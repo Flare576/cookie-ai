@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flare Cookie AI</title>
+    <style>
+        .inny {
+            height: 100vh;
+            width: 100%;
+            display: block;
+            border: none;
+        }
+        #flareIntro {
+            display: flex;
+            flex-direction: column;
+            height: 200px;
+            justify-content: space-around;
+            text-align: center;
+        }
+    </style>
+    <script src="FlareAI.js"></script>
+    <script>
+        function flareStartAI() {
+            document.getElementById("flareIntro").style.display="none";
+            document.getElementById("flareOutputContainer").style.display="block";
+            const playit = document.createElement('iframe');
+            playit.setAttribute('id', 'game');
+            playit.classList.add('inny');
+            document.getElementById("gameHolder").appendChild(playit);
+            playit.setAttribute('src', 'orig/index.html');
+            resetGame();
+        }
+    </script>
+</head>
+<!--<body onLoad="flareStartAI()">-->
+<body>
+    <div id="flareIntro">
+        <div>Cookie Clicker is a game written by Julien "Orteil" Thiennot, and is playable at <a href="https://www.cookieclicker.com/">cookieClicker.com</a>.</div>
+        <div>In the base game, you play an entrepreneur that makes cookies. In this version, however, you play a developer who decided to write the AI. Let's see how that goes.</div>
+        <div><a onClick="flareStartAI()" href="#" class="flareStartAIelem">Start AI</a></div>
+    </div>
+<div id="flareOutputContainer">
+    <div class="flareDataHolder">
+        <div id="flareOutput"></div>
+    </div>
+</div>
+<div id="flareDashboard">
+  <div id="flareRandomDiv"></div>
+</div>
+<div id="gameHolder"></div>
+</body>
+</html>
