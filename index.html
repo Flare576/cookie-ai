@@ -3,21 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Flare Cookie AI</title>
-    <style>
+      <style>
+        body {
+          margin: 0;
+        }
         .inny {
-            height: 100vh;
-            width: 100%;
-            display: block;
-            border: none;
+          height: 100vh;
+          width: 100%;
+          display: block;
+          border: none;
         }
         #flareIntro {
-            display: flex;
-            flex-direction: column;
-            height: 200px;
-            justify-content: space-around;
-            text-align: center;
+          display: flex;
+          flex-direction: column;
+          height: 200px;
+          justify-content: space-around;
+          text-align: center;
         }
-    </style>
+        #flareOutputContainer {
+          position: fixed;
+          left: 0;
+          top: 200px;
+          z-index: 100;
+          width: 0;
+          height: calc(100vh - 238px);
+        }
+        .flareDataHolder {
+          background: #efefef;
+          margin: auto;
+          border-radius: 5px;
+          padding: 5px;
+          height: 100%;
+        }
+        #flareOutput {
+          height: 100%;
+          overflow: scroll;
+          margin-left: 5px;
+        }
+        #flareDynamicOutput {
+          position: absolute;
+          background: #efefef;
+          top: 0;
+          right: 25px;
+          border: 1px solid black;
+          border-radius: 5px;
+          width: 200px;
+        }
+        #flareOutputControls {
+          position: absolute;
+          top: 35px;
+          left: 0;
+        }
+        #flareDashboard {
+          position: absolute;
+          bottom: 30px;
+          left: 0px;
+          background-color:white;
+        }
+      </style>
     <script src="FlareAI.js"></script>
     <script>
         function flareStartAI() {
@@ -30,10 +73,17 @@
             playit.setAttribute('src', 'orig/index.html');
             resetGame();
         }
+        function flareToggleOutput() {
+          if (document.getElementById("flareOutputContainer").style.display === "block")
+            document.getElementById("flareOutputContainer").style.display = "none"
+          else
+            document.getElementById("flareOutputContainer").style.display = "block"
+        }
     </script>
 </head>
-<!--<body onLoad="flareStartAI()">-->
-<body>
+<body onLoad="flareStartAI()">
+<!--<body>-->
+<div id="flareOutputControls" onclick="flareToggleOutput()"><button>Toggle F.L.A.R.E Output</button></div>
     <div id="flareIntro">
         <div>Cookie Clicker is a game written by Julien "Orteil" Thiennot, and is playable at <a href="https://www.cookieclicker.com/">cookieClicker.com</a>.</div>
         <div>In the base game, you play an entrepreneur that makes cookies. In this version, however, you play a developer who decided to write the AI. Let's see how that goes.</div>
@@ -42,6 +92,7 @@
 <div id="flareOutputContainer">
     <div class="flareDataHolder">
         <div id="flareOutput"></div>
+        <div id="flareDynamicOutput"></div>
     </div>
 </div>
 <div id="flareDashboard">
