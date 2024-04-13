@@ -3,82 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <title>Flare Cookie AI</title>
-      <style>
-        body {
-          margin: 0;
-        }
-        .inny {
-          height: 100vh;
-          width: 100%;
-          display: block;
-          border: none;
-        }
-        #flareIntro {
-          display: flex;
-          flex-direction: column;
-          height: 200px;
-          justify-content: space-around;
-          text-align: center;
-        }
-        #flareOutputContainer {
-          position: fixed;
-          left: 0;
-          top: 200px;
-          z-index: 100;
-          width: 0;
-          height: calc(100vh - 238px);
-        }
-        .flareDataHolder {
-          background: #efefef;
-          margin: auto;
-          border-radius: 5px;
-          padding: 5px;
-          height: 100%;
-        }
-        #flareOutput {
-          height: 100%;
-          overflow: scroll;
-          margin-left: 5px;
-        }
-        #flareDynamicOutput {
-          position: absolute;
-          background: #efefef;
-          top: 0;
-          right: 25px;
-          border: 1px solid black;
-          border-radius: 5px;
-          width: 200px;
-        }
-        #flareOutputControls {
-          position: absolute;
-          top: 35px;
-          left: 0;
-        }
-        #flareDashboard {
-          position: absolute;
-          bottom: 30px;
-          left: 0px;
-          background-color:white;
-        }
-      </style>
+    <style>
+      body {
+        margin: 0;
+      }
+      .inny {
+        height: 100vh;
+        width: 100%;
+        display: block;
+        border: none;
+      }
+      #flareIntro {
+        display: flex;
+        flex-direction: column;
+        height: 200px;
+        justify-content: space-around;
+        text-align: center;
+      }
+      #flareOutputContainer {
+        position: fixed;
+        left: 0;
+        bottom: 36px;
+        z-index: 100;
+        width: 0;
+        height: calc(100vh - 238px);
+      }
+      .flareDataHolder {
+        background: #efefef;
+        margin: auto;
+        border-radius: 5px;
+        padding: 5px;
+        height: 100%;
+      }
+      #flareOutput {
+        height: 100%;
+        overflow: scroll;
+        margin-left: 5px;
+      }
+      #flareDynamicOutput {
+        position: absolute;
+        background: #efefef;
+        top: 0;
+        right: 25px;
+        border: 1px solid black;
+        border-radius: 5px;
+        min-width: 200px;
+      }
+      #flareOutputControls {
+        position: absolute;
+        top: 35px;
+        left: 0;
+      }
+      #flareDashboard {
+        position: absolute;
+        bottom: 30px;
+        left: 0px;
+        background-color:white;
+      }
+      .flareError {
+        color: red;
+      }
+      .flareGod {
+        color: purple;
+      }
+      .flareNewBuilding {
+        color: green;
+      }
+      .flareMinigame {
+        color: green;
+      }
+      .flareUpgrading {
+        color: blue;
+      }
+      .flareBuyBuilding {
+        color: orange;
+      }
+      .flareAchievement {
+        color: gold;
+        text-shadow: -1px 1px black;
+      }
+      .flareGoldenCookie {
+        color: gold;
+        font-weight: bold;
+      }
+    </style>
     <script>
-        let flareHz = 30;
-        function flareStartAI() {
-            document.getElementById("flareIntro").style.display="none";
-            document.getElementById("flareOutputContainer").style.display="block";
-            const playit = document.createElement('iframe');
-            playit.setAttribute('id', 'game');
-            playit.classList.add('inny');
-            document.getElementById("gameHolder").appendChild(playit);
-            playit.setAttribute('src', 'orig/index.html');
-            resetGame();
-        }
-        function flareToggleOutput() {
-          if (document.getElementById("flareOutputContainer").style.display === "block")
-            document.getElementById("flareOutputContainer").style.display = "none"
-          else
-            document.getElementById("flareOutputContainer").style.display = "block"
-        }
+      let flareHz = 30;
+      function flareStartAI() {
+        document.getElementById("flareIntro").style.display="none";
+        document.getElementById("flareOutputContainer").style.display="block";
+        const playit = document.createElement('iframe');
+        playit.setAttribute('id', 'game');
+        playit.classList.add('inny');
+        document.getElementById("gameHolder").appendChild(playit);
+        playit.setAttribute('src', 'orig/index.html');
+        startFlare();
+      }
+      function flareToggleOutput() {
+        if (document.getElementById("flareOutputContainer").style.display === "block")
+          document.getElementById("flareOutputContainer").style.display = "none"
+        else
+          document.getElementById("flareOutputContainer").style.display = "block"
+      }
     </script>
     <script src="flareLists.js"></script>
     <script src="FlareAI.js"></script>

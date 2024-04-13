@@ -6,12 +6,12 @@ let flareDelay = 1000/flareHz;
 let flareOneAction = true;
 let flareAscending = 0;
 let flareSubStep = 0;
+let flareMessages = [];
 let flareWonAchievements = [];
 let flareNextPurchase;
 let flareRepurchase;
 // If we spend cookies or need to save, set to false
 let flareShouldSpendCookies = true;
-let flareMessages = [];
 let flareDashMessage = "";
 let gid = (n) => game.document.getElementById(n);
 
@@ -673,23 +673,23 @@ const flareBuildings = () => {
 }
 
 const kickoff = () => {
-  game = window.frames[0];
   flareLog('Initiating Feature Laden Automated Resource Engine (F.L.A.R.E.)');
+  if (gid('langSelect-EN')) {
+    console.log("selecting English");
+    gid('langSelect-EN').click();
+  }
+  game.Game.OpenSesame();
   setTimeout(() => flareKillable = setInterval(flareOp, flareDelay),1000)
 };
 
 const resetGame = () => {
-  game = window.frames[0];
   clearTimeout(flareKillable);
-  setTimeout(() => {
-    //game.Game.HardReset(2);
-    game.Game.OpenSesame();
-    if (gid('langSelect-EN')) {
-      console.log("selecting English");
-      gid('langSelect-EN').click();
-    }
-    kickoff()
-  }, 2000);
+  game.Game.HardReset(2);
+  // Clear persistent data
+  flareMessages = [];
+  flareWonAchievements = [];
+  flareChat.forEach(c => c.fired = false);
+  setTimeout(kickoff, 2000);
 };
 
 const flareDrawOutput = () => {
@@ -725,7 +725,7 @@ const flareCheckTalk = () => {
     }
   }
   const c = gid('cookies').getBoundingClientRect();
-  document.getElementById("flareOutputContainer").style.top = `${Math.ceil(c.y + c.height)}px`;
+  // document.getElementById("flareOutputContainer").style.top = `${Math.ceil(c.y + c.height)}px`;
   document.getElementById("flareOutputContainer").style.width = `${gid("sectionLeft").offsetWidth}px`;
 }
 
@@ -740,14 +740,14 @@ const flareLog = (message) => {
     .forEach((m, i) => {
     let mess = m.message;
     if (m.qty > 1) mess += ` (x${m.qty})`;
-    mess = mess.replace(/Error/g, `<span style="color:red">Error</span>`);
-    mess = mess.replace(/Swapping God/g, `<span style="color:purple">Swapping God</span>`);
-    mess = mess.replace(/Building Available/g, `<span style="color:green">Building Available</span>`);
-    mess = mess.replace(/Activating Minigame/g, `<span style="color:green">Activating Minigame</span>`);
-    mess = mess.replace(/Upgrading!/g, `<span style="color:blue">Upgrading!</span>`);
-    mess = mess.replace(/Buying building/g, `<span style="color:orange">Buying building</span>`);
-    mess = mess.replace(/Achievement won/g, `<span style="color:gold">Achievement won</span>`);
-    mess = mess.replace(/Clicking Golden Cookie/g, `<span style="color:gold;font-weight:bold">Clicking Golden Cookie</span>`);
+    mess = mess.replace(/Error/g, `<span class="flareError">Error</span>`);
+    mess = mess.replace(/Swapping God/g, `<span class="flareGod">Swapping God</span>`);
+    mess = mess.replace(/Building Available/g, `<span class="flareNewBuilding">Building Available</span>`);
+    mess = mess.replace(/Activating Minigame/g, `<span class="flareMinigame">Activating Minigame</span>`);
+    mess = mess.replace(/Upgrading!/g, `<span class="flareUpgrading">Upgrading!</span>`);
+    mess = mess.replace(/Buying building/g, `<span class="flareBuyBuilding">Buying building</span>`);
+    mess = mess.replace(/Achievement won/g, `<span class="flareAchievement">Achievement won</span>`);
+    mess = mess.replace(/Clicking Golden Cookie/g, `<span class="flareGoldenCookie">Clicking Golden Cookie</span>`);
 
       if (i > 0) {
         messages += '<br/>';
@@ -763,6 +763,36 @@ const flareLog = (message) => {
   document.getElementById("flareOutput").scrollTop = document.getElementById("flareOutput").scrollHeight;
   console.log(`${game.Game.T}- ${message}`);
 };
+
+const startFlare = () => {
+  console.log('startFlare');
+  // Let the game call our init once its ready
+  setTimeout(() => {
+    game = window.frames[0];
+    if (!game.Game) {
+      startFlare();
+      return false;
+    }
+    game.Game.registerMod('F.L.A.R.E. AI', {
+      init:function(){
+        console.log('init');
+        kickoff();
+      },
+      save:function(){
+        sessionStorage.setItem('flareMessages', JSON.stringify(flareMessages));
+        sessionStorage.setItem('flareWonAchievements', JSON.stringify(flareWonAchievements));
+        sessionStorage.setItem('flareChat', JSON.stringify(flareChat.map(c => c.fired)));
+        return "saved it mahself";
+      },
+      load:function(str){
+        flareMessages = JSON.parse(sessionStorage.getItem('flareMessages'));
+        flareWonAchievements = JSON.parse(sessionStorage.getItem('flareWonAchievements'));
+        JSON.parse(sessionStorage.getItem('flareChat')).forEach((c, i) => flareChat[i].fired = c);
+        flareLog("Loaded!");
+      },
+    });
+  }, 1000);
+}
 
 // Functions basically lifted from main game
 const flareCurrentFingersBase = () => {
