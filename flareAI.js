@@ -39,7 +39,7 @@ const flareOp = () => {
 
 const flareAscend = () => {
   //Don't ascend if you have an active buff - you might get another level
-  if (Object.keys(game.Game.buffs).length) return false;
+  if (flareHasBuff()) return false;
 
   if (flareAscending > 0 || game.Game.cookiesEarned >= flareAscensionGoal()) {
     switch (flareAscending) {
@@ -156,7 +156,7 @@ const flareClickShimmer = () => {
       // if (topGolden.dur * 30 - topGolden.life < 15) return false;
       topGolden.l.click();
       const message = game.Game.textParticles
-        .filter(t => t.life >= 0)
+        .filter(t => t.life >= 0 && !t.text.includes('Promising fate!'))
         .sort((a,b) => a.life - b.life)[0].text;
       flareLog(`Clicking Golden Cookie - ${message}`);
       return flareOneAction;
@@ -171,6 +171,7 @@ const flareClickCookie = () => {
 }
 
 const flareSpendLumps = () => {
+  return false; // TODO: remove after finishing garden
   const lumpAge = Date.now() - game.Game.lumpT;
   if (lumpAge > game.Game.lumpRipeAge) {
     flareLog('Harvesting a Sugar Lump')
@@ -434,6 +435,12 @@ const flareMoveGod = (from, to) => {
   }
 }
 
+// Eventually make this check for good and bad buffs
+const flareHasBuff = () => {
+  const keys = Object.keys(game.Game.buffs);
+  return keys.length;
+}
+
 // If there's a buff, and we're full on magic, summon another cookie!
 const flareBoostBuffs = () => {
   const keys = Object.keys(game.Game.buffs);
@@ -447,12 +454,416 @@ const flareBoostBuffs = () => {
 
 // I think the goal of this game is going to be unlocking all the plants
 const flareTendGarden = () => {
-  return false;
   const farm = game.Game.Objects['Farm'];
   if (!farm.minigameLoaded) return false;
 
   const garden = farm.minigame;
-  const plants = garden.plants.filter(p=>p.unlocked);
+
+  const soil = ['woodchips', 'fertilizer', 'dirt']
+    .map(n => garden.soils[n])
+    .find(s => farm.amount >= s.req)
+  if (garden.soil !== soil.id) {
+    flareLog(`Swapping Garden soil to ${soil.name}`);
+    gid(`gardenSoil-${soil.id}`).click();
+    return true;
+  }
+
+  const plantTiles = { primary: [], secondary: [] };
+  let harvestTiles;
+
+  switch (farm.level) {
+    case 1:
+      plantTiles.primary = [{x:3,y:2}];
+      plantTiles.secondary = [{x:2,y:2}];
+      harvestTiles = [{x:2,y:3},{x:3,y:3}];
+      break;
+    case 2:
+      plantTiles.primary = [{x:3,y:2}];
+      plantTiles.secondary = [{x:3,y:3}];
+      harvestTiles = [{x:2,y:2},{x:4,y:2},{x:2,y:3},{x:4,y:3}];
+      break;
+    case 3:
+      plantTiles.primary = [{x:2,y:3},{x:4,y:3}];
+      plantTiles.secondary = [{x:3,y:3}];
+      harvestTiles = [
+        {x:2,y:2},{x:3,y:2},{x:4,y:2},
+
+        {x:2,y:4},{x:3,y:4},{x:4,y:4}];
+      break;
+    case 4:
+      plantTiles.primary = [{x:2,y:3},{x:3,y:3}];
+      plantTiles.secondary = [{x:1,y:3},{x:4,y:3}];
+      harvestTiles = [
+        {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},
+        {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},
+      ];
+      break;
+    case 5:
+      plantTiles.primary = [{x:2,y:2},{x:3,y:3}];
+      plantTiles.secondary = [{x:1,y:1},{x:4,y:1},{x:1,y:4},{x:4,y:4}];
+      harvestTiles = [
+                  {x:2,y:1},{x:2,y:1},
+        {x:1,y:2},                    {x:4,y:2},
+        {x:1,y:3},                    {x:4,y:3},
+                  {x:2,y:4},{x:3,y:4},
+      ];
+      break;
+    case 6:
+      plantTiles.primary = [{x:3,y:1},{x:2,y:3},{x:5,y:3}];
+      plantTiles.secondary = [{x:1,y:1},{x:5,y:1},{x:4,y:3},{x:1,y:4}];
+      harvestTiles = [
+                  {x:2,y:1},          {x:4,y:1},
+        {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+        {x:1,y:3},          {x:3,y:3},
+                  {x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},
+      ];
+      break;
+    case 7:
+      plantTiles.primary = [{x:2,y:1},{x:5,y:1},{x:2,y:4},{x:5,y:4}];
+      plantTiles.secondary = [{x:1,y:1},{x:4,y:1},{x:1,y:4},{x:4,y:4}];
+      harvestTiles = [
+                            {x:3,y:1},
+        {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+                            {x:3,y:4},
+        {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+      ];
+      break;
+    case 8:
+      plantTiles.primary = [{x:2,y:1},{x:5,y:1},{x:2,y:4},{x:5,y:4}];
+      plantTiles.secondary = [{x:2,y:2},{x:5,y:2},{x:2,y:5},{x:5,y:5}];
+      harvestTiles = [
+        {x:1,y:1},          {x:3,y:1},{x:4,y:1},          {x:6,y:1},
+        {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+        {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+        {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
+      ];
+      break;
+    case 9:
+      plantTiles.primary = [{x:1,y:2},{x:3,y:2},{x:6,y:2},{x:1,y:5},{x:4,y:5},{x:6,y:5}];
+      plantTiles.secondary = [{x:2,y:2},{x:5,y:2},{x:2,y:5},{x:5,y:5}];
+      harvestTiles = [
+        {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+                                      {x:4,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+        {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
+                                      {x:4,y:5},
+        {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
+      ];
+      break;
+  }
+
+  const plants = garden.plants;
+  const crops = flarePlants
+    .map(({target, primary, secondary}) => {
+      return {
+        target: plants[target],
+        primary: plants[primary],
+        secondary: plants[secondary],
+      };
+    })
+    .find(({target, primary, secondary}) => {
+      if (target.unlocked || garden.plot.find(a => a.find(p => p[0] === target.id + 1)))
+        return false;
+      return primary.unlocked && secondary.unlocked;
+    });
+
+    // complex plants
+  if (crops.target.key === 'everdaisy' && farm.level >= 3) {
+    switch (farm.level) {
+      case 3:
+        plantTiles.primary = [
+          {x:2,y:2},{x:3,y:2},{x:4,y:2},
+          {x:2,y:3},          {x:4,y:3},
+        ];
+        plantTiles.secondary = [{x:2,y:4},{x:3,y:4},{x:4,y:4}];
+        harvestTiles = [{x:3,y:3}];
+        break;
+      case 4:
+        plantTiles.primary = [
+          {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},
+          {x:1,y:3},                    {x:4,y:3},
+        ];
+        plantTiles.secondary = [{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4}];
+        harvestTiles = [{x:2,y:3},{x:3,y:3}];
+        break;
+      case 5:
+        plantTiles.primary = [
+
+          {x:1,y:2},                    {x:4,y:2},
+          {x:1,y:3},{x:2,y:3},          {x:4,y:3},
+          {x:1,y:4},
+        ];
+        plantTiles.secondary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},
+
+
+          {x:2,y:4},{x:3,y:4},{x:4,y:4},
+        ];
+        harvestTiles = [{x:2,y:2},{x:3,y:2},{x:3,y:3}];
+        break;
+      case 6:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},         ,{x:4,y:1},{x:5,y:1},
+          {x:1,y:2},                              {x:5,y:2},
+          {x:1,y:3},                              {x:5,y:3},
+          {x:1,y:4},{x:2,y:4},         ,{x:4,y:4},{x:5,y:4},
+        ];
+        plantTiles.secondary = [
+          {x:3,y:1},
+          {x:3,y:2},
+          {x:3,y:3},
+          {x:3,y:r},
+        ];
+        harvestTiles = [{x:2,y:2},{x:4,y:2},{x:2,y:3},{x:4,y:3}];
+        break;
+      case 7:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+          {x:1,y:2},                              {x:5,y:2},
+
+          {x:1,y:4},                              {x:5,y:4},
+          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+        ];
+        plantTiles.secondary = [
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+        ];
+        harvestTiles = [
+          {x:2,y:2},{x:3,y:2},{x:4,y:2},
+
+          {x:2,y:4},{x:3,y:4},{x:4,y:4},
+        ];
+        break;
+      case 8:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+          {x:1,y:2},                                        {x:6,y:2},
+
+          {x:1,y:4},                                        {x:6,y:4},
+          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},
+        ];
+        plantTiles.secondary = [
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+        ];
+        harvestTiles = [
+          {x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+
+          {x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:2},
+        ];
+        break;
+      case 9:
+        plantTiles.primary = [
+
+          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+          {x:1,y:3},          {x:3,y:3},                    {x:6,y:3},
+
+          {x:1,y:5},                                        {x:6,y:5},
+          {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
+        ];
+        plantTiles.secondary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+
+
+          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
+
+
+        ];
+        harvestTiles = [
+
+          {x:2,y:2},                    {x:5,y:2},
+          {x:2,y:3},          {x:4,y:3},{x:5,y:3},
+
+          {x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+
+        ];
+        break;
+    }
+  } else if (crops.target.key === 'shriekbulb') {
+    switch (farm.level) {
+      case 1:
+        plantTiles.primary = [{x:2,y:2},{x:3,y:2},{x:2,y:3}];
+        harvestTiles = [{x:3,y:3}];
+        break;
+      case 2:
+        plantTiles.primary = [
+          {x:2,y:2},{x:3,y:2},{x:4,y:2},
+                    {x:3,y:3},
+        ];
+        harvestTiles = [{x:2,y:3},{x:4,y:3}];
+        break;
+      case 3:
+        plantTiles.primary = [
+          {x:2,y:2},          {x:4,y:2},
+                    {x:3,y:3},
+          {x:2,y:4},          {x:4,y:4},
+        ];
+        harvestTiles = [
+                    {x:3,y:2},
+          {x:2,y:3},          {x:4,y:3},
+                    {x:3,y:4},
+        ];
+        break;
+      case 4:
+        plantTiles.primary = [
+          {x:1,y:1},                    {x:4,y:1},
+                    {x:2,y:2},{x:3,y:2},
+          {x:1,y:3},                    {x:4,y:3},
+        ];
+        harvestTiles = [
+                    {x:2,y:1},{x:3,y:1},
+          {x:1,y:2},                    {x:4,y:2},
+                    {x:2,y:3},{x:3,y:3},
+        ];
+        break;
+      case 5:
+        plantTiles.primary = [
+          {x:1,y:1},                    {x:4,y:1},
+                    {x:2,y:2},{x:3,y:2},
+                    {x:2,y:3},{x:3,y:3},
+          {x:1,y:4},                    {x:4,y:4},
+        ];
+        harvestTiles = [
+                    {x:2,y:1},{x:3,y:1},
+          {x:1,y:2},                    {x:4,y:2},
+          {x:1,y:3},                    {x:4,y:3},
+                    {x:2,y:4},{x:3,y:4},
+        ];
+        break;
+      case 6:
+        plantTiles.primary = [
+                    {x:2,y:1},          {x:4,y:1},
+                                        {x:4,y:2},{x:5,y:2},
+          {x:1,y:3},{x:2,y:3},
+                    {x:2,y:4},          {x:4,y:4},
+        ];
+        harvestTiles = [
+          {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
+          {x:1,y:2},{x:2,y:2},{x:3,y:2},
+          {x:1,y:3},{x:2,y:3},
+          {x:1,y:4},          {x:3,y:4},          {x:5,y:4},
+        ];
+        break;
+      case 7:
+        plantTiles.primary = [
+                              {x:3,y:1},
+          {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
+
+          {x:1,y:4},{x:2,y:4},          {x:4,y:4},{x:5,y:4},
+                    {x:2,y:5},          {x:4,y:5},
+        ];
+        harvestTiles = [
+          {x:1,y:1},{x:2,y:1},          {x:4,y:1},{x:5,y:1},
+                    {x:2,y:2},          {x:4,y:2},
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+                              {x:3,y:4},
+          {x:1,y:5},          {x:3,y:5},          {x:5,y:5},
+        ];
+        break;
+      case 8:
+        plantTiles.primary = [
+          {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
+                    {x:2,y:2},                    {x:5,y:2},
+                    {x:2,y:3},                    {x:5,y:3},
+                    {x:2,y:4},                    {x:5,y:4},
+          {x:1,y:5},          {x:3,y:5},          {x:5,y:5},
+        ];
+        harvestTiles = [
+                    {x:2,y:1},          {x:4,y:1},          {x:6,y:1},
+          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+          {x:1,y:3},          {x:3,y:3},{x:4,y:3},          {x:6,y:3},
+          {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+                    {x:2,y:5},          {x:4,y:5},          {x:6,y:5},
+        ];
+        break;
+      case 9:
+        plantTiles.primary = [
+          {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
+                    {x:2,y:2},                    {x:5,y:2},
+                    {x:2,y:3},                    {x:5,y:3},
+                    {x:2,y:4},                    {x:5,y:4},
+                    {x:2,y:5},                    {x:5,y:5},
+          {x:1,y:6},          {x:3,y:6},          {x:5,y:6},
+        ];
+        harvestTiles = [
+                    {x:2,y:1},          {x:4,y:1},          {x:6,y:1},
+          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+          {x:1,y:3},          {x:3,y:3},{x:4,y:3},          {x:6,y:3},
+          {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+          {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
+                    {x:2,y:6},          {x:4,y:6},          {x:6,y:6},
+        ];
+        break;
+    }
+  }
+
+  let acted = plantTiles.primary.find(({x,y}) => flarePlant(x,y,crops.primary, crops.target));
+  if (!acted) acted = plantTiles.secondary.find(({x,y}) => flarePlant(x,y,crops.secondary, crops.target));
+  if (!acted) acted = harvestTiles.find(({x,y}) => flareHarvest(x,y));
+
+  return acted;
+}
+
+const flarePlant = (x, y, crop, target) => {
+  const garden = game.Game.Objects['Farm'].minigame;
+
+  // See line 1454 on the "crop.id + 1" thing :/
+  const existingCropId = garden.getTile(x,y)[0] - 1;
+  // Remove what is there already if necessary
+  if (existingCropId >= 0) {
+    const maxWait = existingCropId === crop.id;
+    return flareHarvest(x,y,maxWait);
+  }
+  if (!crop.unlocked) return false; // We could be waiting for Meddleweed, which we can't plant right away
+  const cropCost = garden.getCost(crop);
+  if (flareHasBuff() || game.Game.cookies < cropCost) {
+    flareNextPurchase = {
+      name: crop.name,
+      price: cropCost,
+      delta: `Target: ${target.name}`,
+      eta: (cropCost - game.Game.cookies) / flareGetRate(),
+    };
+    flareShouldSpendCookies = false;
+    return false;
+  }
+
+  switch (flareSubStep) {
+    case 0:
+      flareLog(`Planting ${crop.name} in ${x},${y}`);
+      crop.l.click();
+      flareSubStep++;
+      return true;
+    case 1: garden.clickTile(x, y); flareSubStep = 0; return true;
+  }
+}
+
+const flareHarvest = (x, y, maxWait) => {
+  const garden = game.Game.Objects['Farm'].minigame;
+  // See line 1454 on the "crop.id + 1" thing :/
+  const tileCropId = garden.getTile(x,y)[0] - 1;
+  const maturity = garden.getTile(x,y)[1];
+  if (tileCropId >= 0) {
+    const crop = garden.plantsById[tileCropId];
+    let maturityMinimum = crop.mature;
+    if (maxWait) {
+      // let crumbspores pop
+      maturityMinimum = crop.key === 'crumbspore' ? 100 : 100 - crop.ageTick;
+    }
+    if (!(flareNeedMature(crop) || maxWait) || maturity >= maturityMinimum) {
+      // flareLog(`Harvesting ${crop.name} in ${x},${y}`);
+      flareLog(`Harvesting ${crop.name}`);
+      garden.clickTile(x, y);
+      return true;
+    }
+  }
+  return false;
+}
+
+const flareNeedMature = (crop) => {
+  if (crop.key === 'meddleweed') {
+    const plants = game.Game.Objects['Farm'].minigame.plants;
+    return !(crop.unlocked && plants['brownMold'].unlocked && plants['crumbspore'].unlocked);
+  } else return !crop.unlocked;
 }
 
 const flareAdjustStocks = () => {
@@ -655,7 +1066,7 @@ const flareBuildings = () => {
 
       // If it's going to take < 2 seconds to save for it, just buy it - we might get upgrades sooner
       const timeCheck = price / flareGetRate();
-      const buyCheep = !game.Game.Has('Get lucky') || !Object.keys(game.Game.buffs).length;
+      const buyCheep = !game.Game.Has('Get lucky') || !flareHasBuff();
       // const ratio = timeCheck <= 2 && buyCheep ? 1 / timeCheck : d/price;
       const ratio = timeCheck <= 2 && buyCheep ? .9 : d/price;
 
@@ -738,27 +1149,24 @@ const flareLog = (message) => {
   flareMessages
     .slice(Math.max(flareMessages.length - 100, 0))
     .forEach((m, i) => {
-    let mess = m.message;
-    if (m.qty > 1) mess += ` (x${m.qty})`;
-    mess = mess.replace(/Error/g, `<span class="flareError">Error</span>`);
-    mess = mess.replace(/Swapping God/g, `<span class="flareGod">Swapping God</span>`);
-    mess = mess.replace(/Building Available/g, `<span class="flareNewBuilding">Building Available</span>`);
-    mess = mess.replace(/Activating Minigame/g, `<span class="flareMinigame">Activating Minigame</span>`);
-    mess = mess.replace(/Upgrading!/g, `<span class="flareUpgrading">Upgrading!</span>`);
-    mess = mess.replace(/Buying building/g, `<span class="flareBuyBuilding">Buying building</span>`);
-    mess = mess.replace(/Achievement won/g, `<span class="flareAchievement">Achievement won</span>`);
-    mess = mess.replace(/Clicking Golden Cookie/g, `<span class="flareGoldenCookie">Clicking Golden Cookie</span>`);
+      let mess = m.message;
+      if (m.qty > 1) mess += ` (x${m.qty})`;
+      mess = mess.replace(/Error/g, '<span class="flareError">Error</span>');
+      mess = mess.replace(/Swapping God/g, '<span class="flareGod">Swapping God</span>');
+      mess = mess.replace(/Harvesting/g, '<span class="flareHarvesting">Harvesting</span>');
+      mess = mess.replace(/Planting/g, '<span class="flarePlanting">Planting</span>');
+      mess = mess.replace(/Building Available/g, '<span class="flareNewBuilding">Building Available</span>');
+      mess = mess.replace(/Activating Minigame/g, '<span class="flareMinigame">Activating Minigame</span>');
+      mess = mess.replace(/Upgrading!/g, '<span class="flareUpgrading">Upgrading!</span>');
+      mess = mess.replace(/Buying building/g, '<span class="flareBuyBuilding">Buying building</span>');
+      mess = mess.replace(/Achievement won/g, '<span class="flareAchievement">Achievement won</span>');
+      mess = mess.replace(/Clicking Golden Cookie/g, '<span class="flareGoldenCookie">Clicking Golden Cookie</span>');
 
-      if (i > 0) {
-        messages += '<br/>';
+      if (i === Math.min(flareMessages.length, 100) - 1) {
+        mess = `(new)&nbsp;${mess}`;
       }
-      if (i < flareMessages.length - 1) {
-        messages += '&nbsp;';
-      } else {
-          messages += '(new)&nbsp;';
-      }
-      messages += mess;
-  });
+      messages += `<div>${mess}</div>`;
+    });
   document.getElementById('flareOutput').innerHTML = messages;
   document.getElementById("flareOutput").scrollTop = document.getElementById("flareOutput").scrollHeight;
   console.log(`${game.Game.T}- ${message}`);
