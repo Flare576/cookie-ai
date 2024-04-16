@@ -1089,7 +1089,8 @@ const kickoff = () => {
     console.log("selecting English");
     gid('langSelect-EN').click();
   }
-  game.Game.OpenSesame();
+  // Uncomment for debug tools
+  // game.Game.OpenSesame();
   setTimeout(() => flareKillable = setInterval(flareOp, flareDelay),1000)
 };
 
@@ -1173,8 +1174,6 @@ const flareLog = (message) => {
 };
 
 const startFlare = () => {
-  console.log('startFlare');
-  // Let the game call our init once its ready
   setTimeout(() => {
     game = window.frames[0];
     if (!game.Game) {
@@ -1183,19 +1182,23 @@ const startFlare = () => {
     }
     game.Game.registerMod('F.L.A.R.E. AI', {
       init:function(){
-        console.log('init');
         kickoff();
       },
       save:function(){
         sessionStorage.setItem('flareMessages', JSON.stringify(flareMessages));
         sessionStorage.setItem('flareWonAchievements', JSON.stringify(flareWonAchievements));
         sessionStorage.setItem('flareChat', JSON.stringify(flareChat.map(c => c.fired)));
-        return "saved it mahself";
+        return JSON.stringify({
+          flareMessages,
+          flareWonAchievements,
+          flareChat: flareChat.map(c => c.fired),
+        });
       },
       load:function(str){
-        flareMessages = JSON.parse(sessionStorage.getItem('flareMessages'));
-        flareWonAchievements = JSON.parse(sessionStorage.getItem('flareWonAchievements'));
-        JSON.parse(sessionStorage.getItem('flareChat')).forEach((c, i) => flareChat[i].fired = c);
+        const restored = JSON.parse(str);
+        flareMessages = restored.flareMessages;
+        flareWonAchievements = restored.flareWonAchievements;
+        restored.flareChat.forEach((c, i) => flareChat[i].fired = c);
         flareLog("Loaded!");
       },
     });
