@@ -21,12 +21,9 @@
         text-align: center;
       }
       #flareOutputContainer {
+        transition: left 2s, height 2s, width 2s, bottom 2s;
         position: fixed;
-        left: 0;
-        bottom: 36px;
         z-index: 100;
-        width: 0;
-        height: calc(100vh - 238px);
       }
       .flareDataHolder {
         background: #efefef;
@@ -50,6 +47,7 @@
         min-width: 200px;
       }
       #flareOutputControls {
+        display: none;
         position: absolute;
         top: 35px;
         left: 0;
@@ -102,6 +100,7 @@
       function flareStartAI() {
         document.getElementById("flareIntro").style.display="none";
         document.getElementById("flareOutputContainer").style.display="block";
+        document.getElementById("flareOutputControls").style.display="block";
         const playit = document.createElement('iframe');
         playit.setAttribute('id', 'game');
         playit.classList.add('inny');
@@ -121,7 +120,10 @@
 </head>
 <!--<body onLoad="flareStartAI()">-->
 <body>
-<div id="flareOutputControls" onclick="flareToggleOutput()"><button>Toggle F.L.A.R.E Output</button></div>
+  <div id="flareOutputControls">
+    <button onclick="flareToggleOutput()">Toggle F.L.A.R.E Output</button>
+    <button onclick="flareDownload()">DL</button>
+  </div>
     <div id="flareIntro">
         <div>Cookie Clicker is a game written by Julien "Orteil" Thiennot, and is playable at <a href="https://www.cookieclicker.com/">cookieClicker.com</a>.</div>
         <div>In the base game, you play an entrepreneur that makes cookies. In this version, however, you play a developer who decided to write the AI. Let's see how that goes.</div>

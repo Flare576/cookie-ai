@@ -1203,6 +1203,21 @@ const flareChat = [
     fired: false,
     message: `Status: I'll just click the big cookie, then?`
   }, {
+    resetOnAscension: false,
+    criteria: () => game.Game.Objects['Grandma'].amount,
+    fired: false,
+    message: 'Error: Oh, excuse me, ma\'am...',
+  }, {
+    resetOnAscension: false,
+    criteria: () => game.Game.Objects['Farm'].amount,
+    fired: false,
+    message: 'Error: Ok, I\'ll just move over by the cookie...',
+  }, {
+    resetOnAscension: false,
+    criteria: () => game.Game.shimmers.length,
+    fired: false,
+    message: 'Error: Oh. Do I click the golden one, too?',
+  }, {
     resetOnAscension: true,
     criteria: () => !game.Game.Objects['Cursor'].locked,
     fired: false,
@@ -1291,7 +1306,7 @@ const flareChat = [
     resetOnAscension: true,
     criteria: () => !game.Game.Objects['Idleverse'].locked,
     fired: false,
-    message: 'Building Available: Not sure what this is.',
+    message: 'Building Available: Crossing into other Idleverses to co-generate cookies.',
   }, {
     resetOnAscension: true,
     criteria: () => !game.Game.Objects['Cortex baker'].locked,
@@ -1314,13 +1329,13 @@ const flarePlants = [
     primary: 'meddleweed',
     secondary: 'meddleweed',
   }, {
-    target: 'queenbeet',
-    primary: 'bakeberry',
-    secondary: 'chocoroot',
-  }, {
     target: 'bakeberry',
     primary: 'bakerWheat',
     secondary: 'bakerWheat',
+  }, {
+    target: 'queenbeet',
+    primary: 'bakeberry',
+    secondary: 'chocoroot',
   }, {
     target: 'chocoroot',
     primary: 'brownMold',

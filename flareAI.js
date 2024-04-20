@@ -2,11 +2,13 @@
 // https://www.reddit.com/r/CookieClicker/comments/xmrhwn/build_for_trillion_heavenly_chips_what_can_i/
 let game;
 let flareKillable;
+let flareTick;
 let flareDelay = 1000/flareHz;
 let flareOneAction = true;
 let flareAscending = 0;
 let flareSubStep = 0;
 let flareMessages = [];
+let flareLogs = [];
 let flareWonAchievements = [];
 let flareNextPurchase;
 let flareRepurchase;
@@ -20,6 +22,7 @@ let gid = (n) => game.document.getElementById(n);
 // Line 9932 upgrades defined
 
 const flareOp = () => {
+  flareTick++;
   flareDashMessage = "";
   flareShouldSpendCookies = true;
   [
@@ -181,6 +184,11 @@ const flareSpendLumps = () => {
 
   const lumps = game.Game.lumps;
   if (lumps > 0) {
+    if (game.Game.lumpsTotal === 0) { // our first lump!
+      flareLog('Hiding unnecessary buildings');
+      game.Game.ObjectsById.forEach(o => o.mute(1));
+    }
+
     // We want access to the minigames first
     const nextMinigame = [
       'Wizard tower', // 1st Grimoire
@@ -192,6 +200,7 @@ const flareSpendLumps = () => {
       .find(obj => obj.level === 0);
     if (nextMinigame) {
       if (nextMinigame.amount) {
+        nextMinigame.mute(0);
         flareLog(`Activating Minigame: ${nextMinigame.minigameName}`);
         nextMinigame.levelUp();
         return flareOneAction;
@@ -706,14 +715,14 @@ const flareTendGarden = () => {
         break;
       case 4:
         plantTiles.primary = [
-          {x:1,y:1},                    {x:4,y:1},
-                    {x:2,y:2},{x:3,y:2},
-          {x:1,y:3},                    {x:4,y:3},
-        ];
-        harvestTiles = [
-                    {x:2,y:1},{x:3,y:1},
           {x:1,y:2},                    {x:4,y:2},
                     {x:2,y:3},{x:3,y:3},
+          {x:1,y:4},                    {x:4,y:4},
+        ];
+        harvestTiles = [
+                    {x:2,y:2},{x:3,y:2},
+          {x:1,y:3},                    {x:4,y:3},
+                    {x:2,y:4},{x:3,y:4},
         ];
         break;
       case 5:
@@ -792,6 +801,93 @@ const flareTendGarden = () => {
           {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
           {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
                     {x:2,y:6},          {x:4,y:6},          {x:6,y:6},
+        ];
+        break;
+    }
+  } else if (crops.target.key === 'queenbeetLump') {
+    switch (farm.level) {
+      case 3:
+        plantTiles.primary = [
+          {x:2,y:2},{x:3,y:2},{x:4,y:2},
+          {x:2,y:3},          {x:4,y:3},
+          {x:2,y:4},{x:3,y:4},{x:4,y:4},
+        ];
+        harvestTiles = [{x:3,y:3}];
+        break;
+      case 4:
+        plantTiles.primary = [
+          {x:1,y:2},{x:2,y:2},{x:3,y:2},
+          {x:1,y:3},          {x:3,y:3},
+          {x:1,y:4},{x:2,y:4},{x:3,y:4},
+        ];
+        harvestTiles = [ {x:4,y:2},{x:2,y:3},{x:4,y:3},{x:4,y:4}];
+        break;
+      case 5:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},
+          {x:1,y:2},          {x:3,y:2},
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},
+        ];
+        harvestTiles = [
+                                        {x:4,y:1},
+                    {x:2,y:2},          {x:4,y:2},
+                                        {x:4,y:3},
+          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},
+        ];
+        break;
+      case 6:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+          {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+        ];
+        harvestTiles = [
+                    {x:2,y:2},          {x:4,y:2},
+
+          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},
+        ];
+        break;
+      case 7:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+          {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+          {x:1,y:4},          {x:3,y:4},          {x:5,y:4},
+          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+        ];
+        harvestTiles = [
+                    {x:2,y:2},          {x:4,y:2},
+
+                    {x:2,y:4},          {x:4,y:4},
+        ];
+        break;
+      case 8:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+          {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},
+        ];
+        harvestTiles = [
+                    {x:2,y:2},                    {x:5,y:2},
+
+                    {x:2,y:4},                    {x:5,y:4},
+        ];
+        break;
+      case 9:
+        plantTiles.primary = [
+          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
+          {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
+          {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
+        ];
+        harvestTiles = [
+                    {x:2,y:2},                    {x:5,y:2},
+
+                    {x:2,y:5},                    {x:5,y:5},
         ];
         break;
     }
@@ -1084,6 +1180,7 @@ const flareBuildings = () => {
 }
 
 const kickoff = () => {
+  flareTick = 0;
   flareLog('Initiating Feature Laden Automated Resource Engine (F.L.A.R.E.)');
   if (gid('langSelect-EN')) {
     console.log("selecting English");
@@ -1098,7 +1195,9 @@ const resetGame = () => {
   clearTimeout(flareKillable);
   game.Game.HardReset(2);
   // Clear persistent data
+  flareTick = 0;
   flareMessages = [];
+  flareLog = [];
   flareWonAchievements = [];
   flareChat.forEach(c => c.fired = false);
   setTimeout(kickoff, 2000);
@@ -1117,6 +1216,28 @@ const flareDrawOutput = () => {
   ETA: ${f(flareNextPurchase?.eta)}<br/>
   </div>
   `;
+  // For funsies, start the output in the center, then bump it down when we get first grandma, then move to cookie when
+  // we get our first farm
+  const out = document.getElementById('flareOutputContainer');
+  if (!game.Game.Objects['Farm'].amount) {
+    const divider = gid('leftBeam').getBoundingClientRect();
+    const ca = gid('centerArea').getBoundingClientRect();
+    out.style.left = `${ca.x}px`;
+    out.style.width = `${ca.width}px`;
+    out.style.bottom = '10px';
+    if (!game.Game.Objects['Grandma'].amount) {
+      out.style.height = `${ca.height - 10}px`;
+    } else {
+      const row1 = gid('row1').getBoundingClientRect();
+      out.style.height = `${ca.height - row1.height - 10}px`;
+    }
+  } else {
+    out.style.removeProperty('top');
+    out.style.bottom = '36px';
+    out.style.left = 0;
+    out.style.width = `${gid("sectionLeft").offsetWidth}px`;
+    out.style.height = 'calc(100vh - 238px)';
+  }
 }
 
 const flareCheckTalk = () => {
@@ -1136,21 +1257,31 @@ const flareCheckTalk = () => {
       game.Game.CloseNotes();
     }
   }
-  const c = gid('cookies').getBoundingClientRect();
-  // document.getElementById("flareOutputContainer").style.top = `${Math.ceil(c.y + c.height)}px`;
-  document.getElementById("flareOutputContainer").style.width = `${gid("sectionLeft").offsetWidth}px`;
+  if ((flareTick / flareHz) % 60 === 0) flareLog('Log');
 }
 
 const flareLog = (message) => {
-  if (!message) return;
+  flareLogs.push({
+    tick: flareTick,
+    message,
+    cookies: Math.floor(game.Game.cookies),
+    building_cps: Math.floor(game.Game.cookiesPs),
+    click_cps: Math.floor(flareHz * game.Game.computedMouseCps),
+  });
+  console.log(`${flareTick}- ${message}`);
+
+  if (!message || message === 'Log') return;
+
   const lastIndex = flareMessages.length - 1;
   if (lastIndex > 0 && message === flareMessages[lastIndex].message) flareMessages[lastIndex].qty++;
   else flareMessages.push({ message, qty: 1 });
+
   let messages = '';
+  flareMessages = flareMessages.slice(Math.max(flareMessages.length - 100, 0));
   flareMessages
-    .slice(Math.max(flareMessages.length - 100, 0))
     .forEach((m, i) => {
       let mess = m.message;
+
       if (m.qty > 1) mess += ` (x${m.qty})`;
       mess = mess.replace(/Error/g, '<span class="flareError">Error</span>');
       mess = mess.replace(/Swapping God/g, '<span class="flareGod">Swapping God</span>');
@@ -1166,12 +1297,27 @@ const flareLog = (message) => {
       if (i === Math.min(flareMessages.length, 100) - 1) {
         mess = `(new)&nbsp;${mess}`;
       }
+
       messages += `<div>${mess}</div>`;
     });
   document.getElementById('flareOutput').innerHTML = messages;
   document.getElementById("flareOutput").scrollTop = document.getElementById("flareOutput").scrollHeight;
-  console.log(`${game.Game.T}- ${message}`);
 };
+
+const flareDownload = () => {
+  const head = 'tick,message,cookies,building_cps,click_cps';
+  const output = head + '\n' + flareLogs.map(l => `${l.tick},"${l.message.replaceAll('"','""')}",${l.cookies},${l.building_cps},${l.click_cps}`).join('\n');
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(output));
+  element.setAttribute('download', 'cookie_log.csv');
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
 
 const startFlare = () => {
   setTimeout(() => {
@@ -1180,23 +1326,24 @@ const startFlare = () => {
       startFlare();
       return false;
     }
-    game.Game.registerMod('F.L.A.R.E. AI', {
+    game.Game.registerMod('FLARE AI', {
       init:function(){
         kickoff();
       },
       save:function(){
-        sessionStorage.setItem('flareMessages', JSON.stringify(flareMessages));
-        sessionStorage.setItem('flareWonAchievements', JSON.stringify(flareWonAchievements));
-        sessionStorage.setItem('flareChat', JSON.stringify(flareChat.map(c => c.fired)));
         return JSON.stringify({
+          flareTick,
           flareMessages,
+          flareLogs,
           flareWonAchievements,
           flareChat: flareChat.map(c => c.fired),
         });
       },
       load:function(str){
         const restored = JSON.parse(str);
+        flareTick = restored.flareTick;
         flareMessages = restored.flareMessages;
+        flareLogs = restored.flareLogs;
         flareWonAchievements = restored.flareWonAchievements;
         restored.flareChat.forEach((c, i) => flareChat[i].fired = c);
         flareLog("Loaded!");
