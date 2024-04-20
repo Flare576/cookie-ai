@@ -7,6 +7,7 @@ let flareDelay = 1000/flareHz;
 let flareOneAction = true;
 let flareAscending = 0;
 let flareSubStep = 0;
+let tallestCookie = 0;
 let flareMessages = [];
 let flareLogs = [];
 let flareWonAchievements = [];
@@ -35,6 +36,7 @@ const flareOp = () => {
     flareAdjustStocks,
     flareTrainDragon,
     flareShop,
+    flareAchievementHunt,
     flareClickCookie,
   ].find(f => f());
   flareDrawOutput();
@@ -55,6 +57,7 @@ const flareAscend = () => {
           // Permanent Upgrade, skip during this step
           const next = flareNextChipBatch().upgrades.find(u => u.id !== 264 && !u.bought);
           if (next && next.basePrice <= game.Game.heavenlyChips) {
+            flareLog(`Unlocking: ${next.name}`);
             game.Game.UpgradesById[next.id].click();
           } else {
             flareAscending = 2;
@@ -1231,11 +1234,14 @@ const flareDrawOutput = () => {
       out.style.height = `${ca.height - row1.height - 10}px`;
     }
   } else {
-    out.style.removeProperty('top');
-    out.style.bottom = '36px';
+    const leftDiv = gid('sectionLeft').getBoundingClientRect();
+    const cDiv =  gid('cookies').getBoundingClientRect();
+    tallestCookie = Math.max(cDiv.height, tallestCookie);
+    const calcHeight = leftDiv.height - tallestCookie - cDiv.y - 40;
+    out.style.bottom = '40px';
     out.style.left = 0;
-    out.style.width = `${gid("sectionLeft").offsetWidth}px`;
-    out.style.height = 'calc(100vh - 238px)';
+    out.style.width = `${leftDiv.width}px`;
+    out.style.height = `${calcHeight}px`;
   }
 }
 
@@ -1262,6 +1268,7 @@ const flareCheckTalk = () => {
 const flareLog = (message) => {
   flareLogs.push({
     tick: flareTick,
+    timestamp: Date.now(),
     message,
     cookies: Math.floor(game.Game.cookies),
     building_cps: Math.floor(game.Game.cookiesPs),
@@ -1289,6 +1296,7 @@ const flareLog = (message) => {
       mess = mess.replace(/Building Available/g, '<span class="flareNewBuilding">Building Available</span>');
       mess = mess.replace(/Activating Minigame/g, '<span class="flareMinigame">Activating Minigame</span>');
       mess = mess.replace(/Upgrading!/g, '<span class="flareUpgrading">Upgrading!</span>');
+      mess = mess.replace(/Unlocking/g, '<span class="flareUnlocking">Unlocking</span>');
       mess = mess.replace(/Buying building/g, '<span class="flareBuyBuilding">Buying building</span>');
       mess = mess.replace(/Achievement won/g, '<span class="flareAchievement">Achievement won</span>');
       mess = mess.replace(/Clicking Golden Cookie/g, '<span class="flareGoldenCookie">Clicking Golden Cookie</span>');
@@ -1304,8 +1312,16 @@ const flareLog = (message) => {
 };
 
 const flareDownload = () => {
-  const head = 'tick,message,cookies,building_cps,click_cps';
-  const output = head + '\n' + flareLogs.map(l => `${l.tick},"${l.message.replaceAll('"','""')}",${l.cookies},${l.building_cps},${l.click_cps}`).join('\n');
+  const head = 'tick,timestamp,message,cookies,building_cps,click_cps';
+  const output = head + '\n' + flareLogs.map(l => {
+    let line = `${l.tick},`;
+    line += `${l.timestamp},`
+    line += `"${l.message.replaceAll('"','""')}",`
+    line += `${l.cookies},`
+    line += `${l.building_cps},`
+    line += `${l.click_cps}`
+    return line;
+  }).join('\n');
   const element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(output));
   element.setAttribute('download', 'cookie_log.csv');
@@ -1349,6 +1365,14 @@ const startFlare = () => {
       },
     });
   }, 1000);
+}
+
+const flareAchievementHunt = () => {
+  if (!game.Game.HasAchiev('Cookie-dunker') && game.Game.milkH > .1) {
+    document.getElementById('game').style.height = '100px';
+  } else {
+    document.getElementById('game').style.height = '100vh';
+  }
 }
 
 // Functions basically lifted from main game

@@ -1204,6 +1204,11 @@ const flareChat = [
     message: `Status: I'll just click the big cookie, then?`
   }, {
     resetOnAscension: false,
+    criteria: () => game.Game.milkH > .1,
+    fired: false,
+    message: 'Error: Don\'t freak out, I\'m dunking the cookie.',
+  }, {
+    resetOnAscension: false,
     criteria: () => game.Game.Objects['Grandma'].amount,
     fired: false,
     message: 'Error: Oh, excuse me, ma\'am...',
