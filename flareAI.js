@@ -174,7 +174,6 @@ const flareClickCookie = () => {
 }
 
 const flareSpendLumps = () => {
-  return false; // TODO: remove after finishing garden
   const lumpAge = Date.now() - game.Game.lumpT;
   if (lumpAge > game.Game.lumpRipeAge) {
     flareLog('Harvesting a Sugar Lump')
@@ -184,7 +183,7 @@ const flareSpendLumps = () => {
 
   const lumps = game.Game.lumps;
   if (lumps > 0) {
-    if (game.Game.lumpsTotal === 0) { // our first lump!
+    if (game.Game.lumpsTotal === 1) { // our first lump!
       flareLog('Hiding unnecessary buildings');
       game.Game.ObjectsById.forEach(o => o.mute(1));
     }
