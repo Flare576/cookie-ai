@@ -30,6 +30,7 @@ const flareOp = () => {
     flareAscend,
     flareClickShimmer,
     flareSpendLumps,
+    flareManageSeasons,
     flareCastSpells,
     flarePlayWithGods,
     flareTendGarden,
@@ -128,6 +129,7 @@ const flareSetPermanentUpgrade1 = () => {
     case 1:
       // Right now, just use Kitten managers, eventually do a priority thing
       const bestAvailable = [
+        'upgradeForPermanent321', // Kitten Specialists
         'upgradeForPermanent320', // Kitten Accountants
         'upgradeForPermanent187', // Kitten Managers
         'upgradeForPermanent108', // Kitten Overseers
@@ -170,6 +172,43 @@ const flareClickShimmer = () => {
   }
 }
 
+const flareManageSeasons = () => {
+  if (!game.Game.HasUnlocked('Season switcher')) return false;
+  const finishedChristmas = game.Game.GetHowManyReindeerDrops() === 7 && game.Game.GetHowManySantaDrops() === 14;
+  if (!finishedChristmas) {
+    if (game.Game.season !== 'christmas') {
+      const christmasCost = game.Game.UpgradesById[182].priceFunc();
+      if (game.Game.cookies >= christmasCost) {
+        flareShouldSpendCookies = false;
+        game.Game.UpgradesById[182].click();
+        return flareOneAction;
+      } else {
+        const eta = (christmasCost - game.Game.cookies) / flareGetRate();
+        if (eta <= 300) {
+          flareNextPurchase = {
+            name: 'Waiting for Christmas!',
+            price: christmasCost,
+            delta: 'Holly Jolly',
+            eta,
+          };
+          flareShouldSpendCookies = false;
+        }
+        return false;
+      }
+    } else {
+      // Evolve Festive Test tube Line 14997
+      const santaLvl = game.Game.santaLevel+1;
+      const santaCost = Math.pow(santaLvl, santaLvl);
+      if (santaLvl < 15 && game.Game.cookies >= santaCost) {
+        flareShouldSpendCookies = false;
+        game.Game.UpgradeSanta();
+        return flareOneAction;
+      }
+    }
+  }
+  return false;
+}
+
 const flareClickCookie = () => {
   // For some reason this doesn't register all the clicks
   // gid('bigCookie').click();
@@ -205,6 +244,7 @@ const flareSpendLumps = () => {
         nextMinigame.mute(0);
         flareLog(`Activating Minigame: ${nextMinigame.minigameName}`);
         nextMinigame.levelUp();
+        nextMinigame.switchMinigame(1);
         return flareOneAction;
       }
       return false;
@@ -575,6 +615,8 @@ const flareTendGarden = () => {
       };
     })
     .find(({target, primary, secondary}) => {
+      // If we don't have meddleweed, return it
+      if (!plants['meddleweed'].unlocked && target.key === 'meddleweed') return true;
       if (target.unlocked || garden.plot.find(a => a.find(p => p[0] === target.id + 1)))
         return false;
       return primary.unlocked && secondary.unlocked;
@@ -1011,6 +1053,7 @@ const flareTrainDragon = () => {
         default: target = 'Cortex baker';
       }
       if (game.Game.Objects[target].amount >= 100) {
+        flareLog("Upgrading Dragon!");
         game.Game.specialTab='dragon';
         game.Game.ToggleSpecialMenu(1);
         game.Game.UpgradeDragon();
@@ -1291,6 +1334,7 @@ const flareLog = (message) => {
       if (m.qty > 1) mess += ` (x${m.qty})`;
       mess = mess.replace(/Error/g, '<span class="flareError">Error</span>');
       mess = mess.replace(/Swapping God/g, '<span class="flareGod">Swapping God</span>');
+      mess = mess.replace(/Casting/g, '<span class="flareCasting">Casting</span>');
       mess = mess.replace(/Harvesting/g, '<span class="flareHarvesting">Harvesting</span>');
       mess = mess.replace(/Planting/g, '<span class="flarePlanting">Planting</span>');
       mess = mess.replace(/Building Available/g, '<span class="flareNewBuilding">Building Available</span>');

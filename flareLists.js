@@ -53,6 +53,7 @@ const flareBuildingsList = [
       if (game.Game.Has('Lucky grandmas')) delta += getBoost('Chancemaker', 13);
       if (game.Game.Has('Metagrandmas')) delta += getBoost('Fractal engine', 14);
       if (game.Game.Has('Script grannies')) delta += getBoost('Javascript console', 15);
+      if (game.Game.Has('Alternate grandmas')) delta += getBoost('Idleverse', 16);
       return delta;
     },
   }, {
@@ -127,6 +128,10 @@ const flareUpgradesList = [
     id: 82,
     delta: () => flareCurrentFingers() * 20,
   },
+  { // Upgrade3 x20 for 10quad c (quadrillian fingers)
+    id: 109,
+    delta: () => flareCurrentFingers() * 20,
+  },
 
   { // 2x grandma for 1000c
     id: 7,
@@ -158,6 +163,10 @@ const flareUpgradesList = [
   },
   { // 2x grandma for 50quad c
     id: 307,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x grandma for 50quint c
+    id: 428,
     delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -222,6 +231,10 @@ const flareUpgradesList = [
     id: 297,
     delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x factories for 65quint c
+    id: 310,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x mines for 120000c
     id: 16,
@@ -249,6 +262,10 @@ const flareUpgradesList = [
   },
   { // 2x mines for 6quad c
     id: 296,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x mines for 6quint c
+    id: 309,
     delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -303,6 +320,10 @@ const flareUpgradesList = [
   },
   { // 2x temple for 10quad c
     id: 243,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x temple for 10quint c
+    id: 299,
     delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -374,6 +395,10 @@ const flareUpgradesList = [
   },
   { // 2x Alchemy lab for 375quad c
     id: 115,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Alchemy lab for 37.5quint c
+    id: 197,
     delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -498,6 +523,10 @@ const flareUpgradesList = [
     id: 525,
     delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Fractal engine for 1.55sep c
+    id: 526,
+    delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Javascript console for 710quint c
     id: 594,
@@ -511,9 +540,21 @@ const flareUpgradesList = [
     id: 596,
     delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Javascript console for 3.55sep c
+    id: 597,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Idleverse for 120sex c
     id: 684,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 600sex c
+    id: 685,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 6sep c
+    id: 686,
     delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -559,6 +600,10 @@ const flareUpgradesList = [
   },
   { // Clicking gains +1% of CPS for 5sep c
     id: 460,
+    delta: () => flareHz * game.Game.cookiesPs * .01,
+  },
+  { // Clicking gains +1% of CPS for 500sep c
+    id: 461,
     delta: () => flareHz * game.Game.cookiesPs * .01,
   },
 
@@ -697,6 +742,15 @@ const flareUpgradesList = [
       return (g.storedTotalCps + j_delta) * game.Game.globalCpsMult;
     },
   },
+  { // 2x Grandmas, Idleverse +1% CPS / 16xGrandma for 600sex c
+    id: 683,
+    delta: () => {
+      const g = game.Game.Objects['Grandma'];
+      const i = game.Game.Objects['Idleverse'];
+      const i_delta = i.amount * ((g.amount / 16) * i.storedCps * .01);
+      return (g.storedTotalCps + i_delta) * game.Game.globalCpsMult;
+    },
+  },
   { // 4x Grandmas, unlocks other upgrades for 1quad c
     id: 64,
     delta: () => {
@@ -730,6 +784,10 @@ const flareUpgradesList = [
   },
   { // More CPS for more milk for 900sex c (See line 5022) (kitten accountants)
     id: 320,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
+  },
+  { // More CPS for more milk for 900sep c (See line 5022) (kitten specialists)
+    id: 321,
     delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
   },
 
@@ -889,12 +947,36 @@ const flareUpgradesList = [
     id: 350,
     delta: () => flareGetRate() * .04,
   },
+  { // Cookie Production Multiplier 4% for 500sex c (Millionaires Shortbread)
+    id: 351,
+    delta: () => flareGetRate() * .04,
+  },
   { // Cookie Production Multiplier 4% for 1sep c (Caramel)
     id: 352,
     delta: () => flareGetRate() * .04,
   },
   { // Cookie Production Multiplier 4% for 5sep c (Pecan Sandies)
     id: 403,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 5sep c (Moravian Spice)
+    id: 404,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 50sep c (Anzac biscuits)
+    id: 405,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 100sep c (Buttercakes)
+    id: 406,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 500sep c (Ice cream sandwiches)
+    id: 407,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 1oct c (Pink biscuits)
+    id: 444,
     delta: () => flareGetRate() * .04,
   },
   { // Cookie Production Multiplier 2% for 100m c (Almond)
@@ -949,6 +1031,10 @@ const flareUpgradesList = [
   },
   { // Cookie Production Multiplier 3% for 10sex c (Caramel macarons)
     id: 230,
+    delta: () => flareGetRate() * .03,
+  },
+  { // Cookie Production Multiplier 3% for 10sep c (Licorice macarons)
+    id: 231,
     delta: () => flareGetRate() * .03,
   },
 
@@ -1030,15 +1116,15 @@ const flareUpgradesList = [
 
   { // Golden cookie rate increase 2x 777.7m c (worth waiting 10 min for)
     id: 52,
-    delta: () => 777777777 / flareGetRate() > 600 ? 0 : 777777777,
+    delta: () => flareWaitMinutes(10, 52),
   },
   { // Golden cookie rate increase 2x 77.7b c (worth waiting 10 min for)
     id: 53,
-    delta: () => 77777777777 / flareGetRate() > 600 ? 0 : 77777777777,
+    delta: () => flareWaitMinutes(10, 53),
   },
   { // Golden cookie last 2x longer 77.7t c (worth waiting 20 min for)
     id: 86,
-    delta: () => 77777777777777 / flareGetRate() > 1200 ? 0 : 77777777777777,
+    delta: () => flareWaitMinutes(20, 86),
   },
 
   // Ascension
@@ -1071,7 +1157,7 @@ const flareUpgradesList = [
     delta: () => 25,
   },
 
-  //Eggs?
+  // Easter
   { // Cookie production Multiplier 1% 999c (scales on eggs) (chicken)
     id: 210,
     delta: () => flareGetRate() * .01,
@@ -1126,7 +1212,7 @@ const flareUpgradesList = [
   },
   { // Golden Cookies rate up 5% 999c (scales on eggs) (Golden Goose)
     id: 222,
-    delta: () => game.Game.UpgradesById[221].getPrice(), // just say it's always worth it for now
+    delta: () => flareWaitMinutes(5, 222),
   },
   { // Buildings an upgrades are 1% cheaper 999c (scales on eggs) (faberge)
     id: 223,
@@ -1155,6 +1241,100 @@ const flareUpgradesList = [
   { // +9CPS cookies 999c (scales on eggs) ("egg")
     id: 229,
     delta: () => 9,
+  },
+
+  // Christmas
+  { // Unlock Christmas! 25c (Festive Hat) [Santa's Gift]
+    id: 152,
+    delta: () => 25,
+  },
+  { // 2% CPS  252.5bil c (Christmas Tree Biscuits) [Reindeer]
+    id: 143,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% CPS  252.5bil c (Snowflake biscuit) [Reindeer]
+    id: 144,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% CPS  252.5bil c (Snowman biscuit) [Reindeer]
+    id: 145,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% CPS  252.5bil c (Holly Biscuits) [Reindeer]
+    id: 146,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% CPS  252.5bil c (Candy Cane Biscuits) [Reindeer]
+    id: 147,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% CPS 252.5bil c (Bell Biscuits) [Reindeer]
+    id: 148,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% CPS 252.5bil c (Present Biscuits) [Reindeer]
+    id: 149,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 15% CPS 2525c (Increased Merriness) scales [Santa's Gift]
+    id: 153,
+    delta: () => flareGetRate() * .15,
+  },
+  { // 15% CPS 2525c (Improved Jolliness) scales [Santa's Gift]
+    id: 154,
+    delta: () => flareGetRate() * .15,
+  },
+  { // 1% CPS 2525c (A lump of coal) scales [Santa's Gift]
+    id: 155,
+    delta: () => flareGetRate() * .01,
+  },
+  { // 1% CPS 2525c (An Itchy Sweater) scales [Santa's Gift]
+    id: 156,
+    delta: () => flareGetRate() * .01,
+  },
+  { // Reindeer appear 2x 2525c (Reindeer Baking Grounds) scales [Santa's Gift]
+    id: 157,
+    delta: () => flareWaitMinutes(10, 157),
+  },
+  { // Reindeer 2x slower 2525c (Weight Sleighs) scales [Santa's Gift]
+    id: 158,
+    delta: () => flareWaitMinutes(10, 158),
+  },
+  { // Reindeer give 2x 2525c (Ho-ho-ho flavored frosting) scales [Santa's Gift]
+    id: 159,
+    delta: () => flareWaitMinutes(10, 159),
+  },
+  { // Buildings 1% cheaper 2525c (Season Savings) scales [Santa's Gift]
+    id: 160,
+    delta: () => flareWaitMinutes(5, 159),
+  },
+  { // Upgrades 5% cheaper  2525c (Toy Workshop) scales [Santa's Gift]
+    id: 161,
+    delta: () => flareWaitMinutes(5, 159),
+  },
+  { // Grandmas 2x 2525c (Naughty List) scales [Santa's Gift]
+    id: 162,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // Random drops 10% 2525c (Santa's Botttomless Bag) scales [Santa's Gift]
+    id: 163,
+    delta: () => flareWaitMinutes(10, 163),
+  },
+  { // Clicking 10% 2525c (Santa's Helpers) scales [Santa's Gift]
+    id: 164,
+    delta: () => flareHz * game.Game.cookiesPs * .1,
+  },
+  { // CPS +3% / Santa Level 2525c (Santa's Legacy) scales [Santa's Gift]
+    id: 165,
+    delta: () => flareGetRate() * game.Game.santaLevel * .03,
+  },
+  { // Milk 5% more powerful 2525c (Santa's Milk and Cookies) scales [Santa's Gift]
+    id: 166,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.05,
+  },
+  { // Cookie prod 20%, Buildings 1% off, Upgrades 5% off 2.4 quad c (Santa's Dominion)
+    id: 168,
+    delta: () => flareWaitMinutes(20, 168),
   },
 
   // Research?
@@ -1456,3 +1636,8 @@ const flarePlants = [
     secondary: 'duketater',
   }
 ];
+
+const flareWaitMinutes = (minutes, upgradeID) => {
+  const price = game.Game.UpgradesById[upgradeID].getPrice();
+  return price / flareGetRate() > minutes * 60 ? 0 : price;
+};
