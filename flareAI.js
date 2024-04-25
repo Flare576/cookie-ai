@@ -5,14 +5,12 @@ let flareKillable;
 let flareTick;
 let flareDelay = 1000/flareHz;
 let flareOneAction = true;
-let flareAscending = 0;
-let flareSubStep = 0;
+let flareMultiStep;
 let tallestCookie = 0;
 let flareMessages = [];
 let flareLogs = [];
 let flareWonAchievements = [];
 let flareNextPurchase;
-let flareRepurchase;
 // If we spend cookies or need to save, set to false
 let flareShouldSpendCookies = true;
 let flareDashMessage = "";
@@ -25,21 +23,25 @@ let gid = (n) => game.document.getElementById(n);
 const flareOp = () => {
   flareTick++;
   flareDashMessage = "";
-  flareShouldSpendCookies = true;
-  [
-    flareAscend,
-    flareClickShimmer,
-    flareSpendLumps,
-    flareManageSeasons,
-    flareCastSpells,
-    flarePlayWithGods,
-    flareTendGarden,
-    flareAdjustStocks,
-    flareTrainDragon,
-    flareShop,
-    flareAchievementHunt,
-    flareClickCookie,
-  ].find(f => f());
+  if (flareMultiStep) {
+    flareMultiStep();
+  } else {
+    flareShouldSpendCookies = true;
+    [
+      flareAscend,
+      flareClickShimmer,
+      flareSpendLumps,
+      flareManageSeasons,
+      flareCastSpells,
+      flarePlayWithGods,
+      flareTendGarden,
+      flareAdjustStocks,
+      flareTrainDragon,
+      flareShop,
+      flareAchievementHunt,
+      flareClickCookie,
+    ].find(f => f());
+  }
   flareDrawOutput();
 };
 
@@ -47,50 +49,40 @@ const flareAscend = () => {
   //Don't ascend if you have an active buff - you might get another level
   if (flareHasBuff()) return false;
 
-  if (flareAscending > 0 || game.Game.cookiesEarned >= flareAscensionGoal()) {
-    switch (flareAscending) {
-      case 0: // Click the button
-        flareAscending = 1;
-        game.Game.Ascend(1);
-        break;
-      case 1: // Wait for UI to show up, then apply Heavenly Chips
-        if (gid('heavenlyUpgrade363')) {
-          // Permanent Upgrade, skip during this step
-          const next = flareNextChipBatch().upgrades.find(u => u.id !== 264 && !u.bought);
-          if (next && next.basePrice <= game.Game.heavenlyChips) {
-            flareLog(`Unlocking: ${next.name}`);
-            game.Game.UpgradesById[next.id].click();
-          } else {
-            flareAscending = 2;
-          }
-        }
-        break;
-      case 2: // Set Permanent Upgrade 1
+  if (game.Game.cookiesEarned >= flareAscensionGoal()) {
+    game.Game.Ascend(1);
+    flareMultiStep = () => {// Wait for UI to show up, then apply Heavenly Chips
+      if (!gid('heavenlyUpgrade363')) return false;
+      // 264 is Permanent Upgrade, skip during this step
+      const nextUp = flareNextChipBatch().upgrades.find(u => u.id !== 264 && !u.bought);
+
+      if (nextUp && nextUp.basePrice <= game.Game.heavenlyChips) {
+        flareLog(`Unlocking: ${nextUp.name}`);
+        game.Game.UpgradesById[nextUp.id].click();
+        return false;
+      }
+      flareMultiStep = () => {// Set Permanent Upgrade 1
+        const next = () => {// Set Ascend mode
+          game.Game.nextAscensionMode = 0;
+          //game.Game.nextAscensionMode = 1; // Born again grants access to some achievements, See Line 16328
+          flareMultiStep = () => {// Lets-a-go
+            game.Game.Reincarnate(1);
+            flareMultiStep = () => {// UI restored
+              if (!gid('product2') || !gid('product2').classList.contains('toggledOff')) return false
+              flareChat.forEach(c => {
+                if (c.resetOnAscension) c.fired = false;
+              });
+              flareMultiStep = undefined;
+            };
+          };
+        };
         const perm1 = game.Game.UpgradesById[264];
         if (perm1.bought || (perm1.canBePurchased && perm1.basePrice <= game.Game.heavenlyChips)) {
-          if (!flareSetPermanentUpgrade1()) {
-            flareAscending = 3;
-          }
+          flareSetPermanentUpgrade1(next)
         }
-        break;
-      case 3: // Set Ascend mode
-        flareAscending = 4;
-        game.Game.nextAscensionMode = 0;
-        //game.Game.nextAscensionMode = 1; // Born again grants access to some achievements, See Line 16328
-        break;
-      case 4: // Lets-a-go
-        flareAscending = 5;
-        game.Game.Reincarnate(1);
-        break;
-      case 5: // UI restored
-        if (gid('product2') && gid('product2').classList.contains('toggledOff')) {
-          flareChat.forEach(c => {
-            if (c.resetOnAscension) c.fired = false;
-          });
-          flareAscending = 0;
-        }
-        break;
-    }
+        else flareMultiStep = next;
+      };
+    };
     return true;
   }
   return false;
@@ -118,16 +110,12 @@ const flareNextChipBatch = () => {
     .find(batch => !batch.done);
 }
 
-const flareSetPermanentUpgrade1 = () => {
-  switch (flareSubStep) {
-    case 0:
-      if(gid('heavenlyUpgrade264')) {
-        gid('heavenlyUpgrade264').click();
-        flareSubStep = 1;
-      }
-      break;
-    case 1:
-      // Right now, just use Kitten managers, eventually do a priority thing
+const flareSetPermanentUpgrade1 = (next) => {
+  flareMultiStep = () => { // Wait for upgrade to visible
+    if(!gid('heavenlyUpgrade264')) return false;
+
+    gid('heavenlyUpgrade264').click();
+    flareMultiStep = () => { // Choose best available
       const bestAvailable = [
         'upgradeForPermanent321', // Kitten Specialists
         'upgradeForPermanent320', // Kitten Accountants
@@ -135,22 +123,15 @@ const flareSetPermanentUpgrade1 = () => {
         'upgradeForPermanent108', // Kitten Overseers
         'upgradeForPermanent32', // Kitten Workers
       ].find(id => gid(id));
-      if(gid(bestAvailable)) {
+      if(bestAvailable) {
         gid(bestAvailable).click();
-        flareSubStep = 2;
       }
-      break;
-    case 2:
-      if(gid('promptOption0')) {
+      flareMultiStep = () => { // Click Confirm
         gid('promptOption0').click();
-        flareSubStep = 3;
-      }
-      break;
-    case 3:
-      flareSubStep = 0;
-      return false;
-  }
-  return true;
+        flareMultiStep = next;
+      };
+    };
+  };
 }
 
 const flareClickShimmer = () => {
@@ -174,6 +155,7 @@ const flareClickShimmer = () => {
 
 const flareManageSeasons = () => {
   if (!game.Game.HasUnlocked('Season switcher')) return false;
+  // Tipster says: Christmas [santa] -> Valentines -> Easter -> Halloween -> Christmas [reindeer] -> Halloween
   const finishedChristmas = game.Game.GetHowManyReindeerDrops() === 7 && game.Game.GetHowManySantaDrops() === 14;
   if (!finishedChristmas) {
     if (game.Game.season !== 'christmas') {
@@ -225,10 +207,6 @@ const flareSpendLumps = () => {
 
   const lumps = game.Game.lumps;
   if (lumps > 0) {
-    if (game.Game.lumpsTotal === 1) { // our first lump!
-      flareLog('Hiding unnecessary buildings');
-      game.Game.ObjectsById.forEach(o => o.mute(1));
-    }
 
     // We want access to the minigames first
     const nextMinigame = [
@@ -241,6 +219,10 @@ const flareSpendLumps = () => {
       .find(obj => obj.level === 0);
     if (nextMinigame) {
       if (nextMinigame.amount) {
+        if (game.Game.lumpsTotal === 1) { // our first lump!
+          flareLog('Hiding unnecessary buildings');
+          game.Game.ObjectsById.forEach(o => o.mute(1));
+        }
         nextMinigame.mute(0);
         flareLog(`Activating Minigame: ${nextMinigame.minigameName}`);
         nextMinigame.levelUp();
@@ -410,65 +392,70 @@ const flarePlayWithGods = () => {
   return false; // need to figure out when this is actually beneficial
   const buffs = Object.keys(game.Game.buffs);
   const devastate = !buffs.includes('Devastation') && !buffs.includes('Cookie storm') && buffs.length > 1;
-  if (mg.slot[0] === 2 && (flareSubStep || devastate)) {
+  if (mg.slot[0] === 2 && devastate) {
     // https://cookieclicker.wiki.gg/wiki/Pantheon#Godzamok_101
     const sellable = ['Farm', 'Mine', 'Factory', 'Bank', 'Shipment', 'Alchemy lab', 'Portal', 'Antimatter condenser'];
-    switch (flareSubStep) {
-      case 0:
-        flareRepurchase = sellable
-          .map(n => {
-            const obj = game.Game.Objects[n];
-            if (obj.amount < 50) return null;
-            return {
-              name: obj.name,
-              sold: obj.amount,
-              obj,
-              bought: 0,
-            };
-          })
-          .filter(o => o);
-        game.Game.storeBulkButton(5); // Set to All to sell fastest
-        flareSubStep++;
+
+    const flareRepurchase = sellable
+      .map(n => {
+        const obj = game.Game.Objects[n];
+        if (obj.amount < 50) return null;
+        return {
+          name: obj.name,
+          sold: obj.amount,
+          obj,
+          bought: 0,
+          wasSold: false,
+        };
+      })
+      .filter(o => o);
+    game.Game.storeBulkButton(5); // Set to All to sell fastest
+    flareMultiStep = () => { // Sell each building type
+      const toSell = flareRepurchase.find(o => !o.wasSold);
+      if (toSell) {
+        toSell.wasSold = true;
+        flareLog(`Selling building: ${toSell.name}`, toSell.sold);
+        obj.sell();
         return true;
-      case 1:
-        const toSell = sellable
-          .map(n => {
-            const obj = game.Game.Objects[n];
-            return obj.amount > 50 ? obj : null;
-          })
-          .filter(o => o);
-        if (toSell.length) {
-          const obj = toSell[0];
-          flareLog(`Selling Building: ${obj.name} x${obj.amount}`);
-          obj.sell();
-          return true;
-        } else flareSubStep++;
-        break;
-      case 2: game.Game.storeBulkButton(4); flareSubStep++; return true; // Set to 100
-      case 3:
-        const toBuyAt100 = flareRepurchase
-          .filter(o => o.sold - o.bought > 100);
-        if (toBuyAt100.length) {
-          const buying = toBuyAt100[0];
-          flareLog(`Buying Building: ${buying.name} x100`);
-          buying.bought+=100;
-          buying.obj.buy();
-          return true;
-        } else flareSubStep++;
-        break
-      case 4: game.Game.storeBulkButton(3); flareSubStep++; return true; // Set to 10
-      case 5:
-        const toBuyAt10 = flareRepurchase
-          .filter(o => o.sold - o.bought > 10);
-        if (toBuyAt10.length) {
-          const buying = toBuyAt10[0];
-          flareLog(`Buying Building: ${buying.name} x10`);
-          buying.bought+=10;
-          buying.obj.buy();
-          return true;
-        } else flareSubStep++;
-        break
-      case 6: game.Game.storeBulkButton(2); flareSubStep = 0; return true;
+      }
+      flareMultiStep = () => { // Set button to 100's
+        game.Game.storeBulkButton(4);
+        flareMultiStep = () => { // Buy back anything in the 100-range
+          const toBuyAt100 = flareRepurchase
+            .filter(o => o.sold - o.bought > 100);
+          if (toBuyAt100.length) {
+            const buying = toBuyAt100[0];
+            const before = buying.obj.amount;
+            buying.obj.buy();
+            const qty = buying.obj.amount - before;
+            if (qty !== 100) buying.bought = buying.sold; // We can't afford more
+            else buying.bought+=100;
+            if (qty > 0) flareLog(`Buying building: ${buying.name}`, qty);
+            return true;
+          }
+          flareMultiStep = () => { // Set button to 10's
+            game.Game.storeBulkButton(3);
+            flareMultiStep = () => { // Buy back anything in the 10-range
+              const toBuyAt10 = flareRepurchase
+                .filter(o => o.sold - o.bought > 10);
+              if (toBuyAt10.length) {
+                const buying = toBuyAt10[0];
+                const before = buying.obj.amount;
+                buying.obj.buy();
+                const qty = buying.obj.amount - before;
+                if (qty !== 10) buying.bought = buying.sold; // We can't afford more
+                else buying.bought+=10;
+                if (qty > 0) flareLog(`Buying building: ${buying.name}`, qty);
+                return true;
+              }
+              flareMultiStep = () => { // Set button back to 1
+                game.Game.storeBulkButton(2);
+                flareMultiStep = undefined;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -476,14 +463,17 @@ const flarePlayWithGods = () => {
 const flareMoveGod = (from, to) => {
   const mg = game.Game.Objects['Temple'].minigame;
   if (mg.slot[to] === from.id) return false; // That god is already in that slot
-  switch (flareSubStep) {
-    case 0:
-      flareLog(`Swapping God ${from.name} to Slot ${to + 1}`);
-      mg.dragGod(from);
-      flareSubStep++; return true;
-    case 1: mg.hoverSlot(to); flareSubStep++; return true;
-    case 2: mg.dropGod(); flareSubStep = 0; return true;
+
+  flareLog(`Swapping God ${from.name} to Slot ${flareSlotNames[to]}`);
+  mg.dragGod(from);
+  flareMultiStep = () => {
+    mg.hoverSlot(to);
+    flareMultiStep = () => {
+      mg.dropGod();
+      flareMultiStep = undefined;
+    }
   }
+  return true;
 }
 
 // Eventually make this check for good and bad buffs
@@ -966,15 +956,13 @@ const flarePlant = (x, y, crop, target) => {
     flareShouldSpendCookies = false;
     return false;
   }
-
-  switch (flareSubStep) {
-    case 0:
-      flareLog(`Planting ${crop.name} in ${x},${y}`);
-      crop.l.click();
-      flareSubStep++;
-      return true;
-    case 1: garden.clickTile(x, y); flareSubStep = 0; return true;
+  flareLog(`Planting ${crop.name} in ${x},${y}`);
+  crop.l.click();
+  flareMultiStep = () => {
+    garden.clickTile(x, y);
+    flareMultiStep = undefined;
   }
+  return true;
 }
 
 const flareHarvest = (x, y, maxWait) => {
@@ -1035,7 +1023,7 @@ const flareTrainDragon = () => {
       };
       flareShouldSpendCookies = false;
       if (game.Game.cookies >= cost) {
-        flareLog("Upgrading Dragon!");
+        flareLog(`Upgrading Dragon! (goodbye ${cost} cookies)`);
         game.Game.UpgradeDragon();
         return flareOneAction;
       }
@@ -1053,11 +1041,22 @@ const flareTrainDragon = () => {
         default: target = 'Cortex baker';
       }
       if (game.Game.Objects[target].amount >= 100) {
-        flareLog("Upgrading Dragon!");
+        flareLog(`Upgrading Dragon! (goodbye 100 ${target})`);
         game.Game.specialTab='dragon';
         game.Game.ToggleSpecialMenu(1);
         game.Game.UpgradeDragon();
-        return flareOneAction;
+        flareMultiStep = () => {
+          game.Game.storeBulkButton(4);
+          flareMultiStep = () => {
+            game.Game.Objects[target].buy();
+            flareMultiStep = () => {
+              flareLog(`Buying building: ${target}`, game.Game.Objects[target].amount);
+              game.Game.storeBulkButton(2);
+              flareMultiStep = undefined;
+            }
+          }
+        }
+        return true;
       }
     }
     if (dl >= 5) {
@@ -1096,7 +1095,7 @@ const flareTrainDragon = () => {
           owned: () => game.Game.dragonLevel >= 10,
         }, {
           id: 8,
-          delta: () => game.Game.prestige * .01 * .05 * game.Game.cookiesPs, // 5% bonus to prestige
+          delta: () => flareHeavenlyIncrease(.05), // 5% bonus to prestige
           owned: () => game.Game.dragonLevel >= 11,
         },
       ]
@@ -1120,20 +1119,18 @@ const flareTrainDragon = () => {
 const flareSetDragonAura = (id, slot) => {
   // Auras defined on line 14829
   // Cost to sacrifice is 1 of your highest building (line 14904)
-  switch (flareSubStep) {
-    case 0:
-      game.Game.specialTab='dragon';
-      game.Game.ToggleSpecialMenu(1);
-      flareSubStep = 1;
-      game.Game.SetDragonAura(id,slot); //aura, slot
-      return true;
-    case 1:
+  flareLog(`Dragon Aura set to ${game.Game.dragonAuras[id].name}`);
+  game.Game.specialTab='dragon';
+  game.Game.ToggleSpecialMenu(1);
+  flareMultiStep = () => {
+    game.Game.SetDragonAura(id,slot); //aura, slot
+    flareMultiStep = () => {
       gid('promptOption0').click();
-      flareSubStep = 0;
-      return flareOneAction;
+      flareMultiStep = undefined;
+    }
   }
+  return true;
 }
-
 
 const flareShop = () => {
   if (!flareShouldSpendCookies) return false;
@@ -1308,11 +1305,11 @@ const flareCheckTalk = () => {
   if ((flareTick / flareHz) % 60 === 0) flareLog('Log');
 }
 
-const flareLog = (message) => {
+const flareLog = (message, qty = 1) => {
   flareLogs.push({
     tick: flareTick,
     timestamp: Date.now(),
-    message,
+    message: qty > 1 ? message + ` x${qty}`: message,
     cookies: Math.floor(game.Game.cookies),
     building_cps: Math.floor(game.Game.cookiesPs),
     click_cps: Math.floor(flareHz * game.Game.computedMouseCps),
@@ -1322,8 +1319,8 @@ const flareLog = (message) => {
   if (!message || message === 'Log') return;
 
   const lastIndex = flareMessages.length - 1;
-  if (lastIndex > 0 && message === flareMessages[lastIndex].message) flareMessages[lastIndex].qty++;
-  else flareMessages.push({ message, qty: 1 });
+  if (lastIndex > 0 && message === flareMessages[lastIndex].message) flareMessages[lastIndex].qty += qty;
+  else flareMessages.push({ message, qty });
 
   let messages = '';
   flareMessages = flareMessages.slice(Math.max(flareMessages.length - 100, 0));
@@ -1340,8 +1337,11 @@ const flareLog = (message) => {
       mess = mess.replace(/Building Available/g, '<span class="flareNewBuilding">Building Available</span>');
       mess = mess.replace(/Activating Minigame/g, '<span class="flareMinigame">Activating Minigame</span>');
       mess = mess.replace(/Upgrading!/g, '<span class="flareUpgrading">Upgrading!</span>');
+      mess = mess.replace(/Dragon Aura/g, '<span class="flareDragon">Dragon Aura</span>');
+      mess = mess.replace(/Upgrading Dragon/g, '<span class="flareDragon">Upgrading Dragon</span>');
       mess = mess.replace(/Unlocking/g, '<span class="flareUnlocking">Unlocking</span>');
-      mess = mess.replace(/Buying building/g, '<span class="flareBuyBuilding">Buying building</span>');
+      mess = mess.replace(/Buying building/g, '<span class="flareBuilding">Buying building</span>');
+      mess = mess.replace(/Selling building/g, '<span class="flareBuilding">Selling building</span>');
       mess = mess.replace(/Achievement won/g, '<span class="flareAchievement">Achievement won</span>');
       mess = mess.replace(/Clicking Golden Cookie/g, '<span class="flareGoldenCookie">Clicking Golden Cookie</span>');
 
@@ -1443,3 +1443,30 @@ const flareCurrentFingersBase = () => {
 const flareCurrentFingers = () => {
   return flareCurrentFingersBase() * flareObjectsNoCursor();
 };
+const flareCheat = () => {
+  game.Game.OpenSesame();
+  if(game.Game.lumpsTotal <= 0) {
+    game.Game.lumpsTotal = 1;
+    game.Game.lumps = 1;
+  }
+
+  game.Game.shimmerTypes['golden'].time = game.Game.shimmerTypes['golden'].maxTime;
+  if(!game.Game.goldenClicks) {
+    setTimeout(() => {
+      game.Game.goldenClicks = 77;
+      game.Game.goldenClicksLocal = 77;
+      game.Game.shimmerTypes['golden'].time = game.Game.shimmerTypes['golden'].maxTime;
+    }, 15000);
+  }
+}
+
+const flareHeavenlyIncrease = (addPercent) => {
+  const curHM = game.Game.GetHeavenlyMultiplier();
+  const pres = game.Game.prestige * .01;
+  const baseCPS = game.Game.cookiesPs / game.Game.globalCpsMult;
+
+  const baseMult = game.Game.globalCpsMult / (1+pres * curHM);
+  const newMult = baseMult * (1+pres * (curHM + addPercent))
+  const newCPS = baseCPS * newMult;
+  return newCPS - game.Game.cookiesPs;
+}

@@ -74,6 +74,9 @@
       .flareUnlocking {
         color: purple;
       }
+      .flareDragon {
+        color: purple;
+      }
       .flareNewBuilding {
         color: green;
       }
@@ -83,7 +86,7 @@
       .flareUpgrading {
         color: blue;
       }
-      .flareBuyBuilding {
+      .flareBuilding {
         color: orange;
       }
       .flareAchievement {
@@ -124,11 +127,12 @@
     <script src="flareLists.js"></script>
     <script src="flareAI.js"></script>
 </head>
-<!--<body onLoad="flareStartAI()">-->
-<body>
+<body onLoad="flareStartAI()">
+  <!--<body>-->
   <div id="flareOutputControls">
     <button onclick="flareToggleOutput()">Toggle F.L.A.R.E Output</button>
     <button onclick="flareDownload()">DL</button>
+    <button onclick="flareCheat()">!</button>
   </div>
     <div id="flareIntro">
         <div>Cookie Clicker is a game written by Julien "Orteil" Thiennot, and is playable at <a href="https://www.cookieclicker.com/">cookieClicker.com</a>.</div>

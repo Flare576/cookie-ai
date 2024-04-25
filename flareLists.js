@@ -1130,23 +1130,23 @@ const flareUpgradesList = [
   // Ascension
   { // Unlocks 5% of the potential of your prestiege level 11c
     id: 129,
-    delta: () => game.Game.prestige * .01 * .05 * game.Game.cookiesPs,
+    delta: () => flareHeavenlyIncrease(.05),
   },
   { // Unlocks 25% of the potential of your prestiege level 1111c
     id: 130,
-    delta: () => game.Game.prestige * .01 * .20 * game.Game.cookiesPs, //jump is from 5 to 25
+    delta: () => flareHeavenlyIncrease(.20),
   },
   { // Unlocks 50% of the potential of your prestiege level 111111c
     id: 131,
-    delta: () => game.Game.prestige * .01 * .25 * game.Game.cookiesPs, //jump is from 25 to 50
+    delta: () => flareHeavenlyIncrease(.25),
   },
   { // Unlocks 75% of the potential of your prestiege level 11.11m c
     id: 132,
-    delta: () => game.Game.prestige * .01 * .25 * game.Game.cookiesPs, //jump is from 50 to 75
+    delta: () => flareHeavenlyIncrease(.25),
   },
   { // Unlocks 100% of the potential of your prestiege level 1.11b c
     id: 133,
-    delta: () => game.Game.prestige * .01 * .25 * game.Game.cookiesPs, //jump is from 75 to 100
+    delta: () => flareHeavenlyIncrease(.25),
   },
   { // Cookie production Multipler 1% 100c
     id: 589,
@@ -1636,6 +1636,7 @@ const flarePlants = [
     secondary: 'duketater',
   }
 ];
+const flareSlotNames = ['Diamond', 'Ruby', 'Jade'];
 
 const flareWaitMinutes = (minutes, upgradeID) => {
   const price = game.Game.UpgradesById[upgradeID].getPrice();
