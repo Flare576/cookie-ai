@@ -444,10 +444,6 @@ const flareUpgradesList = [
     id: 442,
     delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.175,
   },
-  { // More CPS for more milk for 900dec c (See line 5022) (kitten assis...)
-    id: 442,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.175,
-  },
   { // More CPS for more milk for 900undec c (See line 5022) (kitten marketeers)
     id: 462,
     delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.15,
@@ -459,625 +455,6 @@ const flareUpgradesList = [
   { // More CPS for more milk for 900duodec c (See line 5022) (kitten executive)
     id: 613,
     delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.115,
-  },
-
-  { // Cookie Production Multiplier 1% for 999999c
-    id: 33,
-    delta: () => flareGetRate() * .01,
-  },
-  { // Cookie Production Multiplier 1% for 5m c
-    id: 34,
-    delta: () => flareGetRate() * .01,
-  },
-  { // Cookie Production Multiplier 1% for 10m c
-    id: 35,
-    delta: () => flareGetRate() * .01,
-  },
-  { // Cookie Production Multiplier 2% for 50m c (Peanut Butter)
-    id: 36,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100m c (Coconut)
-    id: 37,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 500m c (White Chocolate)
-    id: 38,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100m c (Macademia)
-    id: 39,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5b c (DoubleChip)
-    id: 40,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 10b c (white choc mac)
-    id: 41,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 50b c (all chocolate)
-    id: 42,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 5% for 100b c (dark chocolate coated)
-    id: 55,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 100b c (white chocolate coated)
-    id: 56,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 2% for 500b c (eclipse)
-    id: 80,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 1t c (zebra)
-    id: 81,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5t c (snickerdoodle)
-    id: 88,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 10t c (stroopwafels)
-    id: 89,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 50t c (macaroons)
-    id: 90,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100t c (empire biscuits)
-    id: 92,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 500t c (madeleines)
-    id: 104,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 500t c (palmiers)
-    id: 105,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 1quad c (palets)
-    id: 106,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 1quad c (sables)
-    id: 107,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 10quad c (gingerbread men)
-    id: 150,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 10quad c (gingerbread tree)
-    id: 151,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 5% for 50quad c (pure black)
-    id: 256,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 50quad c (pure white)
-    id: 257,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 3% for 100quad c (lady fingers)
-    id: 258,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 500quad c (Tuiles)
-    id: 259,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 1quint c (chocolate-stuffed biscuit)
-    id: 260,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 5quint c (checker cookie)
-    id: 261,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10quint c (butter)
-    id: 262,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 50quint c (cream)
-    id: 263,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 10% for 100oct c (Milk chocolate butter buscuit)
-    id: 334,
-    delta: () => flareGetRate() * .10,
-  },
-  { // Cookie Production Multiplier 10% for 100non c (Dark chocolate butter buscuit)
-    id: 335,
-    delta: () => flareGetRate() * .10,
-  },
-  { // Cookie Production Multiplier 10% for 100dec c (White chocolate butter buscuit)
-    id: 336,
-    delta: () => flareGetRate() * .10,
-  },
-  { // Cookie Production Multiplier 10% for 100dunec c (Ruby chocolate butter buscuit)
-    id: 337,
-    delta: () => flareGetRate() * .10,
-  },
-  { // Cookie Production Multiplier 4% for 100quint c (gingersnap)
-    id: 338,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 500quint c (cinnamon)
-    id: 339,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 1sex c (vanity)
-    id: 340,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 5sex c (cigars)
-    id: 341,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 10sex c (Pinwheel)
-    id: 342,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 50sex c (Fudge squares)
-    id: 343,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 100sex c (Shortbread biscuits)
-    id: 350,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 500sex c (Millionaires Shortbread)
-    id: 351,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 1sep c (Caramel)
-    id: 352,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 10% for 100dunec c (Lavendar chocolate butter buscuit)
-    id: 400,
-    delta: () => flareGetRate() * .10,
-  },
-  { // Cookie Production Multiplier 4% for 5sep c (Pecan Sandies)
-    id: 403,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 5sep c (Moravian Spice)
-    id: 404,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 50sep c (Anzac biscuits)
-    id: 405,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 100sep c (Buttercakes)
-    id: 406,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 500sep c (Ice cream sandwiches)
-    id: 407,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 10% for 100oct c (Birthday)
-    id: 426,
-    delta: () => flareGetRate() * .10,
-  },
-  { // Cookie Production Multiplier 4% for 1oct c (Pink biscuits)
-    id: 444,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 5oct c (Whole grain)
-    id: 445,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 10oct c (Candy)
-    id: 446,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 50oct c (Big Chip)
-    id: 447,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 1% for 100oct c (One Chip)
-    id: 448,
-    delta: () => flareGetRate() * .01,
-  },
-  { // Cookie Production Multiplier 4% for 500oct c (Sprinkles)
-    id: 453,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 950oct c (Peanutbutter blossom)
-    id: 454,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 5non c (Nobake)
-    id: 455,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 10non c (Florentines)
-    id: 456,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 50non c (Chocolate crinkles)
-    id: 457,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 100non c (Maple)
-    id: 458,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 500non c (Persian Rice)
-    id: 464,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 1dec c (Norwegian)
-    id: 465,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 5dec c (Crispy rice)
-    id: 466,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 10dec c (Ube)
-    id: 467,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 50dec c (Butterscotch)
-    id: 468,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 100dec c (Speculaas)
-    id: 469,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 500dec c (Chocolate Oatmeal)
-    id: 498,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 1undec c (Molasses)
-    id: 499,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 5undec c (Biscotti)
-    id: 500,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 10undec c (Waffle)
-    id: 501,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 2% for 100m c (Almond)
-    id: 502,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100m c (Hazelnut)
-    id: 503,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100m c (Walnut)
-    id: 504,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 4% for 50undec c (Custard Creams)
-    id: 535,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 100undec c (Bourbon biscuits)
-    id: 536,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 5% for 500undec c (Mini)
-    id: 538,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 5duodec c (Whoopie Pies)
-    id: 565,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 5duodec c (Caramel wafer biscuits)
-    id: 566,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 10duodec c (Chocolate chip mocha)
-    id: 567,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 30duodec c (Earl grey)
-    id: 568,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 100duodec c (Corn syrup)
-    id: 569,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 300duodec c (Icebox)
-    id: 570,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 300duodec c (Graham cracker)
-    id: 571,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 3tredec c (Hardtack)
-    id: 572,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 10tredec c (Cornflake)
-    id: 573,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 30tredec c (Tofu)
-    id: 574,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 30tredec c (Gluten free)
-    id: 575,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 100tredec c (Russian bread)
-    id: 576,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 300tredec c (Lebkuchen)
-    id: 577,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 1quatdec c (Aachener)
-    id: 578,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 3quatdec c (Canistrelli)
-    id: 579,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 10quatdec c (Nice)
-    id: 580,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 30quatdec c (French pure butter)
-    id: 581,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 30quatdec c (Petit beurre)
-    id: 582,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 100quatdec c (Nanaimo bars)
-    id: 583,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 300quatdec c (Berger)
-    id: 584,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 1quindec c (Chinsuko)
-    id: 585,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 1quindec c (Panda koala)
-    id: 586,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 3quindec c (Putri salju)
-    id: 587,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 5% for 10quindec c (Milk)
-    id: 588,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 10% for 1t c (Chocolate Chip)
-    id: 590,
-    delta: () => flareGetRate() * .10,
-  },
-  { // Cookie Production Multiplier 5% for 30quindec c (Kruidnoten)
-    id: 607,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 05% for 35duodec c (Chai tea)
-    id: 614,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 2% for 100m c (Cashew)
-    id: 727,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 500m c (Milk Chocolate)
-    id: 728,
-    delta: () => flareGetRate() * .02,
-  },
-
-  // Ascension Cookies - macarons
-  { // Cookie Production Multiplier 3% for 10000 c (Rose macarons)
-    id: 202,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10m c (lemon macarons)
-    id: 203,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10b c (chocolate macarons)
-    id: 204,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10t c (pistachio macarons)
-    id: 205,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10quad c (hazelnut  macarons)
-    id: 206,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10quint c (hazelnut macarons)
-    id: 207,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10sex c (Caramel macarons)
-    id: 230,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10sep c (Licorice macarons)
-    id: 231,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10oct c (Earl grey macarons)
-    id: 725,
-    delta: () => flareGetRate() * .03,
-  },
-
-  // Ascension Cookies - brand
-  { // Cookie Production Multiplier 2% for 5quad c (Fig gluttons)
-    id: 125,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5quad c (Loreols)
-    id: 126,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5quad c (Jaffa Cakes)
-    id: 127,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5quad c (Grease's Cups)
-    id: 128,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5quad c (Digits)
-    id: 344,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 3% for 10quad c (Caramoas)
-    id: 120,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10quad c (Sagalongs)
-    id: 121,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10quad c (Shortfoils)
-    id: 122,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 10quad c (Win mints)
-    id: 123,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 5sex c (Lombardia)
-    id: 401,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 3% for 5sex c (Bastenaken)
-    id: 402,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 2% for 5sep c (Festivity Loops)
-    id: 463,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 2% for 5oct c (Havabreaks)
-    id: 612,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5non c (Zilla wafers)
-    id: 618,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5dec c (Dim dams)
-    id: 619,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5undec c (Pokey)
-    id: 726,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 5duodec c (Nines)
-    id: 824,
-    delta: () => flareGetRate() * .02,
-  },
-
-  // Ascension Cookies - Butter cookies
-  { // Cookie Production Multiplier 4% for 100sex c (Butter horseshoes)
-    id: 345,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 500sex c (Butter pucks)
-    id: 346,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 950sex c (Butter knots)
-    id: 347,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 5sep c (Butter slabs)
-    id: 348,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 10sep c (Butter swirls)
-    id: 349,
-    delta: () => flareGetRate() * .04,
-  },
-
-  // Ascension Cookies - british tea biscuits
-  { // Cookie Production Multiplier 2% for 100t c (british tea biscuits)
-    id: 93,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100t c (choclate british tea biscuits)
-    id: 94,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100t c (round british tea biscuits)
-    id: 95,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100t c (round chocolate british tea biscuits)
-    id: 96,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100t c (round british tea biscuits heart)
-    id: 97,
-    delta: () => flareGetRate() * .02,
-  },
-  { // Cookie Production Multiplier 2% for 100t c (round chocolate british tea biscuits heart)
-    id: 98,
-    delta: () => flareGetRate() * .02,
-  },
-
-  // Ascension - Maybe cookies
-  { // Cookie Production Multiplier 4% for 100dec c (Cookie dough)
-    id: 551,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 4% for 10undec c (Burnt)
-    id: 552,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 3% for 1duodec c (no chips)
-    id: 553,
-    delta: () => flareGetRate() * .03,
-  },
-  { // Cookie Production Multiplier 4% for 100duodec c (Flavor text)
-    id: 554,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 5% for 10tredec c (High definition)
-    id: 555,
-    delta: () => flareGetRate() * .05,
-  },
-  { // Cookie Production Multiplier 4% for 1quatdec c (Crackers)
-    id: 611,
-    delta: () => flareGetRate() * .04,
-  },
-  { // Cookie Production Multiplier 5% for 100quatdec c (Deep fried)
-    id: 818,
-    delta: () => flareGetRate() * .05,
   },
 
   { // Golden cookie rate increase 2x 777.7m c (worth waiting 10 min for)
@@ -1456,6 +833,46 @@ const flareUpgradesList = [
 [826, 827, 828, 829, 830, 831, 832, 833, 834]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('You')}));
 
+// 1% cookies
+[33, 34, 35, 448]
+  .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.01)}));
+
+// 2% cookies
+[36, 37, 38, 39, 40, 41, 42, 80, 81, 88, 89, 90, 92, 104, 105, 106, 107, 150, 151, 502, 503, 504, 727, 728,
+  125, 126, 127, 128, 344, 612, 618, 619, 726, 824, // Ascension: Brand
+  93, 94, 95, 96, 97, 98, // Ascension: British Tea
+]
+  .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.02)}));
+
+// 3% cookies
+[258, 259, 260, 261, 262, 263,
+  202, 203, 204, 205, 206, 207, 230, 231, 725, // Ascension: Macarons
+  120, 121, 122, 123, 401, 402, 463, // Ascension: Brand
+  553, // Ascension: Maybe
+]
+  .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.03)}));
+
+// 4% cookies
+[
+  338, 339, 340, 341, 342, 343, 350, 351, 352, 403, 404, 405, 406, 407, 444, 445, 446, 447, 453, 454, 455, 456, 457,
+  458, 464, 465, 466, 467, 468, 469, 498, 499, 500, 501, 535, 536,
+  345, 346, 347, 348, 349, // Ascension: Butter
+  551, 552, 554, 611, // Ascension: Maybe
+]
+  .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.04)}));
+
+// 5% cookies
+[
+  55, 56, 256, 257, 538, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583,
+  584, 585, 586, 587, 588, 607, 614,
+  555, 818, // Ascension: Maybe
+]
+  .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.05)}));
+
+// 10% cookies
+[334, 335, 336, 337, 400, 426, 590]
+  .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.10)}));
+
 // Messages resulting from game events that don't have an action associated with them
 const flareChat = [
   {
@@ -1764,4 +1181,8 @@ const flareGrandmaSynergy = (name) => {
 
 const flareDouble = (name) => {
   return game.Game.Objects[name].storedTotalCps * game.Game.globalCpsMult;
+}
+
+const flareCookieMult = (percent) => {
+  return flareGetRate() * percent;
 }
