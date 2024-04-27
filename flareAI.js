@@ -6,7 +6,8 @@ let flareTick;
 let flareDelay = 1000/flareHz;
 let flareOneAction = true;
 let flareMultiStep;
-let tallestCookie = 0;
+let flareTallestCookie = 0;
+let flareLongestWait = 0;
 let flareMessages = [];
 let flareLogs = [];
 let flareWonAchievements = [];
@@ -47,7 +48,7 @@ const flareOp = () => {
 
 const flareAscend = () => {
   //Don't ascend if you have an active buff - you might get another level
-  if (flareHasBuff()) return false;
+  //if (flareHasBuff()) return false;
 
   if (game.Game.cookiesEarned >= flareAscensionGoal()) {
     game.Game.Ascend(1);
@@ -68,10 +69,11 @@ const flareAscend = () => {
           flareMultiStep = () => {// Lets-a-go
             game.Game.Reincarnate(1);
             flareMultiStep = () => {// UI restored
-              if (!gid('product2') || !gid('product2').classList.contains('toggledOff')) return false
+              if (!gid('product19') || !gid('product19').classList.contains('toggledOff')) return false
               flareChat.forEach(c => {
                 if (c.resetOnAscension) c.fired = false;
               });
+              flareLongestWait = 0;
               flareMultiStep = undefined;
             };
           };
@@ -109,6 +111,7 @@ const flareNextChipBatch = () => {
     })
     .find(batch => !batch.done);
 }
+// Upgrade 2 could be cookies, start with 400, 337, 336, 335, 334?
 
 const flareSetPermanentUpgrade1 = (next) => {
   flareMultiStep = () => { // Wait for upgrade to visible
@@ -117,6 +120,12 @@ const flareSetPermanentUpgrade1 = (next) => {
     gid('heavenlyUpgrade264').click();
     flareMultiStep = () => { // Choose best available
       const bestAvailable = [
+        'upgradeForPermanent613', // Kitten Executive
+        'upgradeForPermanent494', // Kitten Analysts
+        'upgradeForPermanent462', // Kitten Marketeers
+        'upgradeForPermanent442', // Kitten Assistant to....
+        'upgradeForPermanent425', // Kitten Consultants
+        'upgradeForPermanent322', // Kitten Experts
         'upgradeForPermanent321', // Kitten Specialists
         'upgradeForPermanent320', // Kitten Accountants
         'upgradeForPermanent187', // Kitten Managers
@@ -154,39 +163,75 @@ const flareClickShimmer = () => {
 }
 
 const flareManageSeasons = () => {
+  const holidayWaitSeconds = 60;
   if (!game.Game.HasUnlocked('Season switcher')) return false;
   // Tipster says: Christmas [santa] -> Valentines -> Easter -> Halloween -> Christmas [reindeer] -> Halloween
-  const finishedChristmas = game.Game.GetHowManyReindeerDrops() === 7 && game.Game.GetHowManySantaDrops() === 14;
-  if (!finishedChristmas) {
-    if (game.Game.season !== 'christmas') {
-      const christmasCost = game.Game.UpgradesById[182].priceFunc();
-      if (game.Game.cookies >= christmasCost) {
+  // has 'Santas dominion'
+  // const finishedChristmas = game.Game.GetHowManyReindeerDrops() === 7 && game.Game.GetHowManySantaDrops() === 14;
+  const flareSeasonPhases = [
+    {
+      done: () => game.Game.Has('Santa\'s dominion'),
+      name: 'christmas',
+      id: 182,
+      delta: 'Holly Jolly',
+      extra: () => {
+        const santaLvl = game.Game.santaLevel+1;
+        const santaCost = Math.pow(santaLvl, santaLvl);
+        if (santaLvl < 15 && game.Game.cookies >= santaCost) {
+          flareShouldSpendCookies = false;
+          game.Game.UpgradeSanta();
+          return flareOneAction;
+        }
+      },
+    },{
+      done: () => game.Game.Has('Prism heart biscuits'),
+      name: 'valentines',
+      id: 184,
+      delta: '<3',
+    },{
+      done: () => game.Game.GetHowManyEggs() === 20,
+      name: 'easter',
+      id: 209,
+      deta: 'Wascally Wabbits',
+    },{
+      done: () => game.Game.GetHowManyHalloweenDrops() === 7,
+      name: 'halloween',
+      id: 183,
+      deta: 'Spooky Scary Skeletons',
+    },{
+      done: () => game.Game.GetHowManyReindeerDrops() === 7,
+      name: 'christmas',
+      id: 182,
+      deta: 'Back for Reindeer cookies',
+    },{
+      done: () => false,
+      name: 'halloween',
+      id: 183,
+      deta: 'Vibe here apparently',
+    },
+  ];
+  const next = flareSeasonPhases.find(s=>!s.done());
+  if (next) {
+    if (game.Game.season !== next.name) {
+      const cost = game.Game.UpgradesById[next.id].priceFunc();
+      if (game.Game.cookies >= cost) {
         flareShouldSpendCookies = false;
-        game.Game.UpgradesById[182].click();
+        game.Game.UpgradesById[next.id].click();
         return flareOneAction;
       } else {
-        const eta = (christmasCost - game.Game.cookies) / flareGetRate();
-        if (eta <= 300) {
+        const eta = (cost - game.Game.cookies) / flareGetRate();
+        if (eta <= holidayWaitSeconds) {
           flareNextPurchase = {
-            name: 'Waiting for Christmas!',
-            price: christmasCost,
-            delta: 'Holly Jolly',
+            name: `Waiting for ${next.name}!`,
+            price: cost,
+            delta: next.delta,
             eta,
           };
           flareShouldSpendCookies = false;
         }
         return false;
       }
-    } else {
-      // Evolve Festive Test tube Line 14997
-      const santaLvl = game.Game.santaLevel+1;
-      const santaCost = Math.pow(santaLvl, santaLvl);
-      if (santaLvl < 15 && game.Game.cookies >= santaCost) {
-        flareShouldSpendCookies = false;
-        game.Game.UpgradeSanta();
-        return flareOneAction;
-      }
-    }
+    } else if (next.extra) return next.extra();
   }
   return false;
 }
@@ -327,8 +372,10 @@ const flareCastSpells = () => {
     const grimoire = tower.minigame;
     const spell = grimoire.spells['hand of fate'];
     // Magic is full and spell isn't too expensive
+    // Need 21 towers to cast Hand of Fate
     if (grimoire.magic === grimoire.magicM && grimoire.magic > grimoire.getSpellCost(spell)) {
       flareLog('Casting "Force the Hand of Fate"');
+      tower.switchMinigame(1);
       grimoire.castSpell(spell);
       return flareOneAction;
     }
@@ -461,10 +508,12 @@ const flarePlayWithGods = () => {
 }
 
 const flareMoveGod = (from, to) => {
-  const mg = game.Game.Objects['Temple'].minigame;
+  const temple = game.Game.Objects['Temple'];
+  const mg = temple.minigame;
   if (mg.slot[to] === from.id) return false; // That god is already in that slot
 
   flareLog(`Swapping God ${from.name} to Slot ${flareSlotNames[to]}`);
+  temple.switchMinigame(1);
   mg.dragGod(from);
   flareMultiStep = () => {
     mg.hoverSlot(to);
@@ -1027,9 +1076,9 @@ const flareTrainDragon = () => {
         game.Game.UpgradeDragon();
         return flareOneAction;
       }
-      flareDashMessage += "Saving for dragon level";
     } else {
       let target;
+      let qty = 100;
       switch (dl) {
         case 5: target = 'Cursor'; break;
         case 6: target = 'Grandma'; break;
@@ -1038,9 +1087,21 @@ const flareTrainDragon = () => {
         case 9: target = 'Factory'; break;
         case 10: target = 'Bank'; break;
         case 11: target = 'Temple'; break;
-        default: target = 'Cortex baker';
+        case 12: target = 'Wizard tower'; qty = 200; break;
+        case 13: target = 'Shipment'; break;
+        case 14: target = 'Alchemy lab'; break;
+        case 15: target = 'Portal'; break;
+        case 16: target = 'Time machine'; break;
+        case 17: target = 'Antimatter condenser'; break;
+        case 18: target = 'Prism'; break;
+        case 19: target = 'Chancemaker'; break;
+        case 20: target = 'Fractal engine'; break;
+        case 21: target = 'Javascript console'; break;
+        case 22: target = 'Idleverse'; break;
+        case 23: target = 'Cortex baker'; break;
+        case 24: target = 'You'; break;
       }
-      if (game.Game.Objects[target].amount >= 100) {
+      if (target && game.Game.Objects[target].amount >= qty) {
         flareLog(`Upgrading Dragon! (goodbye 100 ${target})`);
         game.Game.specialTab='dragon';
         game.Game.ToggleSpecialMenu(1);
@@ -1153,6 +1214,7 @@ const flareShop = () => {
       return flareOneAction;
     }
   }
+  flareLongestWait = Math.max(flareLongestWait, flareNextPurchase?.eta) || 0;
   return false;
 }
 
@@ -1171,7 +1233,11 @@ const flareUpgrades = () => {
       const desc = u.ddesc;
       const price = u.getPrice();
       const d = delta();
-      const ratio = d/price;
+
+      const quickBuyLimit = Math.min(2, flareLongestWait * .1); // 2 seconds or 10% of the longest wait so far
+      const timeCheck = price / flareGetRate();
+      const ratio = timeCheck <= quickBuyLimit ? d : d/price;
+      // const ratio = d/price;
       const eta = (price - game.Game.cookies) / flareGetRate();
       return {
         id,
@@ -1202,11 +1268,10 @@ const flareBuildings = () => {
       // const price = game.Game.modifyBuildingPrice(obj, obj.price);
       const price = obj.price;
 
-      // If it's going to take < 2 seconds to save for it, just buy it - we might get upgrades sooner
+      const quickBuyLimit = Math.min(2, flareLongestWait * .1); // 2 seconds or 10% of the longest wait so far
       const timeCheck = price / flareGetRate();
       const buyCheep = !game.Game.Has('Get lucky') || !flareHasBuff();
-      // const ratio = timeCheck <= 2 && buyCheep ? 1 / timeCheck : d/price;
-      const ratio = timeCheck <= 2 && buyCheep ? .9 : d/price;
+      const ratio = timeCheck <= quickBuyLimit && buyCheep ? d : d/price;
 
       const eta = (price - game.Game.cookies) / flareGetRate();
       return {
@@ -1228,8 +1293,6 @@ const kickoff = () => {
     console.log("selecting English");
     gid('langSelect-EN').click();
   }
-  // Uncomment for debug tools
-  // game.Game.OpenSesame();
   setTimeout(() => flareKillable = setInterval(flareOp, flareDelay),1000)
 };
 
@@ -1256,6 +1319,8 @@ const flareDrawOutput = () => {
   Cost: ${f(flareNextPurchase?.price)}<br/>
   Delta: ${f(flareNextPurchase?.delta)}<br/>
   ETA: ${f(flareNextPurchase?.eta)}<br/>
+  Longest: ${f(flareLongestWait)}<br/>
+  Batch: ${f(flareNextChipBatch().batchCost)}<br/>
   </div>
   `;
   // For funsies, start the output in the center, then bump it down when we get first grandma, then move to cookie when
@@ -1276,8 +1341,8 @@ const flareDrawOutput = () => {
   } else {
     const leftDiv = gid('sectionLeft').getBoundingClientRect();
     const cDiv =  gid('cookies').getBoundingClientRect();
-    tallestCookie = Math.max(cDiv.height, tallestCookie);
-    const calcHeight = leftDiv.height - tallestCookie - cDiv.y - 40;
+    flareTallestCookie = Math.max(cDiv.height, flareTallestCookie);
+    const calcHeight = leftDiv.height - flareTallestCookie - cDiv.y - 40;
     out.style.bottom = '40px';
     out.style.left = 0;
     out.style.width = `${leftDiv.width}px`;
@@ -1392,18 +1457,20 @@ const startFlare = () => {
       save:function(){
         return JSON.stringify({
           flareTick,
-          flareMessages,
-          flareLogs,
-          flareWonAchievements,
+          flareLongestWait,
           flareChat: flareChat.map(c => c.fired),
         });
       },
       load:function(str){
+        flareWonAchievements = [];
+        for (var i in game.Game.AchievementsById) {
+          if (game.Game.AchievementsById[i].won && !flareWonAchievements.includes(i)) {
+            flareWonAchievements.push(i);
+          }
+        }
         const restored = JSON.parse(str);
         flareTick = restored.flareTick;
-        flareMessages = restored.flareMessages;
-        flareLogs = restored.flareLogs;
-        flareWonAchievements = restored.flareWonAchievements;
+        flareLongestWait = restored.flareLongestWait;
         restored.flareChat.forEach((c, i) => flareChat[i].fired = c);
         flareLog("Loaded!");
       },
@@ -1459,6 +1526,7 @@ const flareCheat = () => {
     }, 15000);
   }
 }
+const flareStop = () => flareKillable = flareKillable ? clearInterval(flareKillable) : setInterval(flareOp, flareDelay);
 
 const flareHeavenlyIncrease = (addPercent) => {
   const curHM = game.Game.GetHeavenlyMultiplier();

@@ -1,21 +1,177 @@
 const flareAscensionList = [
   [
     363, // Cost: 1, Unlocks others (Legacy)
-    323, // Cost: 9, (How to bake your dragon)
-    395, // Cost: 3, 10% increase Cookie multiplier (Heavenly cookies)
-    264, // Cost: 100, Unlock perrmanent slot (put kitten managers)
-    254, // Cost: 25, unlocks more cookie upgrades (macarons)
-    255, // Cost: 25, unlocks more cookie upgrades (brand biscuits)
-    253, // Cost: 25, unlocks more cookie upgrades (british tea biscuits)
-    282, // Cost: 75, 5% more golden cookies (Heavenly Luck)
-    520, // Cost: 100, 1% per herald (Heralds) - we're offline, so it doesn't count, but it unlocks seasons
-    // 326, // Cost: 25, unlocks more cookie upgrades (butter cookies) Not worth it
+    323, // Cost: 9, (How to bake your dragon) req363
+    395, // Cost: 3, 10% increase Cookie multiplier (Heavenly cookies) req363
+    264, // Cost: 100, Unlock perrmanent slot (put best kitten) req363
+    254, // Cost: 25, unlocks more cookie upgrades (macarons) req395
+    255, // Cost: 25, unlocks more cookie upgrades (brand biscuits) req395
+    253, // Cost: 25, unlocks more cookie upgrades (british tea biscuits) req395
+    282, // Cost: 75, 5% more golden cookies (Heavenly Luck) req363
+    520, // Cost: 100, 1% per herald (Heralds) - we're offline, so it doesn't count, but it unlocks seasons req363
   ],[
-    181, // Cost: 1111, Unlock Season Switcher (Season Switcher)
-    327, // Cost: 999, Unlock Golden Switch (Golden Switch)
-    283, // Cost: 777, Golden Cookies effects last 10% longer (Lasting fortune)
+    181, // Cost: 1111, Unlock Season Switcher (Season Switcher) req520
+    327, // Cost: 999, Unlock Golden Switch (Golden Switch) req282
+    283, // Cost: 777, Golden Cookies effects last 10% longer (Lasting fortune) req282
   ],[
-    365, // Cost: 99,999, 10% CPS for golden cookie upgrades (Residual luck)
+    281, // Cost: 1, Offline Mode (Twin Gates of Transcendence) req363
+    326, // Cost: 25, unlocks more cookie upgrades (butter cookies) req395
+    288, // Cost: 50, start with 10 cursors (Starter kit) req254 req255 req253 req326
+    290, // Cost: 55,555, clicking +10% (Halo gloves) req288
+    141, // Cost: 500, Research 10x faster (Persistent memory) req363
+  ],[
+    265, // Cost: 20,000, Unlock perrmanent slot II (put ??????)
+  ],[
+    365, // Cost: 99,999, 10% CPS for golden cookie upgrades (Residual luck) req327
+  ],[
+    266, // Cost: 3m, Unlock perrmanent slot III (put ??????)
+    719, // Cost: 555.555m, Cursor levels boost clicks 5% (Aura gloves) req290
+    720, // Cost: 555.555b, Cursor levels to 20 (Luminous gloves) req719
+
+    // Trans left
+    353, // Cost: 7, Offline 2h (Belphegor) req281
+    354, // Cost: 49, Offline 4h (Mammon) req353
+    355, // Cost: 343, Offline 8h (Abaddon) req354
+    356, // Cost: 2,401, Offline 16h (Satan) req355
+    357, // Cost: 16,807, Offline 1d,8h (Asmodeus) req356
+    358, // Cost: 117,649, Offline 2d,16h (Beelzebub) req357
+    359, // Cost: 823,543, Offline 5d,8h (Lucifer) req358
+
+  ],[
+    // Trans right
+    274, // Cost: 7, Offline 15% (Angels) req281
+    275, // Cost: 49, Offline 25% (Archangels) req274
+    276, // Cost: 343, Offline 35% (Virtues) req275
+    277, // Cost: 2,401, Offline 45% (Dominions) req276
+    278, // Cost: 16,807, Offline 55% (Cherubim) req277
+    279, // Cost: 117,649, Offline 65% (Seraphim) req278
+    280, // Cost: 823,543, Offline 75% (God) req279
+
+    291, // Cost: 9,000, Kittens 10% (Kitten angels) req277
+    717, // Cost 9b, Kitten upgrades boost grandma 29% (Cat ladies) req291
+    718, // Cost: 900b, Grandmas get 5% from milk (Milkhelp) req717
+
+    393, // Cost: 222,222 Synergys @ 15 of each building (Synergies Vol. I) req356 req277
+    394, // Cost: 2.222m, Synergys @ 75 of each building (Synergies Vol. II) req358 req393 req279
+
+    325, // Cost: 40.354m, Synergy upgrads 2% off, 5% regular CPS, Offline 2d (Chimera) req359 req394 req280
+
+    268, // Cost: 555,555b, Upgrades 1% cheaper per 100 cursors (Five-finger discount) req290 req355
+
+  ],[
+    // Starter branch
+    289, // Cost: 5000, start with 5 grandmas (Starter kitchen) req288
+    292, // Cost: 44,444, Wrinklers appear 5x faster (Unholy bait) req289
+    364, // Cost: 444,444, +2 Wrinklers (Elder spice) req292
+    293, // Cost: 444,444, Wrinklers explode +5% (Sacrilegious corruption) req292
+
+    396, // Cost: 6.66m, 10% CPS (Wrinkly cookies) req293 req364
+    495, // Cost: 100m, Mouse tip for wrinkler (Eye of the wrinkler) req396
+    408, // Cost: 100m, Sugar lumps -1h (Stevia caelestis) req396
+    449, // Cost: 200m, Sugar Lumps 1% (up to 100) (Sugar baking) req408
+    539, // Cost: 1b, 5% + 1%/building level 10+ (Sugar crystal cookies) req449
+    540, // Cost: 333b, Various maybe-cookie upgrades (Box of maybe cookies) req539
+    541, // Cost: 333b, Various not-cookie upgrades (Box of not cookies) req539
+    542, // Cost: 333b, Various pastry upgrades (Box of pastries) req539
+
+    450, // Cost: 400m, Sugar frenzy (3x, 1h, cost 1lump) (Sugar craving) req449
+    451, // Cost: 600m, up to 600 grandma -6s sugar lumps (Sugar aging process) req450
+    409, // Cost: 300m, Sugar lumps -1h (Diabetica Daemonicus) req451 req408
+    410, // Cost: 1b, Bifuricated Lumps +5% often, likely (Sucralosia Inutilis) req409
+
+  ],[
+    // Seasons
+    269, // Cost: 111,111, Easter Eggs drop +10% (Starspawn) req181,
+    270, // Cost: 111,111, Christmas cookies drop +10% (Starsnow) req181,
+    271, // Cost: 111,111, Halloween cookies drop +10% (Starterror) req181,
+    272, // Cost: 111,111, Valentines cookies drop +10% (Starlove) req181,
+    273, // Cost: 111,111, Business Golden cookies (Startrade) req181,
+    537, // Cost: 1.111b 1/5 chance to keep holiday drops (Keepsakes) req269-273
+
+    // Spirals
+    496, // Cost: 900,000, Buy all button for upgrades (Inspired checklist) req265 req141
+    561, // Cost: 2m, Mouse tip for costs (Genius accounting) req496
+    505, // Cost: 5m, Mouse tip for Tier (Label printer) req561
+    787, // Cost: 10m, Unshackles plain-tier upgrades (Unshackled flavor) req505
+
+    //Spiral Inside
+
+  ],[
+    788, // Cost: 1.81b, Berrylium upgradeds (Unshackled berrylium) req787
+    789, // Cost: 37.88b, Blueberrylium upgrades (Unshackled blueberrylium) req788
+    790, // Cost: 327.68b, Chalcedhoney upgrades (Unshackled chalcedhoney) req789
+    791, // Cost: 1.747t, Buttergold upgrades (Unshackled buttergold) req790
+    792, // Cost: 6.857t, Sugarmuck upgrades (Unshackled sugarmuck) req791
+    793, // Cost: 21.789t, Jetmint upgrades (Unshackled jetmint) req792
+    794, // Cost: 59.316t, Cherrysilver upgrades (Unshackled cherrysilver) req793
+    795, // Cost: 143.489t, Hazelrald upgrades (Unshackled hazelrald) req794
+    796, // Cost: 316.228t, Mooncandy upgrades (Unshackled mooncandy) req795
+    797, // Cost: 646.316t, Astrofudge upgrades (Unshackled astrofudge) req796
+    798, // Cost: 1.241quad, Alabascream upgrades (Unshackled alabascream) req797
+    799, // Cost: 2.262quad, Iridyum upgrades (Unshackled iridyum) req798
+    800, // Cost: 3.944quad, Glucosmium upgrades (Unshackled glucosmium) req799
+    863, // Cost: 6.617quad, Glimmeringue upgrades (Unshackled glimmeringue) req800
+
+  ],[
+    // Spiral Outside
+    768, // Cost: 15m, Thousand Fingers x25 (Unshackled cursors) req787
+    769, // Cost: 1.92b, Tiered Grandma Upgrades +50% (Unshackled grandmas) req768
+    770, // Cost: 32.805b, Tiered Farm Upgrades +180% (Unshackled farms) req769
+    771, // Cost: 245.76b, Tiered Mine Upgrades +170% (Unshackled mines) req770
+    772, // Cost: 1.172t, Tiered Factory Upgrades +160% (Unshackled factories) req771
+    773, // Cost: 4.199t, Tiered Bank Upgrades +150% (Unshackled banks) req772
+    774, // Cost: 12.353t, Tiered Temple Upgrades +140% (Unshackled temples) req773
+    775, // Cost: 31.457t, Tiered WT Upgrades +130% (Unshackled wizard towers) req774
+    776, // Cost: 71.745t, Tiered Shipment Upgrades +120% (Unshackled shipments) req775
+    777, // Cost: 150t, Tiered AL Upgrades +110% (Unshackled alchemy labs) req776
+    778, // Cost: 292,308t, Tiered Portal Upgrades +100% (Unshackled portals) req777
+    779, // Cost: 537.477t, Tiered TM Upgrades +90% (Unshackled time machines) req778
+    780, // Cost: 941.228t, Tiered AC Upgrades +80% (Unshackled antimatter condensers) req779
+    781, // Cost: 1.581quad, Tiered Prism Upgrades +70% (Unshackled prisms) req780
+    782, // Cost: 2.563quad, Tiered Chancemaker Upgrades +60% (Unshackled chancemakers) req781
+    783, // Cost: 4.027quad, Tiered Fractal Upgrades +50% (Unshackled fractal engines) req782
+    784, // Cost: 6.155quad, Tiered JSC Upgrades +40% (Unshackled javascript consoles) req783
+    785, // Cost: 9.183quad, Tiered Idleverse Upgrades +30% (Unshackled idleverses) req784
+    786, // Cost: 13.408quad, Tiered Cortex Upgrades +20% (Unshackled cortex bakers) req785
+    864, // Cost: 19.2quad, Tiered You Upgrades +10% (Unshackled You) req786
+
+  ],[
+    // Permanent Slots
+    266, // Cost: 3m, Slot III (Permanent upgrade slot III) req265
+    267, // Cost: 400m, Slot IV (Permanent upgrade slot IV) req266
+    268, // Cost: 50b, Slot V (Permanent upgrade slot V) req267
+
+    // Bottom
+    328, // Cost: 9, Milk Selector (Classic dairy selection) req363
+    362, // Cost: 99, Background selector (Basic wallpaper assortment) req328
+    804, // Cost: 10m, Wallpapers (Distinguished wallpaper assortment) req362
+    329, // Cost: 1m, Moar Milk (fanciful dairy selection) req363
+
+    360, // Cost: 999,999 Golden cookie sound (Golden cookie alert sound) req365
+    805, // Cost: 100b, Jukebox (Sound test) req804 req329 req360
+
+    647, // Cost: 100b, Pet the dragon (Pet the dragon) req365 req323
+
+    284, // Cost: 7,777, Golden cookies stay 5% longer (Decisive fate) req283
+    286, // Cost: 99,999, All upgrades 1% cheaper (Divine sales) req284
+    287, // Cost: 399,999, Cookie upgrades 5x cheaper (Divine bakeries) req286
+    397, // Cost: 7.777m, golden cookies 1% double (Distilled essence of redoubled luck) req365 req287
+
+    562, // Cost: 1b, 50% boost, but clicking breaks it (Shimmering veil) req397
+    591, // Cost: 15b, random drops 5x common w/o Heavenly chip secret (Cosmic beginner's luck) req562
+    592, // Cost: 15b, 10% veil not break, 10% CPS (Reinforced membrane) req562
+    801, // Cost: 150b, 10% veil not break, 5% CPS (Delicate touch) req592
+    802, // Cost: 15t, 10% veil not break, 5% CPS (Steadfast murmur) req801
+    803, // Cost: 1.5quad, 10% veil not break, 5% CPS (Glittering edge) req802
+
+    643, // Cost: 77.777b, news ticker can have fortunes (Fortune cookies) req397
+
+  ],[
+    // Hidden
+    411, // Cost: 777, +1% pres, +1% golden life/duration (Lucky digit) req282 + 1 '7' in prestige level
+    412, // Cost: 77,777, +1% pres, +1% golden life/duration (Lucky number) req283 req411+ 2 '7' in prestige level
+    413, // Cost: 77.777m, +1% pres, +1% golden life/duration (Lucky payout) req284 req412+ 4 '7' in prestige level
+
   ],
 ]
 
@@ -88,21 +244,25 @@ const flareBuildingsList = [
     id: 'Javascript console',
   }, {
     id: 'Idleverse',
+  }, {
+    id: 'Cortex baker',
+  }, {
+    id: 'You',
   },
 ];
 
 const flareUpgradesList = [
   { // 2x cursor for 100c, unlocked by first cursor
     id: 0,
-    delta: () => game.Game.Objects['Cursor'].storedTotalCps + flareHz,
+    delta: () => flareCursorAndClick(),
   },
   { // 2x cursor for 500c
     id: 1,
-    delta: () => game.Game.Objects['Cursor'].storedTotalCps + flareHz,
+    delta: () => flareCursorAndClick(),
   },
   { // 2x cursor for 10000c
     id: 2,
-    delta: () => game.Game.Objects['Cursor'].storedTotalCps + flareHz,
+    delta: () => flareCursorAndClick(),
   },
   { // 0.1 for each non-cursor building for 100000c
     id: 3,
@@ -130,6 +290,26 @@ const flareUpgradesList = [
   },
   { // Upgrade3 x20 for 10quad c (quadrillian fingers)
     id: 109,
+    delta: () => flareCurrentFingers() * 20,
+  },
+  { // Upgrade3 x20 for 10quint c (septillian fingers)
+    id: 188,
+    delta: () => flareCurrentFingers() * 20,
+  },
+  { // Upgrade3 x20 for 10sex c (octillion fingers)
+    id: 189,
+    delta: () => flareCurrentFingers() * 20,
+  },
+  { // Upgrade3 x20 for 10sep c (nonillion fingers)
+    id: 660,
+    delta: () => flareCurrentFingers() * 20,
+  },
+  { // Upgrade3 x20 for 10oct c (decillion fingers)
+    id: 764,
+    delta: () => flareCurrentFingers() * 20,
+  },
+  { // Upgrade3 x20 for 10non c (undecillion fingers)
+    id: 873,
     delta: () => flareCurrentFingers() * 20,
   },
 
@@ -169,6 +349,30 @@ const flareUpgradesList = [
     id: 428,
     delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x grandma for 50sex c
+    id: 480,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x grandma for 500sep c
+    id: 506,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x grandma for 500oct c
+    id: 662,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x grandma for 50dec c
+    id: 700,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x grandma for 500undec c
+    id: 743,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x grandma for 5tredec c
+    id: 840,
+    delta: () => game.Game.Objects['Grandma'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x farms for 11000c
     id: 10,
@@ -200,6 +404,34 @@ const flareUpgradesList = [
   },
   { // 2x farms for 550quad c
     id: 308,
+    delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x farms for 550quint c
+    id: 429,
+    delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x farms for 550sex c
+    id: 481,
+    delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x farms for 5.5oct c
+    id: 507,
+    delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x farms for 55non c
+    id: 663,
+    delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x farms for 550dec c
+    id: 701,
+    delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x farms for 5.5duodec c
+    id: 744,
+    delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x farms for 55tredec c
+    id: 841,
     delta: () => game.Game.Objects['Farm'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -235,6 +467,34 @@ const flareUpgradesList = [
     id: 310,
     delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x factories for 65sex c
+    id: 431,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x factories for 65sep c
+    id: 483,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x factories for 650oct c
+    id: 509,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x factories for 6.5dec c
+    id: 665,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x factories for 65undec c
+    id: 703,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x factories for 65duodec c
+    id: 746,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x factories for 6.5quatdec c
+    id: 843,
+    delta: () => game.Game.Objects['Factory'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x mines for 120000c
     id: 16,
@@ -268,6 +528,34 @@ const flareUpgradesList = [
     id: 309,
     delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x mines for 6sex c
+    id: 430,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x mines for 6sep c
+    id: 482,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x mines for 60oct c
+    id: 508,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x mines for 600non c
+    id: 664,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x mines for 6undec c
+    id: 702,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x mines for 60duodec c
+    id: 745,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x mines for 60tredec c
+    id: 842,
+    delta: () => game.Game.Objects['Mine'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x bank for 14m c
     id: 232,
@@ -295,6 +583,38 @@ const flareUpgradesList = [
   },
   { // 2x bank for 700quad c
     id: 298,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 700quint c
+    id: 311,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 700sex c
+    id: 432,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 700sep c
+    id: 484,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 7non c
+    id: 510,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 70dec c
+    id: 666,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 700undec c
+    id: 704,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 7tredec c
+    id: 747,
+    delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x bank for 70quatdec c
+    id: 844,
     delta: () => game.Game.Objects['Bank'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -326,6 +646,34 @@ const flareUpgradesList = [
     id: 299,
     delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x temple for 10sex c
+    id: 312,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x temple for 10sep c
+    id: 433,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x temple for 10oct c
+    id: 485,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x temple for 100non c
+    id: 511,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x temple for 1undec c
+    id: 667,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x temple for 10duodec c
+    id: 705,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x temple for 100tredec c
+    id: 748,
+    delta: () => game.Game.Objects['Temple'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x wizard tower for 3.3b c
     id: 244,
@@ -349,6 +697,38 @@ const flareUpgradesList = [
   },
   { // 2x wizard tower for 165quad c
     id: 249,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 165quint c
+    id: 300,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 165sex c
+    id: 313,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 165sep c
+    id: 434,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 165oct c
+    id: 486,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 1.65dec c
+    id: 512,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 1.65undec c
+    id: 668,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 165duodec c
+    id: 706,
+    delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x wizard tower for 165quatdec c
+    id: 749,
     delta: () => game.Game.Objects['Wizard tower'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -376,6 +756,38 @@ const flareUpgradesList = [
     id: 196,
     delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Shipment for 2.55sex c
+    id: 301,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Shipment for 2.55sep c
+    id: 314,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Shipment for 2.55oct c
+    id: 435,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Shipment for 2.55non c
+    id: 487,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Shipment for 25dec c
+    id: 513,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Shipment for 250undec c
+    id: 669,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Shipment for 250undec c
+    id: 707,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Shipment for 25quatdec c
+    id: 750,
+    delta: () => game.Game.Objects['Shipment'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Alchemy lab for 750b c
     id: 22,
@@ -401,6 +813,34 @@ const flareUpgradesList = [
     id: 197,
     delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Alchemy lab for 37.5sex c
+    id: 302,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Alchemy lab for 37.5sep c
+    id: 315,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Alchemy lab for 37.5oct c
+    id: 436,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Alchemy lab for 37.5non c
+    id: 488,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Alchemy lab for 375dec c
+    id: 514,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Alchemy lab for 3.75duodec c
+    id: 670,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Alchemy lab for 37.5tredec c
+    id: 708,
+    delta: () => game.Game.Objects['Alchemy lab'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Portal for 10t c
     id: 25,
@@ -420,6 +860,38 @@ const flareUpgradesList = [
   },
   { // 2x Portal for 5quint c
     id: 116,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 500quint c
+    id: 198,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 500sex c
+    id: 303,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 500sep c
+    id: 316,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 500oct c
+    id: 437,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 500non c
+    id: 489,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 5undec c
+    id: 515,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 50duodec c
+    id: 671,
+    delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Portal for 500tredec c
+    id: 709,
     delta: () => game.Game.Objects['Portal'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -443,6 +915,34 @@ const flareUpgradesList = [
     id: 117,
     delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Time Machine for 7sex c
+    id: 199,
+    delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Time Machine for 7sep c
+    id: 304,
+    delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Time Machine for 7oct c
+    id: 317,
+    delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Time Machine for 7non c
+    id: 438,
+    delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Time Machine for 7dec c
+    id: 490,
+    delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Time Machine for 70undec c
+    id: 516,
+    delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Time Machine for 700duodec c
+    id: 672,
+    delta: () => game.Game.Objects['Time machine'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Antimater condensor for 1.7quad c
     id: 99,
@@ -462,6 +962,34 @@ const flareUpgradesList = [
   },
   { // 2x Antimater condensor for 850quint c
     id: 118,
+    delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Antimater condensor for 850sex c
+    id: 200,
+    delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Antimater condensor for 85sep c
+    id: 305,
+    delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Antimater condensor for 85oct c
+    id: 318,
+    delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Antimater condensor for 85non c
+    id: 439,
+    delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Antimater condensor for 85dec c
+    id: 491,
+    delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Antimater condensor for 850undec c
+    id: 517,
+    delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Antimater condensor for 8.5tredec c
+    id: 673,
     delta: () => game.Game.Objects['Antimatter condenser'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -485,6 +1013,34 @@ const flareUpgradesList = [
     id: 179,
     delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Prism for 1sep c
+    id: 201,
+    delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Prism for 1oct c
+    id: 306,
+    delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Prism for 1non c
+    id: 319,
+    delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Prism for 1dec c
+    id: 440,
+    delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Prism for 1undec c
+    id: 492,
+    delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Prism for 10duodec c
+    id: 518,
+    delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Prism for 100tredec c
+    id: 674,
+    delta: () => game.Game.Objects['Prism'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Chancemaker for 260quad c
     id: 416,
@@ -504,6 +1060,34 @@ const flareUpgradesList = [
   },
   { // 2x Chancemaker for 130sex c
     id: 420,
+    delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Chancemaker for 13sep c
+    id: 421,
+    delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Chancemaker for 13oct c
+    id: 422,
+    delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Chancemaker for 13non c
+    id: 423,
+    delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Chancemaker for 13dec c
+    id: 441,
+    delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Chancemaker for 13undec c
+    id: 493,
+    delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Chancemaker for 13duodec c
+    id: 519,
+    delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Chancemaker for 13quatdec c
+    id: 675,
     delta: () => game.Game.Objects['Chancemaker'].storedTotalCps * game.Game.globalCpsMult,
   },
 
@@ -527,6 +1111,30 @@ const flareUpgradesList = [
     id: 526,
     delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Fractal engine for 155sep c
+    id: 527,
+    delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Fractal engine for 155oct c
+    id: 528,
+    delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Fractal engine for 155non c
+    id: 529,
+    delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Fractal engine for 155dec c
+    id: 530,
+    delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Fractal engine for 155undec c
+    id: 531,
+    delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Fractal engine for 1.5tredec c
+    id: 532,
+    delta: () => game.Game.Objects['Fractal engine'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Javascript console for 710quint c
     id: 594,
@@ -544,6 +1152,34 @@ const flareUpgradesList = [
     id: 597,
     delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
   },
+  { // 2x Javascript console for 355sep c
+    id: 598,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Javascript console for 35oct c
+    id: 599,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Javascript console for 35non c
+    id: 600,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Javascript console for 35dec c
+    id: 601,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Javascript console for 35undec c
+    id: 602,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Javascript console for 35duodec c
+    id: 603,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Javascript console for 350tredec c
+    id: 604,
+    delta: () => game.Game.Objects['Javascript console'].storedTotalCps * game.Game.globalCpsMult,
+  },
 
   { // 2x Idleverse for 120sex c
     id: 684,
@@ -556,6 +1192,108 @@ const flareUpgradesList = [
   { // 2x Idleverse for 6sep c
     id: 686,
     delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 600sep c
+    id: 687,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 60oct c
+    id: 688,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 6non c
+    id: 689,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 6dec c
+    id: 690,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 6undec c
+    id: 691,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 6duodec c
+    id: 692,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Idleverse for 6tredec c
+    id: 693,
+    delta: () => game.Game.Objects['Idleverse'].storedTotalCps * game.Game.globalCpsMult,
+  },
+
+  { // 2x Cortex baker for 20sep c
+    id: 730,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 100sep c
+    id: 731,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 1oct c
+    id: 732,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 100oct c
+    id: 733,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 10non c
+    id: 734,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 1dec c
+    id: 735,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 1undec c
+    id: 736,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 1duodec c
+    id: 737,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x Cortex baker for 1tredec c
+    id: 738,
+    delta: () => game.Game.Objects['Cortex baker'].storedTotalCps * game.Game.globalCpsMult,
+  },
+
+  { // 2x You for 6oct c
+    id: 826,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 30oct c
+    id: 827,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 300oct c
+    id: 828,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 30non c
+    id: 829,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 3dec c
+    id: 830,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 300dec c
+    id: 831,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 300undec c
+    id: 832,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 300duodec c
+    id: 833,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
+  },
+  { // 2x You for 300tredec c
+    id: 834,
+    delta: () => game.Game.Objects['You'].storedTotalCps * game.Game.globalCpsMult,
   },
 
   { // Clicking gains +1% of CPS for 50000c
@@ -606,150 +1344,90 @@ const flareUpgradesList = [
     id: 461,
     delta: () => flareHz * game.Game.cookiesPs * .01,
   },
+  { // Clicking gains +1% of CPS for 50oct c
+    id: 661,
+    delta: () => flareHz * game.Game.cookiesPs * .01,
+  },
+  { // Clicking gains +1% of CPS for 5non c
+    id: 765,
+    delta: () => flareHz * game.Game.cookiesPs * .01,
+  },
+  { // Clicking gains +1% of CPS for 500non c
+    id: 874,
+    delta: () => flareHz * game.Game.cookiesPs * .01,
+  },
 
   { // 2x Grandmas, Farms +1% CPS / Grandma for 55000c
     id: 57,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const f = game.Game.Objects['Farm'];
-      const f_delta = f.amount * (g.amount * f.storedCps * .01);
-      return (g.storedTotalCps + f_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Farm'),
   },
   { // 2x Grandmas, Mines +1% CPS / 2xGrandma for 600000c
     id: 58,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const m = game.Game.Objects['Mine'];
-      const m_delta = m.amount * ((g.amount / 2) * m.storedCps * .01);
-      return (g.storedTotalCps + m_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Mine'),
   },
   { // 2x Grandmas, Factories +1% CPS / 3xGrandma for 6.5m c
     id: 59,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const f = game.Game.Objects['Factory'];
-      const f_delta = f.amount * ((g.amount / 3) * f.storedCps * .01);
-      return (g.storedTotalCps + f_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Factory'),
   },
   { // 2x Grandmas, Banks +1% CPS / 4xGrandma for 70m c
     id: 250,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const b = game.Game.Objects['Bank'];
-      const b_delta = b.amount * ((g.amount / 4) * b.storedCps * .01);
-      return (g.storedTotalCps + b_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Bank'),
   },
   { // 2x Grandmas, Temple +1% CPS / 5xGrandma for 2b c
     id: 251,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const t = game.Game.Objects['Temple'];
-      const t_delta = t.amount * ((g.amount / 5) * t.storedCps * .01);
-      return (g.storedTotalCps + t_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Temple'),
   },
   { // 2x Grandmas, Wizard tower +1% CPS / 6xGrandma for 16.5b c
     id: 252,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const w = game.Game.Objects['Wizard tower'];
-      const w_delta = w.amount * ((g.amount / 6) * w.storedCps * .01);
-      return (g.storedTotalCps + w_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Wizard tower'),
   },
   { // 2x Grandmas, Shipment +1% CPS / 7xGrandma for 255b c
     id: 60,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const s = game.Game.Objects['Shipment'];
-      const s_delta = s.amount * ((g.amount / 7) * s.storedCps * .01);
-      return (g.storedTotalCps + s_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Shipment'),
   },
   { // 2x Grandmas, Alchemy lab +1% CPS / 8xGrandma for 255b c
     id: 61,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const a = game.Game.Objects['Alchemy lab'];
-      const a_delta = a.amount * ((g.amount / 8) * a.storedCps * .01);
-      return (g.storedTotalCps + a_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Alchemy lab'),
   },
   { // 2x Grandmas, Portals +1% CPS / 9xGrandma for 50t c
     id: 62,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const p = game.Game.Objects['Portal'];
-      const p_delta = p.amount * ((g.amount / 9) * p.storedCps * .01);
-      return (g.storedTotalCps + p_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Portal'),
   },
   { // 2x Grandmas, Time Machines +1% CPS / 10xGrandma for 700t c
     id: 63,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const t = game.Game.Objects['Time machine'];
-      const t_delta = t.amount * ((g.amount / 10) * t.storedCps * .01);
-      return (g.storedTotalCps + t_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Time machine'),
   },
   { // 2x Grandmas, Antimatter condenser +1% CPS / 11xGrandma for 8.5quad c
     id: 103,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const a = game.Game.Objects['Antimatter condenser'];
-      const a_delta = a.amount * ((g.amount / 11) * a.storedCps * .01);
-      return (g.storedTotalCps + a_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Antimatter condenser'),
   },
   { // 2x Grandmas, Prism +1% CPS / 12xGrandma for 8.5quad c
     id: 180,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const p = game.Game.Objects['Prism'];
-      const p_delta = p.amount * ((g.amount / 12) * p.storedCps * .01);
-      return (g.storedTotalCps + p_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Prism'),
   },
   { // 2x Grandmas, Chancemaker +1% CPS / 13xGrandma for 1.3quint c
     id: 415,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const c = game.Game.Objects['Chancemaker'];
-      const c_delta = c.amount * ((g.amount / 13) * c.storedCps * .01);
-      return (g.storedTotalCps + c_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Chancemaker'),
   },
   { // 2x Grandmas, Fractal engine +1% CPS / 14xGrandma for 15.5quint c
     id: 521,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const f = game.Game.Objects['Fractal engine'];
-      const f_delta = f.amount * ((g.amount / 14) * f.storedCps * .01);
-      return (g.storedTotalCps + f_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Fractal engine'),
   },
   { // 2x Grandmas, Javascript console +1% CPS / 15xGrandma for 3.55sex c
     id: 593,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const j = game.Game.Objects['Javascript console'];
-      const j_delta = j.amount * ((g.amount / 15) * j.storedCps * .01);
-      return (g.storedTotalCps + j_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Javascript console'),
   },
   { // 2x Grandmas, Idleverse +1% CPS / 16xGrandma for 600sex c
     id: 683,
-    delta: () => {
-      const g = game.Game.Objects['Grandma'];
-      const i = game.Game.Objects['Idleverse'];
-      const i_delta = i.amount * ((g.amount / 16) * i.storedCps * .01);
-      return (g.storedTotalCps + i_delta) * game.Game.globalCpsMult;
-    },
+    delta: () => flareGrandmaSynergy('Idleverse'),
+  },
+  { // 2x Grandmas, Cortex bakers +1% CPS / 17xGrandma for 600sex c
+    id: 729,
+    delta: () => flareGrandmaSynergy('Cortex baker'),
+  },
+  { // 2x Grandmas, Cortex bakers +1% CPS / 18xGrandma for 30oct c
+    id: 825,
+    delta: () => flareGrandmaSynergy('You'),
   },
   { // 4x Grandmas, unlocks other upgrades for 1quad c
     id: 64,
@@ -789,6 +1467,34 @@ const flareUpgradesList = [
   { // More CPS for more milk for 900sep c (See line 5022) (kitten specialists)
     id: 321,
     delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
+  },
+  { // More CPS for more milk for 900oct c (See line 5022) (kitten experts)
+    id: 322,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
+  },
+  { // More CPS for more milk for 900non c (See line 5022) (kitten consultants)
+    id: 425,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
+  },
+  { // More CPS for more milk for 900dec c (See line 5022) (kitten assis...)
+    id: 442,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.175,
+  },
+  { // More CPS for more milk for 900dec c (See line 5022) (kitten assis...)
+    id: 442,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.175,
+  },
+  { // More CPS for more milk for 900undec c (See line 5022) (kitten marketeers)
+    id: 462,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.15,
+  },
+  { // More CPS for more milk for 900duodec c (See line 5022) (kitten analyst)
+    id: 494,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.125,
+  },
+  { // More CPS for more milk for 900duodec c (See line 5022) (kitten executive)
+    id: 613,
+    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.115,
   },
 
   { // Cookie Production Multiplier 1% for 999999c
@@ -919,6 +1625,22 @@ const flareUpgradesList = [
     id: 263,
     delta: () => flareGetRate() * .03,
   },
+  { // Cookie Production Multiplier 10% for 100oct c (Milk chocolate butter buscuit)
+    id: 334,
+    delta: () => flareGetRate() * .10,
+  },
+  { // Cookie Production Multiplier 10% for 100non c (Dark chocolate butter buscuit)
+    id: 335,
+    delta: () => flareGetRate() * .10,
+  },
+  { // Cookie Production Multiplier 10% for 100dec c (White chocolate butter buscuit)
+    id: 336,
+    delta: () => flareGetRate() * .10,
+  },
+  { // Cookie Production Multiplier 10% for 100dunec c (Ruby chocolate butter buscuit)
+    id: 337,
+    delta: () => flareGetRate() * .10,
+  },
   { // Cookie Production Multiplier 4% for 100quint c (gingersnap)
     id: 338,
     delta: () => flareGetRate() * .04,
@@ -955,6 +1677,10 @@ const flareUpgradesList = [
     id: 352,
     delta: () => flareGetRate() * .04,
   },
+  { // Cookie Production Multiplier 10% for 100dunec c (Lavendar chocolate butter buscuit)
+    id: 400,
+    delta: () => flareGetRate() * .10,
+  },
   { // Cookie Production Multiplier 4% for 5sep c (Pecan Sandies)
     id: 403,
     delta: () => flareGetRate() * .04,
@@ -975,8 +1701,92 @@ const flareUpgradesList = [
     id: 407,
     delta: () => flareGetRate() * .04,
   },
+  { // Cookie Production Multiplier 10% for 100oct c (Birthday)
+    id: 426,
+    delta: () => flareGetRate() * .10,
+  },
   { // Cookie Production Multiplier 4% for 1oct c (Pink biscuits)
     id: 444,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 5oct c (Whole grain)
+    id: 445,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 10oct c (Candy)
+    id: 446,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 50oct c (Big Chip)
+    id: 447,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 1% for 100oct c (One Chip)
+    id: 448,
+    delta: () => flareGetRate() * .01,
+  },
+  { // Cookie Production Multiplier 4% for 500oct c (Sprinkles)
+    id: 453,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 950oct c (Peanutbutter blossom)
+    id: 454,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 5non c (Nobake)
+    id: 455,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 10non c (Florentines)
+    id: 456,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 50non c (Chocolate crinkles)
+    id: 457,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 100non c (Maple)
+    id: 458,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 500non c (Persian Rice)
+    id: 464,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 1dec c (Norwegian)
+    id: 465,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 5dec c (Crispy rice)
+    id: 466,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 10dec c (Ube)
+    id: 467,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 50dec c (Butterscotch)
+    id: 468,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 100dec c (Speculaas)
+    id: 469,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 500dec c (Chocolate Oatmeal)
+    id: 498,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 1undec c (Molasses)
+    id: 499,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 5undec c (Biscotti)
+    id: 500,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 10undec c (Waffle)
+    id: 501,
     delta: () => flareGetRate() * .04,
   },
   { // Cookie Production Multiplier 2% for 100m c (Almond)
@@ -991,9 +1801,125 @@ const flareUpgradesList = [
     id: 504,
     delta: () => flareGetRate() * .02,
   },
+  { // Cookie Production Multiplier 4% for 50undec c (Custard Creams)
+    id: 535,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 100undec c (Bourbon biscuits)
+    id: 536,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 5% for 500undec c (Mini)
+    id: 538,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 5duodec c (Whoopie Pies)
+    id: 565,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 5duodec c (Caramel wafer biscuits)
+    id: 566,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 10duodec c (Chocolate chip mocha)
+    id: 567,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 30duodec c (Earl grey)
+    id: 568,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 100duodec c (Corn syrup)
+    id: 569,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 300duodec c (Icebox)
+    id: 570,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 300duodec c (Graham cracker)
+    id: 571,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 3tredec c (Hardtack)
+    id: 572,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 10tredec c (Cornflake)
+    id: 573,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 30tredec c (Tofu)
+    id: 574,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 30tredec c (Gluten free)
+    id: 575,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 100tredec c (Russian bread)
+    id: 576,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 300tredec c (Lebkuchen)
+    id: 577,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 1quatdec c (Aachener)
+    id: 578,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 3quatdec c (Canistrelli)
+    id: 579,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 10quatdec c (Nice)
+    id: 580,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 30quatdec c (French pure butter)
+    id: 581,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 30quatdec c (Petit beurre)
+    id: 582,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 100quatdec c (Nanaimo bars)
+    id: 583,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 300quatdec c (Berger)
+    id: 584,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 1quindec c (Chinsuko)
+    id: 585,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 1quindec c (Panda koala)
+    id: 586,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 3quindec c (Putri salju)
+    id: 587,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 5% for 10quindec c (Milk)
+    id: 588,
+    delta: () => flareGetRate() * .05,
+  },
   { // Cookie Production Multiplier 10% for 1t c (Chocolate Chip)
     id: 590,
     delta: () => flareGetRate() * .10,
+  },
+  { // Cookie Production Multiplier 5% for 30quindec c (Kruidnoten)
+    id: 607,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 05% for 35duodec c (Chai tea)
+    id: 614,
+    delta: () => flareGetRate() * .05,
   },
   { // Cookie Production Multiplier 2% for 100m c (Cashew)
     id: 727,
@@ -1035,6 +1961,10 @@ const flareUpgradesList = [
   },
   { // Cookie Production Multiplier 3% for 10sep c (Licorice macarons)
     id: 231,
+    delta: () => flareGetRate() * .03,
+  },
+  { // Cookie Production Multiplier 3% for 10oct c (Earl grey macarons)
+    id: 725,
     delta: () => flareGetRate() * .03,
   },
 
@@ -1087,6 +2017,48 @@ const flareUpgradesList = [
     id: 463,
     delta: () => flareGetRate() * .03,
   },
+  { // Cookie Production Multiplier 2% for 5oct c (Havabreaks)
+    id: 612,
+    delta: () => flareGetRate() * .02,
+  },
+  { // Cookie Production Multiplier 2% for 5non c (Zilla wafers)
+    id: 618,
+    delta: () => flareGetRate() * .02,
+  },
+  { // Cookie Production Multiplier 2% for 5dec c (Dim dams)
+    id: 619,
+    delta: () => flareGetRate() * .02,
+  },
+  { // Cookie Production Multiplier 2% for 5undec c (Pokey)
+    id: 726,
+    delta: () => flareGetRate() * .02,
+  },
+  { // Cookie Production Multiplier 2% for 5duodec c (Nines)
+    id: 824,
+    delta: () => flareGetRate() * .02,
+  },
+
+  // Ascension Cookies - Butter cookies
+  { // Cookie Production Multiplier 4% for 100sex c (Butter horseshoes)
+    id: 345,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 500sex c (Butter pucks)
+    id: 346,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 950sex c (Butter knots)
+    id: 347,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 5sep c (Butter slabs)
+    id: 348,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 10sep c (Butter swirls)
+    id: 349,
+    delta: () => flareGetRate() * .04,
+  },
 
   // Ascension Cookies - british tea biscuits
   { // Cookie Production Multiplier 2% for 100t c (british tea biscuits)
@@ -1114,6 +2086,36 @@ const flareUpgradesList = [
     delta: () => flareGetRate() * .02,
   },
 
+  // Ascension - Maybe cookies
+  { // Cookie Production Multiplier 4% for 100dec c (Cookie dough)
+    id: 551,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 4% for 10undec c (Burnt)
+    id: 552,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 3% for 1duodec c (no chips)
+    id: 553,
+    delta: () => flareGetRate() * .03,
+  },
+  { // Cookie Production Multiplier 4% for 100duodec c (Flavor text)
+    id: 554,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 5% for 10tredec c (High definition)
+    id: 555,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Cookie Production Multiplier 4% for 1quatdec c (Crackers)
+    id: 611,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Cookie Production Multiplier 5% for 100quatdec c (Deep fried)
+    id: 818,
+    delta: () => flareGetRate() * .05,
+  },
+
   { // Golden cookie rate increase 2x 777.7m c (worth waiting 10 min for)
     id: 52,
     delta: () => flareWaitMinutes(10, 52),
@@ -1126,6 +2128,43 @@ const flareUpgradesList = [
     id: 86,
     delta: () => flareWaitMinutes(20, 86),
   },
+
+  // Asencion - Synergy
+  // Missing one or two in here
+  { id: 369, delta: () => flareSynergy('Farm', 'Time machine') },
+  { id: 370, delta: () => flareSynergy('Farm', 'Temple') },
+  { id: 371, delta: () => flareSynergy('Mine', 'Wizard tower') },
+  { id: 372, delta: () => flareSynergy('Mine', 'Shipment') },
+  { id: 373, delta: () => flareSynergy('Factory', 'Antimatter condenser') },
+  { id: 374, delta: () => flareSynergy('Factory', 'Time machine') },
+  { id: 375, delta: () => flareSynergy('Bank', 'Portal') },
+  { id: 376, delta: () => flareSynergy('Factory', 'Bank') },
+  { id: 377, delta: () => flareSynergy('Temple', 'Portal') },
+  { id: 378, delta: () => flareSynergy('Temple', 'Antimatter condenser') },
+  { id: 379, delta: () => flareSynergy('Wizard tower', 'Alchemy lab') },
+  { id: 380, delta: () => flareSynergy('Farm', 'Wizard tower') },
+  { id: 382, delta: () => flareSynergy('Factory', 'Shipment') },
+  { id: 384, delta: () => flareSynergy('Bank', 'Alchemy lab') },
+  { id: 385, delta: () => flareSynergy('Farm', 'Portal') },
+  { id: 386, delta: () => flareSynergy('Portal', 'Prism') },
+  { id: 387, delta: () => flareSynergy('Shipment', 'Time machine') },
+  { id: 388, delta: () => flareSynergy('Time machine', 'Prism') },
+  { id: 389, delta: () => flareSynergy('Bank', 'Antimatter condenser') },
+  { id: 390, delta: () => flareSynergy('Alchemy lab', 'Antimatter condenser') },
+  { id: 391, delta: () => flareSynergy('Wizard tower', 'Prism') },
+  { id: 392, delta: () => flareSynergy('Temple', 'Prism') },
+  { id: 424, delta: () => flareSynergy('Mine', 'Chancemaker') },
+  { id: 443, delta: () => flareSynergy('Antimatter condenser', 'Chancemaker') },
+  { id: 533, delta: () => flareSynergy('Prism', 'Fractal engine') },
+  { id: 534, delta: () => flareSynergy('Cursor', 'Fractal engine') },
+  { id: 605, delta: () => flareSynergy('Grandma', 'Javascript console') },
+  { id: 606, delta: () => flareSynergy('Chancemaker', 'Javascript console') },
+  { id: 696, delta: () => flareSynergy('Portal', 'Idleverse') },
+  { id: 697, delta: () => flareSynergy('Fractal engine', 'Idleverse') },
+  { id: 761, delta: () => flareSynergy('Temple', 'Cortex baker') },
+  { id: 762, delta: () => flareSynergy('Farm', 'Cortex baker') },
+  { id: 859, delta: () => flareSynergy('Time machine', 'You') },
+  { id: 860, delta: () => flareSynergy('Javascript console', 'You') },
 
   // Ascension
   { // Unlocks 5% of the potential of your prestiege level 11c
@@ -1220,7 +2259,7 @@ const flareUpgradesList = [
   },
   { // explode into 5% cookies 999c (scales on eggs) (wrinklerspawn)
     id: 224,
-    delta: () => 0, // I don't know how this works yet
+    delta: () => flareWaitMinutes(1, 224), // I don't know how this works yet
   },
   { // Clciking is 10% more effective 999c (scales on eggs) (cookie egg)
     id: 225,
@@ -1337,6 +2376,36 @@ const flareUpgradesList = [
     delta: () => flareWaitMinutes(20, 168),
   },
 
+  // Valentine's Day
+  { // 2% for 931,000c (Pure heart biscuits)
+    id: 169,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 931m c (Ardent heart biscuits)
+    id: 170,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 931b c (Sour heart biscuits)
+    id: 171,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 931t c (Weeping heart biscuits)
+    id: 172,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 931quad c (Golden heart biscuits)
+    id: 173,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 931quint c (Eternal heart biscuits)
+    id: 174,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 931sex c (Prism heart biscuits)
+    id: 645,
+    delta: () => flareGetRate() * .02,
+  },
+
   // Research?
   { // Cookie production Multiplier 1% 1quad c (Specialized Chocolate Chips)
     id: 65,
@@ -1354,6 +2423,7 @@ const flareUpgradesList = [
     id: 68,
     delta: () => flareGetRate() * .03,
   },
+  /*
   { // Grandmas get .02CPS per grandma 16quad c (One Mind)
     id: 69,
     delta: () => {
@@ -1362,6 +2432,7 @@ const flareUpgradesList = [
       return g.amount * d;
     },
   },
+  */
 ];
 
 // Messages resulting from game events that don't have an action associated with them
@@ -1639,6 +2710,34 @@ const flarePlants = [
 const flareSlotNames = ['Diamond', 'Ruby', 'Jade'];
 
 const flareWaitMinutes = (minutes, upgradeID) => {
+  const actualMax = Math.min(minutes * 60, flareLongestWait);
   const price = game.Game.UpgradesById[upgradeID].getPrice();
-  return price / flareGetRate() > minutes * 60 ? 0 : price;
+  return price / flareGetRate() > actualMax ? 0 : price;
 };
+
+const flareCursorAndClick = () => {
+  const cursor = game.Game.Objects['Cursor'].storedTotalCps * game.Game.globalCpsMult;
+  const click = flareHz * game.Game.computedMouseCps;
+  return cursor + click;
+}
+
+const flareSynergy = (fivePercent, pointOnePercent) => {
+  const b1 = game.Game.Objects[fivePercent];
+  const b2 = game.Game.Objects[pointOnePercent];
+  const g = game.Game.Objects['Grandma'];
+  const mult = game.Game.globalCpsMult;
+
+  // To be complete, would also need to include building buffs. This is close enough
+  const b1Boost = mult*(1 + b2.amount*.05) * b1.storedTotalCps * (1+g.amount/b1.id*.01);
+  const b2Boost = mult*(1 + b1.amount*.001) * b2.storedTotalCps * (1+g.amount/b2.id*.01);
+
+  return b1Boost + b2Boost;
+}
+
+const flareGrandmaSynergy = (name) => {
+  const g = game.Game.Objects['Grandma'];
+  const b = game.Game.Objects[name];
+  const b_delta = b.storedTotalCps * ((g.amount / (b.id - 1)) * .01);
+  return (g.storedTotalCps + b_delta) * game.Game.globalCpsMult;
+}
+
