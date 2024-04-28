@@ -54,16 +54,16 @@ const flareAscend = () => {
     game.Game.Ascend(1);
     flareMultiStep = () => {// Wait for UI to show up, then apply Heavenly Chips
       if (!gid('heavenlyUpgrade363')) return false;
-      // 264 is Permanent Upgrade, skip during this step
-      const nextUp = flareNextChipBatch().upgrades.find(u => u.id !== 264 && !u.bought);
+      // 264-268 are Permanent Upgrade, skip during this step
+      const nextUp = flareNextChipBatch().upgrades.find(u => ![264,265,266,267,268].includes(u.id) && !u.bought);
 
       if (nextUp && nextUp.basePrice <= game.Game.heavenlyChips) {
         flareLog(`Unlocking: ${nextUp.name}`);
         game.Game.UpgradesById[nextUp.id].click();
-        return false;
+        return true;
       }
-      flareMultiStep = () => {// Set Permanent Upgrade 1
-        const next = () => {// Set Ascend mode
+      flareMultiStep = () => {// Set Permanent Upgrades
+        flareSetPermanentUpgrades(() => {// Set Ascend mode
           game.Game.nextAscensionMode = 0;
           //game.Game.nextAscensionMode = 1; // Born again grants access to some achievements, See Line 16328
           flareMultiStep = () => {// Lets-a-go
@@ -77,12 +77,7 @@ const flareAscend = () => {
               flareMultiStep = undefined;
             };
           };
-        };
-        const perm1 = game.Game.UpgradesById[264];
-        if (perm1.bought || (perm1.canBePurchased && perm1.basePrice <= game.Game.heavenlyChips)) {
-          flareSetPermanentUpgrade1(next)
-        }
-        else flareMultiStep = next;
+        });
       };
     };
     return true;
@@ -100,7 +95,14 @@ const flareAscensionGoal = () => {
 const flareNextChipBatch = () => {
   return flareAscensionList
     .map(batch => {
-      const upgrades = batch.map(id => game.Game.UpgradesById[id])
+      const upgrades = batch.map(id => game.Game.UpgradesById[id]);
+      // if these are available, affordable, and un-purchased, put them at the top of the list
+      [411, 412, 413].forEach(id => {
+        const upgrade = game.Game.UpgradesById[id];
+        if (upgrade.unlocked && !upgrade.bought && upgrade.basePrice < game.Game.heavenlyChips) {
+          upgrades.push(upgrade);
+        }
+      })
       const done = upgrades[upgrades.length - 1].bought;
       const batchCost = upgrades.reduce((total, u) => total += u.basePrice,0);
       return {
@@ -111,36 +113,69 @@ const flareNextChipBatch = () => {
     })
     .find(batch => !batch.done);
 }
-// Upgrade 2 could be cookies, start with 400, 337, 336, 335, 334?
 
-const flareSetPermanentUpgrade1 = (next) => {
-  flareMultiStep = () => { // Wait for upgrade to visible
-    if(!gid('heavenlyUpgrade264')) return false;
+const flareSetPermanentUpgrades = (next) => {
+  const reset = flareGrandmas
+    .map(id => game.Game.UpgradesById[id])
+    .filter(o => o.bought)
+    .sort((a,b) => a.getPrice() - b.getPrice());
 
-    gid('heavenlyUpgrade264').click();
-    flareMultiStep = () => { // Choose best available
-      const bestAvailable = [
-        'upgradeForPermanent613', // Kitten Executive
-        'upgradeForPermanent494', // Kitten Analysts
-        'upgradeForPermanent462', // Kitten Marketeers
-        'upgradeForPermanent442', // Kitten Assistant to....
-        'upgradeForPermanent425', // Kitten Consultants
-        'upgradeForPermanent322', // Kitten Experts
-        'upgradeForPermanent321', // Kitten Specialists
-        'upgradeForPermanent320', // Kitten Accountants
-        'upgradeForPermanent187', // Kitten Managers
-        'upgradeForPermanent108', // Kitten Overseers
-        'upgradeForPermanent32', // Kitten Workers
-      ].find(id => gid(id));
-      if(bestAvailable) {
-        gid(bestAvailable).click();
-      }
-      flareMultiStep = () => { // Click Confirm
-        gid('promptOption0').click();
-        flareMultiStep = next;
+  const upgrades = flareBestUpgrades
+    .map(id => game.Game.UpgradesById[id])
+    .filter(o => o.bought)
+    .sort((a,b) => a.getPrice() - b.getPrice());
+
+  const v = game.Game.UpgradesById[268];
+  const iv = game.Game.UpgradesById[267];
+  const iii = game.Game.UpgradesById[266];
+  const ii = game.Game.UpgradesById[265];
+  const i = game.Game.UpgradesById[264];
+
+  flareSetPermanentSlot(v, reset,
+    () => flareSetPermanentSlot(iv, reset,
+      () => flareSetPermanentSlot(iii, reset,
+        () => flareSetPermanentSlot(ii, reset,
+          () => flareSetPermanentSlot(i, reset,
+            () => flareSetPermanentSlot(v, upgrades,
+              () => flareSetPermanentSlot(iv, upgrades,
+                () => flareSetPermanentSlot(iii, upgrades,
+                  () => flareSetPermanentSlot(ii, upgrades,
+                    () => flareSetPermanentSlot(i, upgrades, next)
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+const flareSetPermanentSlot = (slot, upgrades, next) => {
+  if (slot.bought || (slot.canBePurchased && slot.basePrice <= game.Game.heavenlyChips)) {
+    if (!slot.bought) flareLog(`Unlocking: ${slot.name}`);
+    flareMultiStep = () => {
+      const slotGid = `heavenlyUpgrade${slot.id}`;
+      if(!gid(slotGid)) return false;
+      gid(slotGid).click();
+      flareMultiStep = () => {
+        const upgrade = upgrades.length && upgrades.pop();
+        if (upgrade) {
+          const upgradeGid = `upgradeForPermanent${upgrade.id}`;
+          if(!gid(upgradeGid)) return false;
+          gid(upgradeGid).click();
+          flareMultiStep = () => { // Click Confirm
+            gid('promptOption0').click();
+            flareMultiStep = next;
+          };
+        } else flareMultiStep = next; // No upgrades left
       };
-    };
-  };
+      return true;
+    }
+    return true;
+  }
+  flareMultiStep = next; // we don't have this slot :/
 }
 
 const flareClickShimmer = () => {
@@ -163,14 +198,14 @@ const flareClickShimmer = () => {
 }
 
 const flareManageSeasons = () => {
-  const holidayWaitSeconds = 60;
+  const holidayWaitSeconds = 30;
   if (!game.Game.HasUnlocked('Season switcher')) return false;
   // Tipster says: Christmas [santa] -> Valentines -> Easter -> Halloween -> Christmas [reindeer] -> Halloween
   // has 'Santas dominion'
   // const finishedChristmas = game.Game.GetHowManyReindeerDrops() === 7 && game.Game.GetHowManySantaDrops() === 14;
   const flareSeasonPhases = [
     {
-      done: () => game.Game.Has('Santa\'s dominion'),
+      done: () => game.Game.Has('Santa\'s dominion') && game.Game.unbuffedCps >= 1.0e+21,
       name: 'christmas',
       id: 182,
       delta: 'Holly Jolly',
@@ -184,7 +219,7 @@ const flareManageSeasons = () => {
         }
       },
     },{
-      done: () => game.Game.Has('Prism heart biscuits'),
+      done: () => game.Game.GetHowManyHeartDrops() === 7,
       name: 'valentines',
       id: 184,
       delta: '<3',
@@ -1063,7 +1098,7 @@ const flareTrainDragon = () => {
       const cost = 1000000 * mult;
       // If it's going to take more than 10 seconds to get the cost, don't wait
       const time = cost / flareGetRate();
-      if (time > 10) return false;
+      if (time > 1) return false;
       flareNextPurchase = {
         name: `Dragon Lvl ${dl+1}`,
         price: cost,
@@ -1207,16 +1242,38 @@ const flareShop = () => {
     }
   } else if(nextBuilding) {
     flareNextPurchase = nextBuilding;
-    if (game.Game.cookies >= nextBuilding.price) {
+    const building = game.Game.Objects[nextBuilding.name];
+    const bought = [
+      () => flareBuyQty(building, 100),
+      () => flareBuyQty(building, 10),
+      () => flareBuyQty(building, 1),
+    ].find(f => f());
+    if (bought) {
       flareShouldSpendCookies = false;
-      flareLog(`Buying building: ${nextBuilding.name}`);
-      game.Game.Objects[nextBuilding.name].buy();
       return flareOneAction;
     }
   }
   flareLongestWait = Math.max(flareLongestWait, flareNextPurchase?.eta) || 0;
   return false;
 }
+
+const flareBuyQty = (obj, qty) => {
+  if (game.Game.cookies >= obj.getSumPrice(qty)) {
+    flareLog(`Buying building: ${obj.name}`, qty);
+    if (game.Game.buyBulk !== qty) {
+      game.Game.storeBulkButton(qty === 100 ? 4 : qty === 10 ? 3 : 2);
+      flareMultiStep = () => {
+        obj.buy();
+        flareMultiStep = undefined;
+      }
+    } else {
+      obj.buy();
+    }
+    return true;
+  }
+  return false;
+}
+
 
 const flareObjectsNoCursor = () => {
   let num = 0;

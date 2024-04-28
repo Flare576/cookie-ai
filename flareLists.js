@@ -17,14 +17,12 @@ const flareAscensionList = [
     281, // Cost: 1, Offline Mode (Twin Gates of Transcendence) req363
     326, // Cost: 25, unlocks more cookie upgrades (butter cookies) req395
     288, // Cost: 50, start with 10 cursors (Starter kit) req254 req255 req253 req326
-    290, // Cost: 55,555, clicking +10% (Halo gloves) req288
-    141, // Cost: 500, Research 10x faster (Persistent memory) req363
-  ],[
-    265, // Cost: 20,000, Unlock perrmanent slot II (put ??????)
+    265, // Cost: 20,000, Unlock permanent slot II (put ??????) req264
   ],[
     365, // Cost: 99,999, 10% CPS for golden cookie upgrades (Residual luck) req327
   ],[
-    266, // Cost: 3m, Unlock perrmanent slot III (put ??????)
+    141, // Cost: 500, Research 10x faster (Persistent memory) req363
+    290, // Cost: 55,555, clicking +10% (Halo gloves) req288
     719, // Cost: 555.555m, Cursor levels boost clicks 5% (Aura gloves) req290
     720, // Cost: 555.555b, Cursor levels to 20 (Luminous gloves) req719
 
@@ -48,6 +46,7 @@ const flareAscensionList = [
     280, // Cost: 823,543, Offline 75% (God) req279
 
     291, // Cost: 9,000, Kittens 10% (Kitten angels) req277
+    646, // Cost: 9b, Kittens 10% less (Kitten wages) req291
     717, // Cost 9b, Kitten upgrades boost grandma 29% (Cat ladies) req291
     718, // Cost: 900b, Grandmas get 5% from milk (Milkhelp) req717
 
@@ -56,7 +55,7 @@ const flareAscensionList = [
 
     325, // Cost: 40.354m, Synergy upgrads 2% off, 5% regular CPS, Offline 2d (Chimera) req359 req394 req280
 
-    268, // Cost: 555,555b, Upgrades 1% cheaper per 100 cursors (Five-finger discount) req290 req355
+    368, // Cost: 555,555b, Upgrades 1% cheaper per 100 cursors (Five-finger discount) req290 req355
 
   ],[
     // Starter branch
@@ -80,12 +79,13 @@ const flareAscensionList = [
     410, // Cost: 1b, Bifuricated Lumps +5% often, likely (Sucralosia Inutilis) req409
 
   ],[
+    819, // Cost: 999,999, Send gifts (Wrapping paper) req520
     // Seasons
-    269, // Cost: 111,111, Easter Eggs drop +10% (Starspawn) req181,
-    270, // Cost: 111,111, Christmas cookies drop +10% (Starsnow) req181,
-    271, // Cost: 111,111, Halloween cookies drop +10% (Starterror) req181,
-    272, // Cost: 111,111, Valentines cookies drop +10% (Starlove) req181,
-    273, // Cost: 111,111, Business Golden cookies (Startrade) req181,
+    269, // Cost: 111,111, Easter Eggs drop +10% (Starspawn) req181
+    270, // Cost: 111,111, Christmas cookies drop +10% (Starsnow) req181
+    271, // Cost: 111,111, Halloween cookies drop +10% (Starterror) req181
+    272, // Cost: 111,111, Valentines cookies drop +10% (Starlove) req181
+    273, // Cost: 111,111, Business Golden cookies (Startrade) req181
     537, // Cost: 1.111b 1/5 chance to keep holiday drops (Keepsakes) req269-273
 
     // Spirals
@@ -153,8 +153,9 @@ const flareAscensionList = [
     647, // Cost: 100b, Pet the dragon (Pet the dragon) req365 req323
 
     284, // Cost: 7,777, Golden cookies stay 5% longer (Decisive fate) req283
+    285, // Cost: 99,999, All buildings 1% cheaper (Divine discount) req284
     286, // Cost: 99,999, All upgrades 1% cheaper (Divine sales) req284
-    287, // Cost: 399,999, Cookie upgrades 5x cheaper (Divine bakeries) req286
+    287, // Cost: 399,999, Cookie upgrades 5x cheaper (Divine bakeries) req286 req285
     397, // Cost: 7.777m, golden cookies 1% double (Distilled essence of redoubled luck) req365 req287
 
     562, // Cost: 1b, 50% boost, but clicking breaks it (Shimmering veil) req397
@@ -166,12 +167,12 @@ const flareAscensionList = [
 
     643, // Cost: 77.777b, news ticker can have fortunes (Fortune cookies) req397
 
-  ],[
+    /*
     // Hidden
     411, // Cost: 777, +1% pres, +1% golden life/duration (Lucky digit) req282 + 1 '7' in prestige level
     412, // Cost: 77,777, +1% pres, +1% golden life/duration (Lucky number) req283 req411+ 2 '7' in prestige level
     413, // Cost: 77.777m, +1% pres, +1% golden life/duration (Lucky payout) req284 req412+ 4 '7' in prestige level
-
+    */
   ],
 ]
 
@@ -404,59 +405,6 @@ const flareUpgradesList = [
     },
   },
 
-  { // More CPS for more milk for 9m c (See line 5022) (kitten helpers)
-    id: 31,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.1,
-  },
-  { // More CPS for more milk for 9b c (See line 5022) (kitten workers)
-    id: 32,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.125,
-  },
-  { // More CPS for more milk for 90t c (See line 5022) (kitten engineers)
-    id: 54,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.15,
-  },
-  { // More CPS for more milk for 90quad c (See line 5022) (kitten overseers)
-    id: 108,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.175,
-  },
-  { // More CPS for more milk for 900quint c (See line 5022) (kitten managers)
-    id: 187,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
-  },
-  { // More CPS for more milk for 900sex c (See line 5022) (kitten accountants)
-    id: 320,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
-  },
-  { // More CPS for more milk for 900sep c (See line 5022) (kitten specialists)
-    id: 321,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
-  },
-  { // More CPS for more milk for 900oct c (See line 5022) (kitten experts)
-    id: 322,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
-  },
-  { // More CPS for more milk for 900non c (See line 5022) (kitten consultants)
-    id: 425,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.2,
-  },
-  { // More CPS for more milk for 900dec c (See line 5022) (kitten assis...)
-    id: 442,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.175,
-  },
-  { // More CPS for more milk for 900undec c (See line 5022) (kitten marketeers)
-    id: 462,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.15,
-  },
-  { // More CPS for more milk for 900duodec c (See line 5022) (kitten analyst)
-    id: 494,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.125,
-  },
-  { // More CPS for more milk for 900duodec c (See line 5022) (kitten executive)
-    id: 613,
-    delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.115,
-  },
-
   { // Golden cookie rate increase 2x 777.7m c (worth waiting 10 min for)
     id: 52,
     delta: () => flareWaitMinutes(10, 52),
@@ -484,7 +432,9 @@ const flareUpgradesList = [
   { id: 378, delta: () => flareSynergy('Temple', 'Antimatter condenser') },
   { id: 379, delta: () => flareSynergy('Wizard tower', 'Alchemy lab') },
   { id: 380, delta: () => flareSynergy('Farm', 'Wizard tower') },
+  { id: 381, delta: () => flareSynergy('Mine', 'Shipment') },
   { id: 382, delta: () => flareSynergy('Factory', 'Shipment') },
+  { id: 383, delta: () => flareSynergy('Mine', 'Alchemy lab') },
   { id: 384, delta: () => flareSynergy('Bank', 'Alchemy lab') },
   { id: 385, delta: () => flareSynergy('Farm', 'Portal') },
   { id: 386, delta: () => flareSynergy('Portal', 'Prism') },
@@ -776,8 +726,8 @@ const flareUpgradesList = [
   */
 ];
 
-[7,   8,   9,   44,  110, 192, 294, 307, 428, 480, 506, 662, 700, 743, 840]
-  .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Grandma')}));
+let flareGrandmas = [7,   8,   9,   44,  110, 192, 294, 307, 428, 480, 506, 662, 700, 743, 840];
+flareGrandmas.forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Grandma')}));
 
 [10,  11,  12,  45,  111, 193, 295, 308, 429, 481, 507, 663, 701, 744, 841]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Farm')}));
@@ -791,50 +741,50 @@ const flareUpgradesList = [
 [232, 233, 234, 235, 236, 237, 298, 311, 432, 484, 510, 666, 704, 747, 844]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Bank')}));
 
-[238, 239, 240, 241, 242, 243, 299, 312, 433, 485, 511, 667, 705, 748]
+[238, 239, 240, 241, 242, 243, 299, 312, 433, 485, 511, 667, 705, 748, 845]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Temple')}));
 
-[244, 245, 246, 247, 248, 249, 300, 313, 434, 486, 512, 668, 706, 749]
+[244, 245, 246, 247, 248, 249, 300, 313, 434, 486, 512, 668, 706, 749, 846]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Wizard tower')}));
 
-[19,  20,  21,  48,  114, 196, 301, 314, 435, 487, 513, 669, 707, 750]
+[19,  20,  21,  48,  114, 196, 301, 314, 435, 487, 513, 669, 707, 750, 847]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Shipment')}));
 
-[22,  23,  24,  49,  115, 197, 302, 315, 436, 488, 514, 670, 708]
+[22,  23,  24,  49,  115, 197, 302, 315, 436, 488, 514, 670, 708, 751, 848]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Alchemy lab')}));
 
-[25,  26,  27,  50,  116, 198, 303, 316, 437, 489, 515, 671, 709]
+[25,  26,  27,  50,  116, 198, 303, 316, 437, 489, 515, 671, 709, 752, 849]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Portal')}));
 
-[28,  29,  30,  51,  117, 199, 304, 317, 438, 490, 516, 672]
+[28,  29,  30,  51,  117, 199, 304, 317, 438, 490, 516, 672, 710, 753, 850]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Time machine')}));
 
-[99,  100, 101, 102, 118, 200, 305, 318, 439, 491, 517, 673]
+[99,  100, 101, 102, 118, 200, 305, 318, 439, 491, 517, 673, 711, 754, 851]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Antimatter condenser')}));
 
-[175, 176, 177, 178, 179, 201, 306, 319, 440, 492, 518, 674]
+[175, 176, 177, 178, 179, 201, 306, 319, 440, 492, 518, 674, 712, 755, 852]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Prism')}));
 
-[416, 417, 418, 419, 420, 421, 422, 423, 441, 493, 519, 675]
+[416, 417, 418, 419, 420, 421, 422, 423, 441, 493, 519, 675, 713, 756, 853]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Chancemaker')}));
 
-[522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532]
+[522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 676, 714, 757, 854]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Fractal engine')}));
 
-[594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604]
+[594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 677, 715, 758]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Javascript console')}));
 
-[684, 685, 686, 687, 688, 689, 690, 691, 692, 693]
+[684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 716]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Idleverse')}));
 
-[730, 731, 732, 733, 734, 735, 736, 737, 738]
+[730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Cortex baker')}));
 
-[826, 827, 828, 829, 830, 831, 832, 833, 834]
+[826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('You')}));
 
 // 1% cookies
-[33, 34, 35, 448]
+[33, 34, 35, 448, 560] // 560 is Ascension: Not Cookie
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.01)}));
 
 // 2% cookies
@@ -858,20 +808,32 @@ const flareUpgradesList = [
   458, 464, 465, 466, 467, 468, 469, 498, 499, 500, 501, 535, 536,
   345, 346, 347, 348, 349, // Ascension: Butter
   551, 552, 554, 611, // Ascension: Maybe
+  543, 544, 545, 546, 547, 548, 549, 550, 866, // Ascnsion: Pastries
+  556, 557, 558, 559, // Ascension: Not Cookies
 ]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.04)}));
 
 // 5% cookies
 [
-  55, 56, 256, 257, 538, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583,
-  584, 585, 586, 587, 588, 607, 614,
+  55,  56,  256, 257, 538, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582,
+  583, 584, 585, 586, 587, 588, 607, 608, 609, 614, 615, 616, 617, 652, 653, 654, 655, 656, 657, 658, 678, 679, 680,
+  681, 682, 721, 722, 723, 724, 807, 808, 809, 810, 811,
   555, 818, // Ascension: Maybe
+  610, 620, // Ascension: Not Cookies
 ]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.05)}));
 
 // 10% cookies
-[334, 335, 336, 337, 400, 426, 590]
-  .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.10)}));
+const flareTenCookies = [334, 335, 336, 337, 400, 426, 590, 477, 478, 479];
+flareTenCookies.forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.10)}));
+
+// Kittens
+const flareKittens = [ 31, 32, 54, 108, 187, 320, 321, 322, 425, 442, 462, 494, 613, 766, 865];
+flareKittens.forEach(id=>flareUpgradesList.push({id, delta: () => flareKittenAdd(id)}));
+
+
+const flareBestUpgrades = [].concat(flareTenCookies, flareKittens);
+
 
 // Messages resulting from game events that don't have an action associated with them
 const flareChat = [
@@ -1005,7 +967,12 @@ const flareChat = [
     resetOnAscension: true,
     criteria: () => !game.Game.Objects['Cortex baker'].locked,
     fired: false,
-    message: 'Building Available: Not sure what this is.',
+    message: 'Building Available: Cortex bakers are pure thoughts. About cookies.',
+  }, {
+    resetOnAscension: true,
+    criteria: () => !game.Game.Objects['You'].locked,
+    fired: false,
+    message: 'Building Available: You\'re pretty good at this, right? More of that.',
   },
 ];
 
@@ -1185,4 +1152,26 @@ const flareDouble = (name) => {
 
 const flareCookieMult = (percent) => {
   return flareGetRate() * percent;
+}
+
+const flareKittenAdd = (id) => {
+  let percent = 0;
+  switch (id) {
+    case 31:  percent = .1;   break; // Helpers
+    case 32:                         // Workers
+    case 494: percent = .125; break; // Analysts
+    case 54:                         // Engineers
+    case 462: percent = .15;  break; // Marketeers
+    case 108:                        // Overseers
+    case 442: percent = .175; break; // Assistant to..
+    case 187:                        // Managers
+    case 320:                        // Accountants
+    case 321:                        // Specialists
+    case 322:                        // Experts
+    case 425: percent = .2;   break; // Consultants
+    case 613: percent = .115; break; // Executive
+    case 766: percent = .11;  break; // Admins
+    case 865: percent = .105; break; // Strategists
+  }
+  return percent * game.Game.cookiesPs * game.Game.milkProgress;
 }
