@@ -1,172 +1,161 @@
 const flareAscensionList = [
-  [
+  [ // 365
     363, // Cost: 1, Unlocks others (Legacy)
     323, // Cost: 9, (How to bake your dragon) req363
     395, // Cost: 3, 10% increase Cookie multiplier (Heavenly cookies) req363
-    264, // Cost: 100, Unlock perrmanent slot (put best kitten) req363
+    264, // Cost: 100, Unlock perrmanent slot (Permanent Upgrde Slot I) req363
     254, // Cost: 25, unlocks more cookie upgrades (macarons) req395
     255, // Cost: 25, unlocks more cookie upgrades (brand biscuits) req395
     253, // Cost: 25, unlocks more cookie upgrades (british tea biscuits) req395
     282, // Cost: 75, 5% more golden cookies (Heavenly Luck) req363
     520, // Cost: 100, 1% per herald (Heralds) - we're offline, so it doesn't count, but it unlocks seasons req363
-  ],[
+  ],[ // 2887
     181, // Cost: 1111, Unlock Season Switcher (Season Switcher) req520
     327, // Cost: 999, Unlock Golden Switch (Golden Switch) req282
     283, // Cost: 777, Golden Cookies effects last 10% longer (Lasting fortune) req282
-  ],[
+  ],[ // 21,482
     281, // Cost: 1, Offline Mode (Twin Gates of Transcendence) req363
     326, // Cost: 25, unlocks more cookie upgrades (butter cookies) req395
     288, // Cost: 50, start with 10 cursors (Starter kit) req254 req255 req253 req326
-    265, // Cost: 20,000, Unlock permanent slot II (put ??????) req264
-  ],[
-    365, // Cost: 99,999, 10% CPS for golden cookie upgrades (Residual luck) req327
-  ],[
-    141, // Cost: 500, Research 10x faster (Persistent memory) req363
-    290, // Cost: 55,555, clicking +10% (Halo gloves) req288
-    719, // Cost: 555.555m, Cursor levels boost clicks 5% (Aura gloves) req290
-    720, // Cost: 555.555b, Cursor levels to 20 (Luminous gloves) req719
-
-    // Trans left
     353, // Cost: 7, Offline 2h (Belphegor) req281
     354, // Cost: 49, Offline 4h (Mammon) req353
     355, // Cost: 343, Offline 8h (Abaddon) req354
-    356, // Cost: 2,401, Offline 16h (Satan) req355
-    357, // Cost: 16,807, Offline 1d,8h (Asmodeus) req356
-    358, // Cost: 117,649, Offline 2d,16h (Beelzebub) req357
-    359, // Cost: 823,543, Offline 5d,8h (Lucifer) req358
-
-  ],[
-    // Trans right
     274, // Cost: 7, Offline 15% (Angels) req281
     275, // Cost: 49, Offline 25% (Archangels) req274
     276, // Cost: 343, Offline 35% (Virtues) req275
+    328, // Cost: 9, Milk Selector (Classic dairy selection) req363
+    362, // Cost: 99, Background selector (Basic wallpaper assortment) req328
+    141, // Cost: 500, Research 10x faster (Persistent memory) req363
+    265, // Cost: 20,000, Unlock permanent slot II (Permanent Upgrde Slot II) req264
+  ],[ // 226,577
+    289, // Cost: 5,000, start with 5 grandmas (Starter kitchen) req288
+    284, // Cost: 7,777, Golden cookies stay 5% longer (Decisive fate) req283
+    356, // Cost: 2,401, Offline 16h (Satan) req355
     277, // Cost: 2,401, Offline 45% (Dominions) req276
+    365, // Cost: 99,999, 10% CPS for golden cookie upgrades (Residual luck) req327
+    290, // Cost: 55,555, clicking +10% (Halo gloves) req288
+    291, // Cost: 9,000, Kittens 10% (Kitten angels) req277
+    292, // Cost: 44,444, Wrinklers appear 5x faster (Unholy bait) req289
+  ],[ // 2,535,574
+    357, // Cost: 16,807, Offline 1d,8h (Asmodeus) req356
+    358, // Cost: 117,649, Offline 2d,16h (Beelzebub) req357
     278, // Cost: 16,807, Offline 55% (Cherubim) req277
     279, // Cost: 117,649, Offline 65% (Seraphim) req278
-    280, // Cost: 823,543, Offline 75% (God) req279
-
-    291, // Cost: 9,000, Kittens 10% (Kitten angels) req277
-    646, // Cost: 9b, Kittens 10% less (Kitten wages) req291
-    717, // Cost 9b, Kitten upgrades boost grandma 29% (Cat ladies) req291
-    718, // Cost: 900b, Grandmas get 5% from milk (Milkhelp) req717
-
     393, // Cost: 222,222 Synergys @ 15 of each building (Synergies Vol. I) req356 req277
-    394, // Cost: 2.222m, Synergys @ 75 of each building (Synergies Vol. II) req358 req393 req279
-
-    325, // Cost: 40.354m, Synergy upgrads 2% off, 5% regular CPS, Offline 2d (Chimera) req359 req394 req280
-
-    368, // Cost: 555,555b, Upgrades 1% cheaper per 100 cursors (Five-finger discount) req290 req355
-
-  ],[
-    // Starter branch
-    289, // Cost: 5000, start with 5 grandmas (Starter kitchen) req288
-    292, // Cost: 44,444, Wrinklers appear 5x faster (Unholy bait) req289
     364, // Cost: 444,444, +2 Wrinklers (Elder spice) req292
     293, // Cost: 444,444, Wrinklers explode +5% (Sacrilegious corruption) req292
-
-    396, // Cost: 6.66m, 10% CPS (Wrinkly cookies) req293 req364
-    495, // Cost: 100m, Mouse tip for wrinkler (Eye of the wrinkler) req396
-    408, // Cost: 100m, Sugar lumps -1h (Stevia caelestis) req396
-    449, // Cost: 200m, Sugar Lumps 1% (up to 100) (Sugar baking) req408
-    539, // Cost: 1b, 5% + 1%/building level 10+ (Sugar crystal cookies) req449
-    540, // Cost: 333b, Various maybe-cookie upgrades (Box of maybe cookies) req539
-    541, // Cost: 333b, Various not-cookie upgrades (Box of not cookies) req539
-    542, // Cost: 333b, Various pastry upgrades (Box of pastries) req539
-
-    450, // Cost: 400m, Sugar frenzy (3x, 1h, cost 1lump) (Sugar craving) req449
-    451, // Cost: 600m, up to 600 grandma -6s sugar lumps (Sugar aging process) req450
-    409, // Cost: 300m, Sugar lumps -1h (Diabetica Daemonicus) req451 req408
-    410, // Cost: 1b, Bifuricated Lumps +5% often, likely (Sucralosia Inutilis) req409
-
-  ],[
-    819, // Cost: 999,999, Send gifts (Wrapping paper) req520
-    // Seasons
     269, // Cost: 111,111, Easter Eggs drop +10% (Starspawn) req181
     270, // Cost: 111,111, Christmas cookies drop +10% (Starsnow) req181
     271, // Cost: 111,111, Halloween cookies drop +10% (Starterror) req181
     272, // Cost: 111,111, Valentines cookies drop +10% (Starlove) req181
     273, // Cost: 111,111, Business Golden cookies (Startrade) req181
-    537, // Cost: 1.111b 1/5 chance to keep holiday drops (Keepsakes) req269-273
-
-    // Spirals
+    285, // Cost: 99,999, All buildings 1% cheaper (Divine discount) req284
+    286, // Cost: 99,999, All upgrades 1% cheaper (Divine sales) req284
+    287, // Cost: 399,999, Cookie upgrades 5x cheaper (Divine bakeries) req286 req285
+  ],[ // 23,213,750
+    359, // Cost: 823,543, Offline 5d,8h (Lucifer) req358
+    280, // Cost: 823,543, Offline 75% (God) req279
+    266, // Cost: 3m, Slot III (Permanent upgrade slot III) req265
+    394, // Cost: 2.222m, Synergys @ 75 of each building (Synergies Vol. II) req358 req393 req279
+    396, // Cost: 6.66m, 10% CPS (Wrinkly cookies) req293 req364
+    819, // Cost: 999,999, Send gifts (Wrapping paper) req520
     496, // Cost: 900,000, Buy all button for upgrades (Inspired checklist) req265 req141
+    397, // Cost: 7.777m, golden cookies 1% double (Distilled essence of redoubled luck) req365 req287
+  ],[ // 184,353,605
+    325, // Cost: 40.354m, Synergy upgrads 2% off, 5% regular CPS, Offline 2d (Chimera) req359 req394 req280
+    495, // Cost: 100m, Mouse tip for wrinkler (Eye of the wrinkler) req396
     561, // Cost: 2m, Mouse tip for costs (Genius accounting) req496
     505, // Cost: 5m, Mouse tip for Tier (Label printer) req561
+    804, // Cost: 10m, Wallpapers (Distinguished wallpaper assortment) req362
+    329, // Cost: 1m, Moar Milk (fanciful dairy selection) req363
+    360, // Cost: 999,999 Golden cookie sound (Golden cookie alert sound) req365
+
     787, // Cost: 10m, Unshackles plain-tier upgrades (Unshackled flavor) req505
+    768, // Cost: 15m, Thousand Fingers x25 (Unshackled cursors) req787
+  ],[ // 2,755,555,555
+    719, // Cost: 555.555m, Cursor levels boost clicks 5% (Aura gloves) req290
+    449, // Cost: 200m, Sugar Lumps 1% (up to 100) (Sugar baking) req408
+    408, // Cost: 100m, Sugar lumps -1h (Stevia caelestis) req396
+    451, // Cost: 600m, up to 600 grandma -6s sugar lumps (Sugar aging process) req450
+    409, // Cost: 300m, Sugar lumps -1h (Diabetica Daemonicus) req451 req408
+    410, // Cost: 1b, Bifuricated Lumps +5% often, likely (Sucralosia Inutilis) req409
+  ],[ // 20,911,111,111
+    267, // Cost: 400m, Slot IV (Permanent upgrade slot IV) req266
+    646, // Cost: 9b, Kittens 10% less (Kitten wages) req291
+    717, // Cost 9b, Kitten upgrades boost grandma 29% (Cat ladies) req291
+    539, // Cost: 1b, 5% + 1%/building level 10+ (Sugar crystal cookies) req449
+    450, // Cost: 400m, Sugar frenzy (3x, 1h, cost 1lump) (Sugar craving) req449
+    537, // Cost: 1.111b 1/5 chance to keep holiday drops (Keepsakes) req269-273
+  ],[ // 218,192,922,282.37 (.37?)
+    268, // Cost: 50b, Slot V (Permanent upgrade slot V) req267
 
-    //Spiral Inside
-
-  ],[
     788, // Cost: 1.81b, Berrylium upgradeds (Unshackled berrylium) req787
     789, // Cost: 37.88b, Blueberrylium upgrades (Unshackled blueberrylium) req788
+
+    769, // Cost: 1.92b, Tiered Grandma Upgrades +50% (Unshackled grandmas) req768
+    770, // Cost: 32.805b, Tiered Farm Upgrades +180% (Unshackled farms) req769
+
+    562, // Cost: 1b, 50% boost, but clicking breaks it (Shimmering veil) req397
+    591, // Cost: 15b, random drops 5x common w/o Heavenly chip secret (Cosmic beginner's luck) req562
+
+    643, // Cost: 77.777b, news ticker can have fortunes (Fortune cookies) req397
+  ],[ // 2,064,000,555,525
+    592, // Cost: 15b, 10% veil not break, 10% CPS (Reinforced membrane) req562
+    801, // Cost: 150b, 10% veil not break, 5% CPS (Delicate touch) req592
+    718, // Cost: 900b, Grandmas get 5% from milk (Milkhelp) req717
+
+    540, // Cost: 333b, Various maybe-cookie upgrades (Box of maybe cookies) req539
+    541, // Cost: 333b, Various not-cookie upgrades (Box of not cookies) req539
+    542, // Cost: 333b, Various pastry upgrades (Box of pastries) req539
+
+    368, // Cost: 555,555b, Upgrades 1% cheaper per 100 cursors (Five-finger discount) req290 req355
+  ],[ // 14,803,842,269,332.23 (.23?)
+    720, // Cost: 555.555b, Cursor levels to 20 (Luminous gloves) req719
+
     790, // Cost: 327.68b, Chalcedhoney upgrades (Unshackled chalcedhoney) req789
     791, // Cost: 1.747t, Buttergold upgrades (Unshackled buttergold) req790
     792, // Cost: 6.857t, Sugarmuck upgrades (Unshackled sugarmuck) req791
+
+    771, // Cost: 245.76b, Tiered Mine Upgrades +170% (Unshackled mines) req770
+    772, // Cost: 1.172t, Tiered Factory Upgrades +160% (Unshackled factories) req771
+    773, // Cost: 4.199t, Tiered Bank Upgrades +150% (Unshackled banks) req772
+
+    805, // Cost: 100b, Jukebox (Sound test) req804 req329 req360
+    647, // Cost: 100b, Pet the dragon (Pet the dragon) req365 req323
+  ],[ // 196,660,275,734,837.88 (.88?)
     793, // Cost: 21.789t, Jetmint upgrades (Unshackled jetmint) req792
     794, // Cost: 59.316t, Cherrysilver upgrades (Unshackled cherrysilver) req793
+
+    774, // Cost: 12.353t, Tiered Temple Upgrades +140% (Unshackled temples) req773
+    775, // Cost: 31.457t, Tiered WT Upgrades +130% (Unshackled wizard towers) req774
+    776, // Cost: 71.745t, Tiered Shipment Upgrades +120% (Unshackled shipments) req775
+  ],[ // 2,100,817,865,341,771.2 (.2?)
+    802, // Cost: 15t, 10% veil not break, 5% CPS (Steadfast murmur) req801
+
     795, // Cost: 143.489t, Hazelrald upgrades (Unshackled hazelrald) req794
     796, // Cost: 316.228t, Mooncandy upgrades (Unshackled mooncandy) req795
     797, // Cost: 646.316t, Astrofudge upgrades (Unshackled astrofudge) req796
+
+    777, // Cost: 150t, Tiered AL Upgrades +110% (Unshackled alchemy labs) req776
+    778, // Cost: 292,308t, Tiered Portal Upgrades +100% (Unshackled portals) req777
+    779, // Cost: 537.477t, Tiered TM Upgrades +90% (Unshackled time machines) req778
+  ],[ // 24,677,100,272,946,604
+    803, // Cost: 1.5quad, 10% veil not break, 5% CPS (Glittering edge) req802
+
     798, // Cost: 1.241quad, Alabascream upgrades (Unshackled alabascream) req797
     799, // Cost: 2.262quad, Iridyum upgrades (Unshackled iridyum) req798
     800, // Cost: 3.944quad, Glucosmium upgrades (Unshackled glucosmium) req799
     863, // Cost: 6.617quad, Glimmeringue upgrades (Unshackled glimmeringue) req800
 
-  ],[
-    // Spiral Outside
-    768, // Cost: 15m, Thousand Fingers x25 (Unshackled cursors) req787
-    769, // Cost: 1.92b, Tiered Grandma Upgrades +50% (Unshackled grandmas) req768
-    770, // Cost: 32.805b, Tiered Farm Upgrades +180% (Unshackled farms) req769
-    771, // Cost: 245.76b, Tiered Mine Upgrades +170% (Unshackled mines) req770
-    772, // Cost: 1.172t, Tiered Factory Upgrades +160% (Unshackled factories) req771
-    773, // Cost: 4.199t, Tiered Bank Upgrades +150% (Unshackled banks) req772
-    774, // Cost: 12.353t, Tiered Temple Upgrades +140% (Unshackled temples) req773
-    775, // Cost: 31.457t, Tiered WT Upgrades +130% (Unshackled wizard towers) req774
-    776, // Cost: 71.745t, Tiered Shipment Upgrades +120% (Unshackled shipments) req775
-    777, // Cost: 150t, Tiered AL Upgrades +110% (Unshackled alchemy labs) req776
-    778, // Cost: 292,308t, Tiered Portal Upgrades +100% (Unshackled portals) req777
-    779, // Cost: 537.477t, Tiered TM Upgrades +90% (Unshackled time machines) req778
     780, // Cost: 941.228t, Tiered AC Upgrades +80% (Unshackled antimatter condensers) req779
     781, // Cost: 1.581quad, Tiered Prism Upgrades +70% (Unshackled prisms) req780
     782, // Cost: 2.563quad, Tiered Chancemaker Upgrades +60% (Unshackled chancemakers) req781
     783, // Cost: 4.027quad, Tiered Fractal Upgrades +50% (Unshackled fractal engines) req782
+  ],[ // 47,946,456,660,000,000
     784, // Cost: 6.155quad, Tiered JSC Upgrades +40% (Unshackled javascript consoles) req783
     785, // Cost: 9.183quad, Tiered Idleverse Upgrades +30% (Unshackled idleverses) req784
     786, // Cost: 13.408quad, Tiered Cortex Upgrades +20% (Unshackled cortex bakers) req785
     864, // Cost: 19.2quad, Tiered You Upgrades +10% (Unshackled You) req786
-
-  ],[
-    // Permanent Slots
-    266, // Cost: 3m, Slot III (Permanent upgrade slot III) req265
-    267, // Cost: 400m, Slot IV (Permanent upgrade slot IV) req266
-    268, // Cost: 50b, Slot V (Permanent upgrade slot V) req267
-
-    // Bottom
-    328, // Cost: 9, Milk Selector (Classic dairy selection) req363
-    362, // Cost: 99, Background selector (Basic wallpaper assortment) req328
-    804, // Cost: 10m, Wallpapers (Distinguished wallpaper assortment) req362
-    329, // Cost: 1m, Moar Milk (fanciful dairy selection) req363
-
-    360, // Cost: 999,999 Golden cookie sound (Golden cookie alert sound) req365
-    805, // Cost: 100b, Jukebox (Sound test) req804 req329 req360
-
-    647, // Cost: 100b, Pet the dragon (Pet the dragon) req365 req323
-
-    284, // Cost: 7,777, Golden cookies stay 5% longer (Decisive fate) req283
-    285, // Cost: 99,999, All buildings 1% cheaper (Divine discount) req284
-    286, // Cost: 99,999, All upgrades 1% cheaper (Divine sales) req284
-    287, // Cost: 399,999, Cookie upgrades 5x cheaper (Divine bakeries) req286 req285
-    397, // Cost: 7.777m, golden cookies 1% double (Distilled essence of redoubled luck) req365 req287
-
-    562, // Cost: 1b, 50% boost, but clicking breaks it (Shimmering veil) req397
-    591, // Cost: 15b, random drops 5x common w/o Heavenly chip secret (Cosmic beginner's luck) req562
-    592, // Cost: 15b, 10% veil not break, 10% CPS (Reinforced membrane) req562
-    801, // Cost: 150b, 10% veil not break, 5% CPS (Delicate touch) req592
-    802, // Cost: 15t, 10% veil not break, 5% CPS (Steadfast murmur) req801
-    803, // Cost: 1.5quad, 10% veil not break, 5% CPS (Glittering edge) req802
-
-    643, // Cost: 77.777b, news ticker can have fortunes (Fortune cookies) req397
-
     /*
     // Hidden
     411, // Cost: 777, +1% pres, +1% golden life/duration (Lucky digit) req282 + 1 '7' in prestige level
@@ -1133,8 +1122,8 @@ const flareSynergy = (fivePercent, pointOnePercent) => {
   const mult = game.Game.globalCpsMult;
 
   // To be complete, would also need to include building buffs. This is close enough
-  const b1Boost = mult*(1 + b2.amount*.05) * b1.storedTotalCps * (1+g.amount/b1.id*.01);
-  const b2Boost = mult*(1 + b1.amount*.001) * b2.storedTotalCps * (1+g.amount/b2.id*.01);
+  const b1Boost = mult*(1 + b2.amount*.05) * b1.storedTotalCps * (b1.id ? 1+g.amount/b1.id*.01 : 1);
+  const b2Boost = mult*(1 + b1.amount*.001) * b2.storedTotalCps * (b2.id ? 1+g.amount/b2.id*.01 : 1);
 
   return b1Boost + b2Boost;
 }

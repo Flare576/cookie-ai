@@ -93,25 +93,42 @@ const flareAscensionGoal = () => {
 }
 
 const flareNextChipBatch = () => {
-  return flareAscensionList
+  const left = flareAscensionList
     .map(batch => {
-      const upgrades = batch.map(id => game.Game.UpgradesById[id]);
+      const upgrades = batch
+        .map(id => game.Game.UpgradesById[id])
+        .filter(u => !u.bought);
       // if these are available, affordable, and un-purchased, put them at the top of the list
       [411, 412, 413].forEach(id => {
         const upgrade = game.Game.UpgradesById[id];
-        if (upgrade.unlocked && !upgrade.bought && upgrade.basePrice < game.Game.heavenlyChips) {
+        if (upgrade.canBePurchased && !upgrade.bought && upgrade.basePrice * 100 < game.Game.heavenlyChips) {
           upgrades.push(upgrade);
         }
       })
-      const done = upgrades[upgrades.length - 1].bought;
+      if (!upgrades.length) return null;
       const batchCost = upgrades.reduce((total, u) => total += u.basePrice,0);
       return {
-        done,
         upgrades,
         batchCost,
       }
     })
-    .find(batch => !batch.done);
+    .filter(b=>b);
+  if (left.length) return left[0];
+  else {
+    let batchCost = Math.floor(game.Game.HowMuchPrestige(game.Game.cookiesReset)) * 10;
+    // Nothing left to buy... or is there
+    if (!game.Game.Has('Lucky payout')) {
+      let cur = game.Game.prestige;
+      // Make a new number where the most significant number is the same, but all others are 7
+      let goal = cur.toString().split('').reduce((a,e) => a + (a ? '7' : e), '') * 1;
+      if (cur > goal) { // ugh, current prestige is actually higher than our "goal", bump up those numbers
+        const bump = Math.floor(cur*.1).toString().split('').reduce((a,e) => a + (a ? '0' : '1'), '') * 1;
+        while (cur > goal) goal += bump;
+      }
+      batchCost = goal - cur;
+    }
+    return { upgrades: [], batchCost };
+  }
 }
 
 const flareSetPermanentUpgrades = (next) => {
@@ -169,7 +186,12 @@ const flareSetPermanentSlot = (slot, upgrades, next) => {
             gid('promptOption0').click();
             flareMultiStep = next;
           };
-        } else flareMultiStep = next; // No upgrades left
+        } else {
+          flareMultiStep = () => { // Click Cancel
+            gid('promptOption1').click();
+            flareMultiStep = next;
+          };
+        }
       };
       return true;
     }
@@ -227,7 +249,7 @@ const flareManageSeasons = () => {
       done: () => game.Game.GetHowManyEggs() === 20,
       name: 'easter',
       id: 209,
-      deta: 'Wascally Wabbits',
+      delta: 'Wascally Wabbits',
     },{
       done: () => game.Game.GetHowManyHalloweenDrops() === 7,
       name: 'halloween',
@@ -237,12 +259,12 @@ const flareManageSeasons = () => {
       done: () => game.Game.GetHowManyReindeerDrops() === 7,
       name: 'christmas',
       id: 182,
-      deta: 'Back for Reindeer cookies',
+      delta: 'Back for Reindeer cookies',
     },{
       done: () => false,
       name: 'halloween',
       id: 183,
-      deta: 'Vibe here apparently',
+      delta: 'Vibe here apparently',
     },
   ];
   const next = flareSeasonPhases.find(s=>!s.done());
@@ -1368,7 +1390,11 @@ const resetGame = () => {
 const flareDrawOutput = () => {
   flareCheckTalk();
   document.getElementById("flareRandomDiv").innerHTML = flareDashMessage;
-  const f = (n) => n ? n.toLocaleString('en-US', {maximumFractionDigits:2}) : '';
+  const f = (n) => {
+    if (!n || isNaN(n)) return n;
+    if (n > 1e+20) return n.toExponential(4);
+    return n.toLocaleString('en-US', {maximumFractionDigits:2});
+  }
   document.getElementById("flareDynamicOutput").innerHTML = `
 <div>
   Clicking CPS: ${f(Math.round(flareHz * game.Game.computedMouseCps))}<br/>
@@ -1377,7 +1403,7 @@ const flareDrawOutput = () => {
   Delta: ${f(flareNextPurchase?.delta)}<br/>
   ETA: ${f(flareNextPurchase?.eta)}<br/>
   Longest: ${f(flareLongestWait)}<br/>
-  Batch: ${f(flareNextChipBatch().batchCost)}<br/>
+  Batch: ${f(flareNextChipBatch().batchCost)} <br/>
   </div>
   `;
   // For funsies, start the output in the center, then bump it down when we get first grandma, then move to cookie when
@@ -1595,3 +1621,12 @@ const flareHeavenlyIncrease = (addPercent) => {
   const newCPS = baseCPS * newMult;
   return newCPS - game.Game.cookiesPs;
 }
+
+const flareGetChips = () => {
+  const chips = flareNextChipBatch().batchCost + game.Game.HowMuchPrestige(game.Game.cookiesReset) + 1;
+  const need = game.Game.HowManyCookiesReset(chips) - game.Game.cookiesReset;
+  game.Game.cookies = need;
+  game.Game.cookiesEarned = need;
+}
+
+
