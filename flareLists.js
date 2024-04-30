@@ -396,15 +396,15 @@ const flareUpgradesList = [
 
   { // Golden cookie rate increase 2x 777.7m c (worth waiting 10 min for)
     id: 52,
-    delta: () => flareWaitMinutes(10, 52),
+    delta: () => flareWaitMinutes(10, 52, Number.MAX_VALUE),
   },
   { // Golden cookie rate increase 2x 77.7b c (worth waiting 10 min for)
     id: 53,
-    delta: () => flareWaitMinutes(10, 53),
+    delta: () => flareWaitMinutes(10, 53, Number.MAX_VALUE),
   },
   { // Golden cookie last 2x longer 77.7t c (worth waiting 20 min for)
     id: 86,
-    delta: () => flareWaitMinutes(20, 86),
+    delta: () => flareWaitMinutes(20, 86, Number.MAX_VALUE),
   },
 
   // Asencion - Synergy
@@ -686,6 +686,35 @@ const flareUpgradesList = [
     delta: () => flareGetRate() * .02,
   },
 
+  { // 2% for 444b? c (Skull)
+    id: 134,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 444b? c (Ghost)
+    id: 135,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 444b? c (Bat)
+    id: 136,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 444b? c (Slime)
+    id: 137,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 444b? c (Pumpkin)
+    id: 138,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 444b? c (Eyeball)
+    id: 139,
+    delta: () => flareGetRate() * .02,
+  },
+  { // 2% for 444b? c (Spider)
+    id: 140,
+    delta: () => flareGetRate() * .02,
+  },
+
   // Research?
   { // Cookie production Multiplier 1% 1quad c (Specialized Chocolate Chips)
     id: 65,
@@ -703,7 +732,6 @@ const flareUpgradesList = [
     id: 68,
     delta: () => flareGetRate() * .03,
   },
-  /*
   { // Grandmas get .02CPS per grandma 16quad c (One Mind)
     id: 69,
     delta: () => {
@@ -711,8 +739,36 @@ const flareUpgradesList = [
       const d = g.amount * .02;
       return g.amount * d;
     },
+    after: () => {
+      gid('promptOption0').click();
+      flareMultiStep = undefined;
+    },
   },
-  */
+  { // Cookie production Multiplier 4% 30quad c (Exotic Nuts)
+    id: 70,
+    delta: () => flareGetRate() * .04,
+  },
+  { // Grandmas get .02CPS per grandma 60quad c (Communal brainsweep)
+    id: 71,
+    delta: () => {
+      const g = game.Game.Objects['Grandma'];
+      const d = g.amount * .02;
+      return g.amount * d;
+    },
+  },
+  { // Cookie production Multiplier 5% 120quad c (Arcane Sugar)
+    id: 72,
+    delta: () => flareGetRate() * .05,
+  },
+  { // Grandmas get .05CPS per portal 240quad c (Elder pact)
+    id: 73,
+    delta: () => {
+      const g = game.Game.Objects['Grandma'];
+      const p = game.Game.Objects['Portal'];
+      const d = p.amount * .05;
+      return g.amount * d;
+    },
+  },
 ];
 
 let flareGrandmas = [7,   8,   9,   44,  110, 192, 294, 307, 428, 480, 506, 662, 700, 743, 840];
@@ -769,8 +825,8 @@ flareGrandmas.forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('
 [730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Cortex baker')}));
 
-[826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837]
-  .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('You')}));
+const flareYou = [826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837];
+flareYou.forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('You')}));
 
 // 1% cookies
 [33, 34, 35, 448, 560] // 560 is Ascension: Not Cookie
@@ -821,7 +877,7 @@ const flareKittens = [ 31, 32, 54, 108, 187, 320, 321, 322, 425, 442, 462, 494, 
 flareKittens.forEach(id=>flareUpgradesList.push({id, delta: () => flareKittenAdd(id)}));
 
 
-const flareBestUpgrades = [].concat(flareTenCookies, flareKittens);
+const flareBestUpgrades = [].concat(flareTenCookies, flareKittens, flareYou);
 
 
 // Messages resulting from game events that don't have an action associated with them
@@ -862,6 +918,11 @@ const flareChat = [
     criteria: () => game.Game.shimmers.length,
     fired: false,
     message: 'Error: Oh. Do I click the golden one, too?',
+  }, {
+    resetOnAscension: false,
+    criteria: () => game.Game.wrinklers.find(w=>w.sucked > 0),
+    fired: false,
+    message: 'Error: Uh... What\'s that <i>thing</i> by the cookie?!',
   }, {
     resetOnAscension: true,
     criteria: () => !game.Game.Objects['Cursor'].locked,
@@ -1102,11 +1163,12 @@ const flarePlants = [
   }
 ];
 const flareSlotNames = ['Diamond', 'Ruby', 'Jade'];
+const flareBuffNames = ['Frenzy','Elder frenzy', 'Click frenzy', 'Cookie storm', 'Dragon Harvest', 'Dragonflight'];
 
-const flareWaitMinutes = (minutes, upgradeID) => {
+const flareWaitMinutes = (minutes, upgradeID, delta) => {
   const actualMax = Math.min(minutes * 60, flareLongestWait);
   const price = game.Game.UpgradesById[upgradeID].getPrice();
-  return price / flareGetRate() > actualMax ? 0 : price;
+  return price / flareGetRate() > actualMax ? 0 : delta || price;
 };
 
 const flareCursorAndClick = () => {

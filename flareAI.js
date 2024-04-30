@@ -40,6 +40,7 @@ const flareOp = () => {
       flareTrainDragon,
       flareShop,
       flareAchievementHunt,
+      flareHandleGrandmapocalypse,
       flareClickCookie,
     ].find(f => f());
   }
@@ -47,8 +48,8 @@ const flareOp = () => {
 };
 
 const flareAscend = () => {
-  //Don't ascend if you have an active buff - you might get another level
-  //if (flareHasBuff()) return false;
+  //Don't ascend if you have two or more active buffs; milk it
+  if (flareGoodBuffs().length > 1) return false;
 
   if (game.Game.cookiesEarned >= flareAscensionGoal()) {
     game.Game.Ascend(1);
@@ -202,7 +203,8 @@ const flareSetPermanentSlot = (slot, upgrades, next) => {
 
 const flareClickShimmer = () => {
   if (game.Game.shimmers.length) {
-    const topGolden = game.Game.shimmers.find(s => !s.wrath);
+    const clickWrath = game.Game.elderWrath > 0;
+    const topGolden = game.Game.shimmers.find(s => clickWrath || !s.wrath);
     if (topGolden) {
       // Line 5653 is pop-up call
       // For the first cookie, wait until (literally) the last second
@@ -213,7 +215,7 @@ const flareClickShimmer = () => {
       const message = game.Game.textParticles
         .filter(t => t.life >= 0 && !t.text.includes('Promising fate!'))
         .sort((a,b) => a.life - b.life)[0].text;
-      flareLog(`Clicking Golden Cookie - ${message}`);
+      flareLog(`Clicking ${topGolden.wrath ? 'Wrath' : 'Golden'} Cookie - ${message}`);
       return flareOneAction;
     }
   }
@@ -425,11 +427,43 @@ const flareSpendLumps = () => {
 const flareCastSpells = () => {
   const tower = game.Game.Objects['Wizard tower'];
   if (!tower.minigameLoaded) return false;
-  if (flareBoostBuffs()) {
-    const grimoire = tower.minigame;
-    const spell = grimoire.spells['hand of fate'];
+  const grimoire = tower.minigame;
+  const spell = grimoire.spells['hand of fate'];
+  if (grimoire.magicM >= 100) {
+    if (grimoire.magic >= 100) {
+      if (flareBuildingBuffs().length) {
+        tower.switchMinigame(1);
+        flareLog('Casting "Force the Hand of Fate"');
+        grimoire.castSpell(spell);
+        flareMultiStep = () => {
+          if(grimoire.magic >= 100) return false; // it may take a few frames to update
+          flareClickShimmer(); // click the cookie
+          flareMultiStep = () => {
+            if (flareGoodBuffs().length >= 2) {
+              tower.sell(tower.amount - 21);
+              flareMultiStep = () => {
+                if(grimoire.magic > 23) return false; // it may take a few frames to update
+                flareLog('Casting "Force the Hand of Fate"');
+                grimoire.castSpell(spell);
+                flareMultiStep = () => {
+                  if(grimoire.magic > 1) return false; // it may take a few frames to update
+                  tower.sell(21); // reset magic meter
+                  flareMultiStep = () => {
+                    if(tower.amount > 0) tower.sell(); // just in case
+                    flareMultiStep = undefined;
+                  }
+                }
+              }
+            } else flareMultiStep = undefined;
+          }
+        }
+        return true;
+      }
+    }
+  } else if (flareBoostBuffs()) {
     // Magic is full and spell isn't too expensive
     // Need 21 towers to cast Hand of Fate
+    // 517 towers gets 100 magic
     if (grimoire.magic === grimoire.magicM && grimoire.magic > grimoire.getSpellCost(spell)) {
       flareLog('Casting "Force the Hand of Fate"');
       tower.switchMinigame(1);
@@ -569,7 +603,7 @@ const flareMoveGod = (from, to) => {
   const mg = temple.minigame;
   if (mg.slot[to] === from.id) return false; // That god is already in that slot
 
-  flareLog(`Swapping God ${from.name} to Slot ${flareSlotNames[to]}`);
+  flareLog(`Swapping God ${from.name} to ${flareSlotNames[to]} Slot`);
   temple.switchMinigame(1);
   mg.dragGod(from);
   flareMultiStep = () => {
@@ -582,19 +616,33 @@ const flareMoveGod = (from, to) => {
   return true;
 }
 
-// Eventually make this check for good and bad buffs
-const flareHasBuff = () => {
+const flareGoodBuffs = () => {
+  let good = flareBuildingBuffs();
   const keys = Object.keys(game.Game.buffs);
-  return keys.length;
+  if (keys.length > good.length) {
+    good = good.concat(keys.filter(b => flareBuffNames.includes(b)));
+  }
+  return good;
+}
+
+const flareBuildingBuffs = () => {
+  let good = [];
+  let count = 0;
+  const buffs = Object.keys(game.Game.buffs);
+  const gcbs = game.Game.goldenCookieBuildingBuffs;
+  if (buffs.length === 0) return false;
+  for (b in gcbs) {
+    if (buffs.includes(gcbs[b][0])) good.push(gcbs[b][0]);
+  }
+  return good;
 }
 
 // If there's a buff, and we're full on magic, summon another cookie!
 const flareBoostBuffs = () => {
-  const keys = Object.keys(game.Game.buffs);
-  if (keys.length) {
-    const buff = game.Game.buffs[keys[0]];
-    //return keys.length > 1 || buff.time > buff.maxTime * .9 && buff.time < buff.maxTime * .95;
-    return keys.length > 1 || buff.time > buff.maxTime * .9;
+  const buffs = flareGoodBuffs();
+  if (buffs.length) {
+    const buff = game.Game.buffs[buffs[0]];
+    return buffs.length > 1 || buff.time > buff.maxTime * .9;
   }
   return false;
 }
@@ -1052,7 +1100,7 @@ const flarePlant = (x, y, crop, target) => {
   }
   if (!crop.unlocked) return false; // We could be waiting for Meddleweed, which we can't plant right away
   const cropCost = garden.getCost(crop);
-  if (flareHasBuff() || game.Game.cookies < cropCost) {
+  if (flareGoodBuffs().length || game.Game.cookies < cropCost) {
     flareNextPurchase = {
       name: crop.name,
       price: cropCost,
@@ -1178,6 +1226,7 @@ const flareTrainDragon = () => {
       }
     }
     if (dl >= 5) {
+      // Line 14798 for auras
       const bestAura = [
         {
           id: 1,
@@ -1215,6 +1264,58 @@ const flareTrainDragon = () => {
           id: 8,
           delta: () => flareHeavenlyIncrease(.05), // 5% bonus to prestige
           owned: () => game.Game.dragonLevel >= 11,
+        }, {
+          id: 9,
+          delta: () => 0, // Golden cookies 5% appear
+          owned: () => game.Game.dragonLevel >= 12,
+        }, {
+          id: 10,
+          delta: () => 0, // enables "Dragon Flight" Golden cookie
+          owned: () => game.Game.dragonLevel >= 13,
+        }, {
+          id: 11,
+          delta: () => 0, // Golden cookies give 10% more cookies
+          owned: () => game.Game.dragonLevel >= 14,
+        }, {
+          id: 12,
+          delta: () => 0, // Wrath cookies give 10% more cookies
+          owned: () => game.Game.dragonLevel >= 15,
+        }, {
+          id: 13,
+          delta: () => 0, // Golden cookies last 5% longer
+          owned: () => game.Game.dragonLevel >= 16,
+        }, {
+          id: 14,
+          delta: () => flareNeedDrops() ? Number.MAX_VALUE : 0, // 25%+ Random Drops
+          owned: () => game.Game.dragonLevel >= 17,
+        }, {
+          id: 15,
+          delta: () => flareGetRate(), // All cookie production doubled?
+          owned: () => game.Game.dragonLevel >= 18,
+        }, {
+          id: 16,
+          delta: () => 0, // 123% per golden cookie on screen
+          owned: () => game.Game.dragonLevel >= 19,
+        }, {
+          id: 17,
+          delta: () => 0, // Sugar lumps grow 5% faster, 50% weirder
+          owned: () => game.Game.dragonLevel >= 20,
+        }, {
+          id: 18,
+          delta: () => 0, // Selling best building may grant wish
+          owned: () => game.Game.dragonLevel >= 21,
+        }, {
+          id: 19,
+          delta: () => 0, // Supreme Intellect - powers minigames
+          owned: () => game.Game.dragonLevel >= 22,
+        }, {
+          id: 20,
+          delta: () => 0, // Enhanced wrinklers
+          owned: () => game.Game.dragonLevel >= 23,
+        }, {
+          id: 21,
+          delta: () => 0, // bake Dragon cookie?
+          owned: () => game.Game.dragonLevel >= 24,
         },
       ]
         .map(a => {
@@ -1261,6 +1362,9 @@ const flareShop = () => {
       flareShouldSpendCookies = false;
       flareLog(`Upgrading! ${nextUpgrade.name} - ${nextUpgrade.desc}`);
       game.Game.UpgradesById[nextUpgrade.id].click();
+      if (nextUpgrade.after) {
+        flareMultiStep = nextUpgrade.after;
+      }
     }
   } else if(nextBuilding) {
     flareNextPurchase = nextBuilding;
@@ -1305,7 +1409,7 @@ const flareObjectsNoCursor = () => {
 
 const flareUpgrades = () => {
   return flareUpgradesList
-    .map(({id, delta}) => {
+    .map(({id, delta, after}) => {
       const u = game.Game.UpgradesById[id];
       if (!u.unlocked || u.bought) return null;
       const name = u.name;
@@ -1326,6 +1430,7 @@ const flareUpgrades = () => {
         delta: d,
         ratio,
         eta,
+        after,
       };
     })
     .filter(d => d)
@@ -1349,7 +1454,7 @@ const flareBuildings = () => {
 
       const quickBuyLimit = Math.min(2, flareLongestWait * .1); // 2 seconds or 10% of the longest wait so far
       const timeCheck = price / flareGetRate();
-      const buyCheep = !game.Game.Has('Get lucky') || !flareHasBuff();
+      const buyCheep = !game.Game.Has('Get lucky') || !flareGoodBuffs().length;
       const ratio = timeCheck <= quickBuyLimit && buyCheep ? d : d/price;
 
       const eta = (price - game.Game.cookies) / flareGetRate();
@@ -1478,6 +1583,7 @@ const flareLog = (message, qty = 1) => {
 
       if (m.qty > 1) mess += ` (x${m.qty})`;
       mess = mess.replace(/Error/g, '<span class="flareError">Error</span>');
+      mess = mess.replace(/Pop goes the wrinkler/g, '<span class="flareWrinkler">Pop goes the wrinkler</span>');
       mess = mess.replace(/Swapping God/g, '<span class="flareGod">Swapping God</span>');
       mess = mess.replace(/Casting/g, '<span class="flareCasting">Casting</span>');
       mess = mess.replace(/Harvesting/g, '<span class="flareHarvesting">Harvesting</span>');
@@ -1567,6 +1673,65 @@ const flareAchievementHunt = () => {
   } else {
     document.getElementById('game').style.height = '100vh';
   }
+}
+
+// Line 14252
+const flareHandleGrandmapocalypse = () => {
+  if (game.Game.elderWrath > 0) {
+    const active = game.Game.wrinklers.filter(w=>w.sucked).sort((a,b) => b.sucked - a.sucked);
+    // If we don't have "Wrinkler poker" yet, poke the first wrinkler until we do
+    if (active.length && !game.Game.HasAchiev('Wrinkler poker')) {
+      const longest = active[0];
+      if (longest.hp <= 2) active.shift();
+    }
+    // If we're still waiting for drops/achievements, click wrinklers asap
+    if (flareNeedDrops() || !game.Game.HasAchiev('Moistburster')) {
+      const clicked = active.find(w => flareClickWrinkler(w));
+      return clicked && flareOneAction;
+    }
+    // If we haven't appeased them enough, do that
+    const pledge = game.Game.UpgradesById[74];
+    if (!game.Game.HasAchiev('Elder slumber') && pledge.unlocked) {
+      const price = pledge.getPrice();
+      const eta = (price - game.Game.cookies) / flareGetRate();
+      flareNextPurchase = {
+        name: pledge.name,
+        price,
+        delta: 'No moar',
+        eta: eta > 0 ? eta : 0,
+      };
+      flareShouldSpendCookies = false;
+      if (game.Game.cookies >= price) {
+        flareLog('Appeasing the Grandmatriarchs');
+        pledge.click();
+        return flareOneAction;
+      }
+      return false;
+    }
+    // Otherwise, let the wrinklers stack as high as possible, then nuke 'em
+    if (active.length >= game.Game.getWrinklersMax()) {
+      flareMultiStep = () => {
+        if (!active.find(w => flareClickWrinkler(w))) flareMultiStep = undefined;
+      };
+    }
+  }
+}
+
+const flareClickWrinkler = (wrinkler) => {
+  if (wrinkler.sucked) {
+    if (wrinkler.hp < 1) flareLog('Pop goes the wrinkler');
+    game.Game.mouseX = wrinkler.x;
+    game.Game.mouseY = wrinkler.y;
+    gid('backgroundLeftCanvas').click();
+    return true;
+  }
+  return false;
+}
+
+const flareNeedDrops = () => {
+  return !(game.Game.GetHowManyEggs() === 20
+  && game.Game.GetHowManyHalloweenDrops() === 7
+  && game.Game.GetHowManyReindeerDrops() === 7);
 }
 
 // Functions basically lifted from main game
