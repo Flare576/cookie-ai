@@ -1,5 +1,5 @@
 const flareAscensionList = [
-  [ // 365
+  [ //1 365
     363, // Cost: 1, Unlocks others (Legacy)
     323, // Cost: 9, (How to bake your dragon) req363
     395, // Cost: 3, 10% increase Cookie multiplier (Heavenly cookies) req363
@@ -9,11 +9,11 @@ const flareAscensionList = [
     253, // Cost: 25, unlocks more cookie upgrades (british tea biscuits) req395
     282, // Cost: 75, 5% more golden cookies (Heavenly Luck) req363
     520, // Cost: 100, 1% per herald (Heralds) - we're offline, so it doesn't count, but it unlocks seasons req363
-  ],[ // 2887
+  ],[ //2 2887
     181, // Cost: 1111, Unlock Season Switcher (Season Switcher) req520
     327, // Cost: 999, Unlock Golden Switch (Golden Switch) req282
     283, // Cost: 777, Golden Cookies effects last 10% longer (Lasting fortune) req282
-  ],[ // 21,482
+  ],[ //3 21,482
     281, // Cost: 1, Offline Mode (Twin Gates of Transcendence) req363
     326, // Cost: 25, unlocks more cookie upgrades (butter cookies) req395
     288, // Cost: 50, start with 10 cursors (Starter kit) req254 req255 req253 req326
@@ -27,7 +27,7 @@ const flareAscensionList = [
     362, // Cost: 99, Background selector (Basic wallpaper assortment) req328
     141, // Cost: 500, Research 10x faster (Persistent memory) req363
     265, // Cost: 20,000, Unlock permanent slot II (Permanent Upgrde Slot II) req264
-  ],[ // 226,577
+  ],[ //4 226,577
     289, // Cost: 5,000, start with 5 grandmas (Starter kitchen) req288
     284, // Cost: 7,777, Golden cookies stay 5% longer (Decisive fate) req283
     356, // Cost: 2,401, Offline 16h (Satan) req355
@@ -36,7 +36,7 @@ const flareAscensionList = [
     290, // Cost: 55,555, clicking +10% (Halo gloves) req288
     291, // Cost: 9,000, Kittens 10% (Kitten angels) req277
     292, // Cost: 44,444, Wrinklers appear 5x faster (Unholy bait) req289
-  ],[ // 2,535,574
+  ],[ //5 2,535,574
     357, // Cost: 16,807, Offline 1d,8h (Asmodeus) req356
     358, // Cost: 117,649, Offline 2d,16h (Beelzebub) req357
     278, // Cost: 16,807, Offline 55% (Cherubim) req277
@@ -52,7 +52,7 @@ const flareAscensionList = [
     285, // Cost: 99,999, All buildings 1% cheaper (Divine discount) req284
     286, // Cost: 99,999, All upgrades 1% cheaper (Divine sales) req284
     287, // Cost: 399,999, Cookie upgrades 5x cheaper (Divine bakeries) req286 req285
-  ],[ // 23,213,750
+  ],[ //6 23,213,750
     359, // Cost: 823,543, Offline 5d,8h (Lucifer) req358
     280, // Cost: 823,543, Offline 75% (God) req279
     266, // Cost: 3m, Slot III (Permanent upgrade slot III) req265
@@ -61,7 +61,7 @@ const flareAscensionList = [
     819, // Cost: 999,999, Send gifts (Wrapping paper) req520
     496, // Cost: 900,000, Buy all button for upgrades (Inspired checklist) req265 req141
     397, // Cost: 7.777m, golden cookies 1% double (Distilled essence of redoubled luck) req365 req287
-  ],[ // 184,353,605
+  ],[ //7 184,353,605
     325, // Cost: 40.354m, Synergy upgrads 2% off, 5% regular CPS, Offline 2d (Chimera) req359 req394 req280
     495, // Cost: 100m, Mouse tip for wrinkler (Eye of the wrinkler) req396
     561, // Cost: 2m, Mouse tip for costs (Genius accounting) req496
@@ -72,21 +72,21 @@ const flareAscensionList = [
 
     787, // Cost: 10m, Unshackles plain-tier upgrades (Unshackled flavor) req505
     768, // Cost: 15m, Thousand Fingers x25 (Unshackled cursors) req787
-  ],[ // 2,755,555,555
+  ],[ //8 2,755,555,555
     719, // Cost: 555.555m, Cursor levels boost clicks 5% (Aura gloves) req290
     449, // Cost: 200m, Sugar Lumps 1% (up to 100) (Sugar baking) req408
     408, // Cost: 100m, Sugar lumps -1h (Stevia caelestis) req396
     451, // Cost: 600m, up to 600 grandma -6s sugar lumps (Sugar aging process) req450
     409, // Cost: 300m, Sugar lumps -1h (Diabetica Daemonicus) req451 req408
     410, // Cost: 1b, Bifuricated Lumps +5% often, likely (Sucralosia Inutilis) req409
-  ],[ // 20,911,111,111
+  ],[ //9 20,911,111,111
     267, // Cost: 400m, Slot IV (Permanent upgrade slot IV) req266
     646, // Cost: 9b, Kittens 10% less (Kitten wages) req291
     717, // Cost 9b, Kitten upgrades boost grandma 29% (Cat ladies) req291
     539, // Cost: 1b, 5% + 1%/building level 10+ (Sugar crystal cookies) req449
     450, // Cost: 400m, Sugar frenzy (3x, 1h, cost 1lump) (Sugar craving) req449
     537, // Cost: 1.111b 1/5 chance to keep holiday drops (Keepsakes) req269-273
-  ],[ // 218,192,922,282.37 (.37?)
+  ],[ //10 218,192,922,282.37 (.37?)
     268, // Cost: 50b, Slot V (Permanent upgrade slot V) req267
 
     788, // Cost: 1.81b, Berrylium upgradeds (Unshackled berrylium) req787
@@ -99,7 +99,7 @@ const flareAscensionList = [
     591, // Cost: 15b, random drops 5x common w/o Heavenly chip secret (Cosmic beginner's luck) req562
 
     643, // Cost: 77.777b, news ticker can have fortunes (Fortune cookies) req397
-  ],[ // 2,064,000,555,525
+  ],[ //11 2,064,000,555,525
     592, // Cost: 15b, 10% veil not break, 10% CPS (Reinforced membrane) req562
     801, // Cost: 150b, 10% veil not break, 5% CPS (Delicate touch) req592
     718, // Cost: 900b, Grandmas get 5% from milk (Milkhelp) req717
@@ -109,7 +109,7 @@ const flareAscensionList = [
     542, // Cost: 333b, Various pastry upgrades (Box of pastries) req539
 
     368, // Cost: 555,555b, Upgrades 1% cheaper per 100 cursors (Five-finger discount) req290 req355
-  ],[ // 14,803,842,269,332.23 (.23?)
+  ],[ //12 14,803,842,269,332.23 (.23?)
     720, // Cost: 555.555b, Cursor levels to 20 (Luminous gloves) req719
 
     790, // Cost: 327.68b, Chalcedhoney upgrades (Unshackled chalcedhoney) req789
@@ -122,36 +122,36 @@ const flareAscensionList = [
 
     805, // Cost: 100b, Jukebox (Sound test) req804 req329 req360
     647, // Cost: 100b, Pet the dragon (Pet the dragon) req365 req323
-  ],[ // 196,660,275,734,837.88 (.88?)
+  ],[ //13 196,660,275,734,837.88 (.88?)
     793, // Cost: 21.789t, Jetmint upgrades (Unshackled jetmint) req792
     794, // Cost: 59.316t, Cherrysilver upgrades (Unshackled cherrysilver) req793
 
     774, // Cost: 12.353t, Tiered Temple Upgrades +140% (Unshackled temples) req773
     775, // Cost: 31.457t, Tiered WT Upgrades +130% (Unshackled wizard towers) req774
     776, // Cost: 71.745t, Tiered Shipment Upgrades +120% (Unshackled shipments) req775
-  ],[ // 2,100,817,865,341,771.2 (.2?)
+  ],[ //14 917,024,401,016,823
     802, // Cost: 15t, 10% veil not break, 5% CPS (Steadfast murmur) req801
 
     795, // Cost: 143.489t, Hazelrald upgrades (Unshackled hazelrald) req794
     796, // Cost: 316.228t, Mooncandy upgrades (Unshackled mooncandy) req795
-    797, // Cost: 646.316t, Astrofudge upgrades (Unshackled astrofudge) req796
 
     777, // Cost: 150t, Tiered AL Upgrades +110% (Unshackled alchemy labs) req776
     778, // Cost: 292,308t, Tiered Portal Upgrades +100% (Unshackled portals) req777
-    779, // Cost: 537.477t, Tiered TM Upgrades +90% (Unshackled time machines) req778
-  ],[ // 24,677,100,272,946,604
+  ],[ //15 25,860,893,737,271,550
     803, // Cost: 1.5quad, 10% veil not break, 5% CPS (Glittering edge) req802
 
+    797, // Cost: 646.316t, Astrofudge upgrades (Unshackled astrofudge) req796
     798, // Cost: 1.241quad, Alabascream upgrades (Unshackled alabascream) req797
     799, // Cost: 2.262quad, Iridyum upgrades (Unshackled iridyum) req798
     800, // Cost: 3.944quad, Glucosmium upgrades (Unshackled glucosmium) req799
     863, // Cost: 6.617quad, Glimmeringue upgrades (Unshackled glimmeringue) req800
 
+    779, // Cost: 537.477t, Tiered TM Upgrades +90% (Unshackled time machines) req778
     780, // Cost: 941.228t, Tiered AC Upgrades +80% (Unshackled antimatter condensers) req779
     781, // Cost: 1.581quad, Tiered Prism Upgrades +70% (Unshackled prisms) req780
     782, // Cost: 2.563quad, Tiered Chancemaker Upgrades +60% (Unshackled chancemakers) req781
     783, // Cost: 4.027quad, Tiered Fractal Upgrades +50% (Unshackled fractal engines) req782
-  ],[ // 47,946,456,660,000,000
+  ],[ //16 47,946,456,660,000,000
     784, // Cost: 6.155quad, Tiered JSC Upgrades +40% (Unshackled javascript consoles) req783
     785, // Cost: 9.183quad, Tiered Idleverse Upgrades +30% (Unshackled idleverses) req784
     786, // Cost: 13.408quad, Tiered Cortex Upgrades +20% (Unshackled cortex bakers) req785
@@ -256,7 +256,10 @@ const flareUpgradesList = [
   },
   { // 0.1 for each non-cursor building for 100000c
     id: 3,
-    delta: () => (game.Game.Objects['Cursor'].amount + flareHz) * flareObjectsNoCursor() * .1,
+    delta: () => {
+      const c = game.Game.Objects['Cursor'].amount;
+      return (c + flareHz) * (game.Game.BuildingsOwned - c) * .1;
+    },
   },
   { // Upgrade3 x5 for 10m c
     id: 4,
@@ -567,34 +570,6 @@ const flareUpgradesList = [
     id: 152,
     delta: () => 25,
   },
-  { // 2% CPS  252.5bil c (Christmas Tree Biscuits) [Reindeer]
-    id: 143,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% CPS  252.5bil c (Snowflake biscuit) [Reindeer]
-    id: 144,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% CPS  252.5bil c (Snowman biscuit) [Reindeer]
-    id: 145,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% CPS  252.5bil c (Holly Biscuits) [Reindeer]
-    id: 146,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% CPS  252.5bil c (Candy Cane Biscuits) [Reindeer]
-    id: 147,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% CPS 252.5bil c (Bell Biscuits) [Reindeer]
-    id: 148,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% CPS 252.5bil c (Present Biscuits) [Reindeer]
-    id: 149,
-    delta: () => flareGetRate() * .02,
-  },
   { // 15% CPS 2525c (Increased Merriness) scales [Santa's Gift]
     id: 153,
     delta: () => flareGetRate() * .15,
@@ -656,66 +631,7 @@ const flareUpgradesList = [
     delta: () => flareWaitMinutes(20, 168),
   },
 
-  // Valentine's Day
-  { // 2% for 931,000c (Pure heart biscuits)
-    id: 169,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 931m c (Ardent heart biscuits)
-    id: 170,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 931b c (Sour heart biscuits)
-    id: 171,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 931t c (Weeping heart biscuits)
-    id: 172,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 931quad c (Golden heart biscuits)
-    id: 173,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 931quint c (Eternal heart biscuits)
-    id: 174,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 931sex c (Prism heart biscuits)
-    id: 645,
-    delta: () => flareGetRate() * .02,
-  },
-
-  { // 2% for 444b? c (Skull)
-    id: 134,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 444b? c (Ghost)
-    id: 135,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 444b? c (Bat)
-    id: 136,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 444b? c (Slime)
-    id: 137,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 444b? c (Pumpkin)
-    id: 138,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 444b? c (Eyeball)
-    id: 139,
-    delta: () => flareGetRate() * .02,
-  },
-  { // 2% for 444b? c (Spider)
-    id: 140,
-    delta: () => flareGetRate() * .02,
-  },
-
-  // Research?
+  // Research
   { // Cookie production Multiplier 1% 1quad c (Specialized Chocolate Chips)
     id: 65,
     delta: () => flareGetRate() * .01,
@@ -769,7 +685,33 @@ const flareUpgradesList = [
       return g.amount * d;
     },
   },
+
+  // Fortunes (Building-specific below)
+  { // All buildings/upgrades 1% cheaper, 1% CPS (Fortune 100)
+    id: 638,
+    delta: () => flareGetRate() * .01,
+  },
+  { // 7% CPS (Fortune 101)
+    id: 639,
+    delta: () => flareGetRate() * .07,
+  },
+  { // Extra 1% while closed (Fortune 102)
+    id: 640,
+    delta: () => flareWaitMinutes(1, 640),
+  },
+  { // Extra Milk (Fortune 103)
+    id: 641,
+    delta: () => flareKittenAdd(641),
+  },
+  { // Clicking gains +1% of CPS (Fortune 104)
+    id: 642,
+    delta: () => flareHz * game.Game.cookiesPs * .01,
+  },
 ];
+
+// Building Fortunes
+[621, 622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634, 635, 636, 637, 698, 763, 861]
+  .forEach(id=>flareUpgradesList.push({id, delta: () => flareWaitMinutes(1, id)}));
 
 let flareGrandmas = [7,   8,   9,   44,  110, 192, 294, 307, 428, 480, 506, 662, 700, 743, 840];
 flareGrandmas.forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Grandma')}));
@@ -816,26 +758,29 @@ flareGrandmas.forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('
 [522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 676, 714, 757, 854]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Fractal engine')}));
 
-[594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 677, 715, 758]
+[594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 677, 715, 758, 855]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Javascript console')}));
 
-[684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 716]
+[684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 716, 759, 856]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Idleverse')}));
 
-[730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742]
+[730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742, 760, 857]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('Cortex baker')}));
 
-const flareYou = [826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837];
+const flareYou = [826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837, 838, 839, 858];
 flareYou.forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('You')}));
 
 // 1% cookies
-[33, 34, 35, 448, 560] // 560 is Ascension: Not Cookie
+[33, 34, 35, 448, 476, 560] // 476 is from garden; 560 is Ascension: Not Cookie
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.01)}));
 
 // 2% cookies
 [36, 37, 38, 39, 40, 41, 42, 80, 81, 88, 89, 90, 92, 104, 105, 106, 107, 150, 151, 502, 503, 504, 727, 728,
   125, 126, 127, 128, 344, 612, 618, 619, 726, 824, // Ascension: Brand
   93, 94, 95, 96, 97, 98, // Ascension: British Tea
+  134, 135, 136, 137, 138, 139, 140, // Halloween
+  143, 144, 145, 146, 147, 148, 149, // Reindeer
+  169, 170, 171, 172, 173, 174, 645, // Valentine's
 ]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.02)}));
 
@@ -860,16 +805,17 @@ flareYou.forEach(id=>flareUpgradesList.push({id, delta: () => flareDouble('You')
 
 // 5% cookies
 [
-  55,  56,  256, 257, 538, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582,
-  583, 584, 585, 586, 587, 588, 607, 608, 609, 614, 615, 616, 617, 652, 653, 654, 655, 656, 657, 658, 678, 679, 680,
-  681, 682, 721, 722, 723, 724, 807, 808, 809, 810, 811,
+  55,  56,  256, 257, 330, 538, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581,
+  582, 583, 584, 585, 586, 587, 588, 607, 608, 609, 614, 615, 616, 617, 652, 653, 654, 655, 656, 657, 658, 678, 679,
+  680, 681, 682, 721, 722, 723, 724, 807, 808, 809, 810, 811, 812, 813, 814, 815, 816, 820, 821, 822, 823, 867, 868,
+  869, 870, 871, 872,
   555, 818, // Ascension: Maybe
   610, 620, // Ascension: Not Cookies
 ]
   .forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.05)}));
 
 // 10% cookies
-const flareTenCookies = [334, 335, 336, 337, 400, 426, 590, 477, 478, 479];
+const flareTenCookies = [334, 335, 336, 337, 400, 426, 590, 477, 478, 479, 497, 659, 699];
 flareTenCookies.forEach(id=>flareUpgradesList.push({id, delta: () => flareCookieMult(.10)}));
 
 // Kittens
@@ -900,7 +846,7 @@ const flareChat = [
     message: `Status: I'll just click the big cookie, then?`
   }, {
     resetOnAscension: false,
-    criteria: () => game.Game.milkH > .1,
+    criteria: () => game.Game.milkH > .2,
     fired: false,
     message: 'Error: Don\'t freak out, I\'m dunking the cookie.',
   }, {
@@ -918,6 +864,16 @@ const flareChat = [
     criteria: () => game.Game.shimmers.length,
     fired: false,
     message: 'Error: Oh. Do I click the golden one, too?',
+  }, {
+    resetOnAscension: false,
+    criteria: () => game.Game.HasAchiev('Itchscratcher'),
+    fired: false,
+    message: 'Error: Maybe I just stay over there... ew.',
+  }, {
+    resetOnAscension: false,
+    criteria: () => game.Game.elderWrath,
+    fired: false,
+    message: 'Error: That background... I\'ll just.. move back over',
   }, {
     resetOnAscension: false,
     criteria: () => game.Game.wrinklers.find(w=>w.sucked > 0),
@@ -1026,27 +982,106 @@ const flareChat = [
   },
 ];
 
+const flareChatChecks = [
+  [{
+    regex: /^(Buying building)/,
+    class: 'flareBuyBuilding',
+  },{
+    regex: /^(Selling building)/,
+    class: 'flareSellBuilding',
+  },{
+    regex: /^(Pop goes the wrinkler)/,
+    class: 'flareWrinkler',
+  },{
+    regex: /^(Clicking Reindeer Cookie)/,
+    class: 'flareGoldenCookie',
+  },{
+    regex: /^(Clicking Golden Cookie)/,
+    class: 'flareGoldenCookie',
+  },{
+    regex: /^(Clicking Wrath Cookie)/,
+    class: 'flareWrathCookie',
+  }],[{
+    regex: /^(Casting)/,
+    class: 'flareCasting',
+  },{
+    regex: /^(Swapping God)/,
+    class: 'flareGod',
+  },{
+    regex: /^(Harvesting)/,
+    class: 'flareHarvesting',
+  },{
+    regex: /^(Planting)/,
+    class: 'flarePlanting',
+  },{
+    regex: /^(Upgrading!)/,
+    class: 'flareUpgrading',
+  },{
+    regex: /^(Upgrading Dragon)/,
+    class: 'flareDragon',
+  }],[{
+    regex: /^(Error)/,
+    class: 'flareError',
+  },{
+    regex: /^(Building Available)/,
+    class: 'flareNewBuilding',
+  },{
+    regex: /^(Activating Minigame)/,
+    class: 'flareMinigame',
+  },{
+    regex: /^(Dragon Aura)/,
+    class: 'flareDragon',
+  },{
+    regex: /^(Unlocking)/,
+    class: 'flareUnlocking',
+  },{
+    regex: /^(Swapping Garden soil)/,
+    class: 'flarePlanting',
+  },{
+    regex: /^(Changing Season)/,
+    class: 'flareSeason',
+  },{
+    regex: /^(Clicking fortune!)/,
+    class: 'flareFortune',
+  },{
+    regex: /^(Ascending!)/,
+    class: 'flareAscend',
+  },{
+    regex: /^(Achievement won)/,
+    class: 'flareAchievement',
+  }],
+];
+
 const flarePlants = [
   {
     target: 'meddleweed',
     primary: 'meddleweed',
     secondary: 'meddleweed',
+    layout: 'meddleweed',
   }, {
     target: 'crumbspore',
     primary: 'meddleweed',
     secondary: 'meddleweed',
+    layout: 'meddleweed',
   }, {
     target: 'brownMold',
     primary: 'meddleweed',
     secondary: 'meddleweed',
+    layout: 'meddleweed',
   }, {
     target: 'bakeberry',
     primary: 'bakerWheat',
     secondary: 'bakerWheat',
+    soil: 'woodchips',
   }, {
     target: 'queenbeet',
     primary: 'bakeberry',
     secondary: 'chocoroot',
+    soil: 'woodchips',
+  }, {
+    target: 'duketater',
+    primary: 'queenbeet',
+    secondary: 'queenbeet',
   }, {
     target: 'chocoroot',
     primary: 'brownMold',
@@ -1084,25 +1119,17 @@ const flarePlants = [
     primary: 'whiteChocoroot',
     secondary: 'shimmerlily',
   }, {
-    target: 'nursetulip',
-    primary: 'whiskerbloom',
-    secondary: 'whiskerbloom',
-  }, {
     target: 'elderwort',
     primary: 'shimmerlily',
     secondary: 'cronerice',
   }, {
+    target: 'nursetulip',
+    primary: 'whiskerbloom',
+    secondary: 'whiskerbloom',
+  }, {
     target: 'greenRot',
     primary: 'clover',
     secondary: 'whiteMildew',
-  }, {
-    target: 'doughshroom',
-    primary: 'crumbspore',
-    secondary: 'crumbspore',
-  }, {
-    target: 'duketater',
-    primary: 'queenbeet',
-    secondary: 'queenbeet',
 
   }, {
     target: 'goldenClover',
@@ -1144,6 +1171,10 @@ const flarePlants = [
     target: 'wrinklegill',
     primary: 'crumbspore',
     secondary: 'brownMold',
+  }, { // Low priority as crumbspore takes over
+    target: 'doughshroom',
+    primary: 'crumbspore',
+    secondary: 'crumbspore',
   }, {
     target: 'tidygrass',
     primary: 'whiteChocoroot',
@@ -1152,18 +1183,22 @@ const flarePlants = [
     target: 'everdaisy',
     primary: 'tidygrass',
     secondary: 'elderwort',
+    layout: 'everdaisy',
   }, {
     target: 'queenbeetLump',
     primary: 'queenbeet',
     secondary: 'queenbeet',
+    soil: 'woodchips',
+    layout: 'queenbeetLump',
   }, {
     target: 'shriekbulb',
     primary: 'duketater',
     secondary: 'duketater',
+    layout: 'shriekbulb',
   }
 ];
 const flareSlotNames = ['Diamond', 'Ruby', 'Jade'];
-const flareBuffNames = ['Frenzy','Elder frenzy', 'Click frenzy', 'Cookie storm', 'Dragon Harvest', 'Dragonflight'];
+const flareOtherBuffs = ['Frenzy', 'Click frenzy', 'Cookie storm', 'Dragon Harvest', 'Dragonflight'];
 
 const flareWaitMinutes = (minutes, upgradeID, delta) => {
   const actualMax = Math.min(minutes * 60, flareLongestWait);
@@ -1223,6 +1258,376 @@ const flareKittenAdd = (id) => {
     case 613: percent = .115; break; // Executive
     case 766: percent = .11;  break; // Admins
     case 865: percent = .105; break; // Strategists
+    case 641: percent = .05;  break; // Fortune 103
   }
   return percent * game.Game.cookiesPs * game.Game.milkProgress;
 }
+
+const flareGardenTiles = {
+  standard: [{
+    primary: [{x:3,y:2}],
+    secondary: [{x:2,y:2}],
+    harvest: [{x:2,y:3},{x:3,y:3}],
+  },{
+    primary: [{x:3,y:2}],
+    secondary: [{x:3,y:3}],
+    harvest: [{x:2,y:2},{x:4,y:2},{x:2,y:3},{x:4,y:3}],
+  },{
+    primary: [{x:2,y:3},{x:4,y:3}],
+    secondary: [{x:3,y:3}],
+    harvest: [
+      {x:2,y:2},{x:3,y:2},{x:4,y:2},
+
+      {x:2,y:4},{x:3,y:4},{x:4,y:4}],
+  },{
+    primary: [{x:2,y:3},{x:3,y:3}],
+    secondary: [{x:1,y:3},{x:4,y:3}],
+    harvest: [
+      {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},
+      {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},
+    ],
+  },{
+    primary: [{x:2,y:2},{x:3,y:3}],
+    secondary: [{x:1,y:1},{x:4,y:1},{x:1,y:4},{x:4,y:4}],
+    harvest: [
+                {x:2,y:1},{x:2,y:1},
+      {x:1,y:2},                    {x:4,y:2},
+      {x:1,y:3},                    {x:4,y:3},
+                {x:2,y:4},{x:3,y:4},
+    ],
+  },{
+    primary: [{x:3,y:1},{x:2,y:3},{x:5,y:3}],
+    secondary: [{x:1,y:1},{x:5,y:1},{x:4,y:3},{x:1,y:4}],
+    harvest: [
+      {x:2,y:1},          {x:4,y:1},
+      {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+      {x:1,y:3},          {x:3,y:3},
+      {x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},
+    ],
+  },{
+    primary: [{x:2,y:1},{x:5,y:1},{x:2,y:4},{x:5,y:4}],
+    secondary: [{x:1,y:1},{x:4,y:1},{x:1,y:4},{x:4,y:4}],
+    harvest: [
+                          {x:3,y:1},
+      {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+      {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+                          {x:3,y:4},
+      {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+    ],
+  },{
+    primary: [{x:2,y:1},{x:5,y:1},{x:2,y:4},{x:5,y:4}],
+    secondary: [{x:2,y:2},{x:5,y:2},{x:2,y:5},{x:5,y:5}],
+    harvest: [
+      {x:1,y:1},          {x:3,y:1},{x:4,y:1},          {x:6,y:1},
+      {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+      {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+      {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+      {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
+    ],
+  },{
+    primary: [{x:1,y:2},{x:3,y:2},{x:6,y:2},{x:1,y:5},{x:4,y:5},{x:6,y:5}],
+    secondary: [{x:2,y:2},{x:5,y:2},{x:2,y:5},{x:5,y:5}],
+    harvest: [
+      {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+                                    {x:4,y:2},
+      {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+      {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
+                                    {x:4,y:5},
+      {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
+    ],
+  },
+  ],
+  everdaisy: [{},{}, // Cant grow before level 3
+  {
+    primary: [
+      {x:2,y:2},{x:3,y:2},{x:4,y:2},
+      {x:2,y:3},          {x:4,y:3},
+    ],
+    secondary: [{x:2,y:4},{x:3,y:4},{x:4,y:4}],
+    harvest: [{x:3,y:3}],
+  },{
+    primary: [
+      {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},
+      {x:1,y:3},                    {x:4,y:3},
+    ],
+    secondary: [{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4}],
+    harvest: [{x:2,y:3},{x:3,y:3}],
+  },{
+    primary: [
+
+      {x:1,y:2},                    {x:4,y:2},
+      {x:1,y:3},{x:2,y:3},          {x:4,y:3},
+      {x:1,y:4},
+    ],
+    secondary: [
+      {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},
+
+
+      {x:2,y:4},{x:3,y:4},{x:4,y:4},
+    ],
+    harvest: [{x:2,y:2},{x:3,y:2},{x:3,y:3}],
+  },{
+    primary: [
+      {x:1,y:1},{x:2,y:1},         ,{x:4,y:1},{x:5,y:1},
+      {x:1,y:2},                              {x:5,y:2},
+      {x:1,y:3},                              {x:5,y:3},
+      {x:1,y:4},{x:2,y:4},         ,{x:4,y:4},{x:5,y:4},
+    ],
+    secondary: [
+      {x:3,y:1},
+      {x:3,y:2},
+      {x:3,y:3},
+      {x:3,y:4},
+    ],
+    harvest: [{x:2,y:2},{x:4,y:2},{x:2,y:3},{x:4,y:3}],
+  },{
+    primary: [
+      {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+      {x:1,y:2},                              {x:5,y:2},
+
+      {x:1,y:4},                              {x:5,y:4},
+      {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+    ],
+    secondary: [
+      {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+    ],
+    harvest: [
+      {x:2,y:2},{x:3,y:2},{x:4,y:2},
+
+      {x:2,y:4},{x:3,y:4},{x:4,y:4},
+    ],
+  },{
+    primary: [
+      {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+      {x:1,y:2},                                        {x:6,y:2},
+
+      {x:1,y:4},                                        {x:6,y:4},
+      {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},
+    ],
+    secondary: [
+      {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+    ],
+    harvest: [
+      {x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
+
+      {x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:2},
+    ],
+  },{
+    primary: [
+
+      {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+      {x:1,y:3},          {x:3,y:3},                    {x:6,y:3},
+
+      {x:1,y:5},                                        {x:6,y:5},
+      {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
+    ],
+    secondary: [
+      {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+
+
+      {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
+
+
+    ],
+    harvest: [
+
+      {x:2,y:2},                    {x:5,y:2},
+      {x:2,y:3},          {x:4,y:3},{x:5,y:3},
+
+      {x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+
+    ],
+  },
+  ],
+  shriekbulb: [
+    {
+      primary: [{x:2,y:2},{x:3,y:2},{x:2,y:3}],
+      harvest: [{x:3,y:3}],
+    },{
+      primary: [
+        {x:2,y:2},{x:3,y:2},{x:4,y:2},
+                  {x:3,y:3},
+      ],
+      harvest: [{x:2,y:3},{x:4,y:3}],
+    },{
+      primary: [
+        {x:2,y:2},          {x:4,y:2},
+                  {x:3,y:3},
+        {x:2,y:4},          {x:4,y:4},
+      ],
+      harvest: [
+                  {x:3,y:2},
+        {x:2,y:3},          {x:4,y:3},
+                  {x:3,y:4},
+      ],
+    },{
+      primary: [
+        {x:1,y:2},                    {x:4,y:2},
+                  {x:2,y:3},{x:3,y:3},
+        {x:1,y:4},                    {x:4,y:4},
+      ],
+      harvest: [
+                  {x:2,y:2},{x:3,y:2},
+        {x:1,y:3},                    {x:4,y:3},
+                  {x:2,y:4},{x:3,y:4},
+      ],
+    },{
+      primary: [
+        {x:1,y:1},                    {x:4,y:1},
+                  {x:2,y:2},{x:3,y:2},
+                  {x:2,y:3},{x:3,y:3},
+        {x:1,y:4},                    {x:4,y:4},
+      ],
+      harvest: [
+                  {x:2,y:1},{x:3,y:1},
+        {x:1,y:2},                    {x:4,y:2},
+        {x:1,y:3},                    {x:4,y:3},
+                  {x:2,y:4},{x:3,y:4},
+      ],
+    },{
+      primary: [
+                  {x:2,y:1},          {x:4,y:1},
+                                      {x:4,y:2},{x:5,y:2},
+        {x:1,y:3},{x:2,y:3},
+                  {x:2,y:4},          {x:4,y:4},
+      ],
+      harvest: [
+        {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
+        {x:1,y:2},{x:2,y:2},{x:3,y:2},
+        {x:1,y:3},{x:2,y:3},
+        {x:1,y:4},          {x:3,y:4},          {x:5,y:4},
+      ],
+    },{
+      primary: [
+                            {x:3,y:1},
+        {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
+
+        {x:1,y:4},{x:2,y:4},          {x:4,y:4},{x:5,y:4},
+                  {x:2,y:5},          {x:4,y:5},
+      ],
+      harvest: [
+        {x:1,y:1},{x:2,y:1},          {x:4,y:1},{x:5,y:1},
+                  {x:2,y:2},          {x:4,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+                            {x:3,y:4},
+        {x:1,y:5},          {x:3,y:5},          {x:5,y:5},
+      ],
+    },{
+      primary: [
+        {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
+                  {x:2,y:2},                    {x:5,y:2},
+                  {x:2,y:3},                    {x:5,y:3},
+                  {x:2,y:4},                    {x:5,y:4},
+        {x:1,y:5},          {x:3,y:5},          {x:5,y:5},
+      ],
+      harvest: [
+                  {x:2,y:1},          {x:4,y:1},          {x:6,y:1},
+        {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+        {x:1,y:3},          {x:3,y:3},{x:4,y:3},          {x:6,y:3},
+        {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+                  {x:2,y:5},          {x:4,y:5},          {x:6,y:5},
+      ],
+    },{
+      primary: [
+        {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
+                  {x:2,y:2},                    {x:5,y:2},
+                  {x:2,y:3},                    {x:5,y:3},
+                  {x:2,y:4},                    {x:5,y:4},
+                  {x:2,y:5},                    {x:5,y:5},
+        {x:1,y:6},          {x:3,y:6},          {x:5,y:6},
+      ],
+      harvest: [
+                  {x:2,y:1},          {x:4,y:1},          {x:6,y:1},
+        {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+        {x:1,y:3},          {x:3,y:3},{x:4,y:3},          {x:6,y:3},
+        {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+        {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
+                  {x:2,y:6},          {x:4,y:6},          {x:6,y:6},
+      ],
+    },
+  ],
+  queenbeetLump: [{},{},{}, // Cant grow before level 3
+    {
+      primary: [
+        {x:2,y:2},{x:3,y:2},{x:4,y:2},
+        {x:2,y:3},          {x:4,y:3},
+        {x:2,y:4},{x:3,y:4},{x:4,y:4},
+      ],
+      harvest: [{x:3,y:3}],
+    },{
+      primary: [
+        {x:1,y:2},{x:2,y:2},{x:3,y:2},
+        {x:1,y:3},          {x:3,y:3},
+        {x:1,y:4},{x:2,y:4},{x:3,y:4},
+      ],
+      harvest: [ {x:4,y:2},{x:2,y:3},{x:4,y:3},{x:4,y:4}],
+    },{
+      primary: [
+        {x:1,y:1},{x:2,y:1},{x:3,y:1},
+        {x:1,y:2},          {x:3,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},
+      ],
+      harvest: [
+                                      {x:4,y:1},
+                  {x:2,y:2},          {x:4,y:2},
+                                      {x:4,y:3},
+        {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},
+      ],
+    },{
+      primary: [
+        {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+        {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+      ],
+      harvest: [
+                  {x:2,y:2},          {x:4,y:2},
+
+        {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},
+      ],
+    },{
+      primary: [
+        {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
+        {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
+        {x:1,y:4},          {x:3,y:4},          {x:5,y:4},
+        {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
+      ],
+      harvest: [
+                  {x:2,y:2},          {x:4,y:2},
+
+                  {x:2,y:4},          {x:4,y:4},
+      ],
+    },{
+      primary: [
+        {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+        {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+        {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
+        {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},
+      ],
+      harvest: [
+                  {x:2,y:2},                    {x:5,y:2},
+
+                  {x:2,y:4},                    {x:5,y:4},
+      ],
+    },{
+      primary: [
+        {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
+        {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
+        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
+        {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
+        {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
+        {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
+      ],
+      harvest: [
+                  {x:2,y:2},                    {x:5,y:2},
+
+                  {x:2,y:5},                    {x:5,y:5},
+      ],
+    },
+  ],
+};
+flareGardenTiles['meddleweed'] = flareGardenTiles['shriekbulb'].map(({primary, harvest}) => ({
+  primary: primary.concat(harvest),
+  harvest,
+}));

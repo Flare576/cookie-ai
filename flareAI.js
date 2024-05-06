@@ -8,7 +8,7 @@ let flareOneAction = true;
 let flareMultiStep;
 let flareTallestCookie = 0;
 let flareLongestWait = 0;
-let flareMessages = [];
+let flareMessages = [[], [], []];
 let flareLogs = [];
 let flareWonAchievements = [];
 let flareNextPurchase;
@@ -31,6 +31,7 @@ const flareOp = () => {
     [
       flareAscend,
       flareClickShimmer,
+      flareClickFortune,
       flareSpendLumps,
       flareManageSeasons,
       flareCastSpells,
@@ -52,6 +53,8 @@ const flareAscend = () => {
   if (flareGoodBuffs().length > 1) return false;
 
   if (game.Game.cookiesEarned >= flareAscensionGoal()) {
+    if (flareGardenCheck()) return false;
+    flareLog('Ascending!');
     game.Game.Ascend(1);
     flareMultiStep = () => {// Wait for UI to show up, then apply Heavenly Chips
       if (!gid('heavenlyUpgrade363')) return false;
@@ -88,9 +91,18 @@ const flareAscend = () => {
 
 const flareAscensionGoal = () => {
   // See Line 16542
-  const next = flareNextChipBatch();
-  const owned = Math.floor(game.Game.HowMuchPrestige(game.Game.cookiesReset));
-  return game.Game.HowManyCookiesReset(owned + next.batchCost) - game.Game.cookiesReset;
+  const nextBatch = flareNextChipBatch();
+  const moreChips = nextBatch.batchCost - game.Game.heavenlyChips;
+  // Can't use game.Game.prestige - it can be off... somehow
+  const totalChips = Math.ceil(game.Game.HowMuchPrestige(game.Game.cookiesReset)) + moreChips;
+  let moreCookies = 0;
+  let i = 0;
+  do {
+    // HowManyCookiesReset doesn't always return a new number - add a buffer until it does
+    moreCookies = game.Game.HowManyCookiesReset(1 + totalChips + i) - game.Game.cookiesReset;
+    i = totalChips - Math.floor(game.Game.HowMuchPrestige(game.Game.cookiesReset + moreCookies));
+  } while (i > 0);
+  return moreCookies
 }
 
 const flareNextChipBatch = () => {
@@ -99,37 +111,43 @@ const flareNextChipBatch = () => {
       const upgrades = batch
         .map(id => game.Game.UpgradesById[id])
         .filter(u => !u.bought);
-      // if these are available, affordable, and un-purchased, put them at the top of the list
-      [411, 412, 413].forEach(id => {
-        const upgrade = game.Game.UpgradesById[id];
-        if (upgrade.canBePurchased && !upgrade.bought && upgrade.basePrice * 100 < game.Game.heavenlyChips) {
-          upgrades.push(upgrade);
-        }
-      })
       if (!upgrades.length) return null;
-      const batchCost = upgrades.reduce((total, u) => total += u.basePrice,0);
+
+      const batchCost = Math.ceil(upgrades.reduce((total, u) => total += u.basePrice,0));
       return {
         upgrades,
         batchCost,
       }
     })
     .filter(b=>b);
-  if (left.length) return left[0];
-  else {
-    let batchCost = Math.floor(game.Game.HowMuchPrestige(game.Game.cookiesReset)) * 10;
+
+  const batch = left.length ? left[0] : { upgrades: [], batchCost: 0 };
+  const extra = game.Game.heavenlyChips - batch.batchCost;
+  // if these are available, affordable, and un-purchased, put them at the top of the list
+  [411, 412, 413].forEach(id => {
+    const upgrade = game.Game.UpgradesById[id];
+    if (upgrade.canBePurchased && !upgrade.bought && upgrade.basePrice < extra) {
+      batch.upgrades.unshift(upgrade);
+      batch.batchCost += upgrade.basePrice;
+    }
+  });
+
+  if (!batch.upgrades.length) {
+    batch.batchCost = Math.floor(game.Game.HowMuchPrestige(game.Game.cookiesReset)) * 10;
     // Nothing left to buy... or is there
     if (!game.Game.Has('Lucky payout')) {
       let cur = game.Game.prestige;
-      // Make a new number where the most significant number is the same, but all others are 7
-      let goal = cur.toString().split('').reduce((a,e) => a + (a ? '7' : e), '') * 1;
+      // Make a new number where the most significant numbers are the same, but 12 are 7
+      const sig = cur.toString().length - 12;
+      let goal = cur.toString().split('').reduce((a,e,i) => a + (i > sig ? '7' : e), '') * 1;
       if (cur > goal) { // ugh, current prestige is actually higher than our "goal", bump up those numbers
-        const bump = Math.floor(cur*.1).toString().split('').reduce((a,e) => a + (a ? '0' : '1'), '') * 1;
+        const bump = 1000000000000;
         while (cur > goal) goal += bump;
       }
-      batchCost = goal - cur;
+      batch.batchCost = goal - cur;
     }
-    return { upgrades: [], batchCost };
   }
+  return batch;
 }
 
 const flareSetPermanentUpgrades = (next) => {
@@ -215,22 +233,30 @@ const flareClickShimmer = () => {
       const message = game.Game.textParticles
         .filter(t => t.life >= 0 && !t.text.includes('Promising fate!'))
         .sort((a,b) => a.life - b.life)[0].text;
-      flareLog(`Clicking ${topGolden.wrath ? 'Wrath' : 'Golden'} Cookie - ${message}`);
+      const type = topGolden.wrath ? 'Wrath' : topGolden.type === 'reindeer' ? 'Reindeer' : 'Golden';
+      flareLog(`Clicking ${type} Cookie - ${message}`);
       return flareOneAction;
     }
   }
 }
 
+const flareClickFortune = () => {
+  if (gid("commentsText1").querySelector('.fortune')) {
+    flareLog('Clicking fortune!');
+    gid("commentsText1").click();
+    return flareOneAction;
+  }
+  return false;
+}
+
 const flareManageSeasons = () => {
   const holidayWaitSeconds = 30;
   if (!game.Game.HasUnlocked('Season switcher')) return false;
-  // Tipster says: Christmas [santa] -> Valentines -> Easter -> Halloween -> Christmas [reindeer] -> Halloween
-  // has 'Santas dominion'
-  // const finishedChristmas = game.Game.GetHowManyReindeerDrops() === 7 && game.Game.GetHowManySantaDrops() === 14;
+
   const flareSeasonPhases = [
     {
       done: () => game.Game.Has('Santa\'s dominion') && game.Game.unbuffedCps >= 1.0e+21,
-      name: 'christmas',
+      name: 'Christmas',
       id: 182,
       delta: 'Holly Jolly',
       extra: () => {
@@ -244,36 +270,32 @@ const flareManageSeasons = () => {
       },
     },{
       done: () => game.Game.GetHowManyHeartDrops() === 7,
-      name: 'valentines',
+      name: 'Valentines',
       id: 184,
       delta: '<3',
     },{
       done: () => game.Game.GetHowManyEggs() === 20,
-      name: 'easter',
+      name: 'Easter',
       id: 209,
       delta: 'Wascally Wabbits',
     },{
       done: () => game.Game.GetHowManyHalloweenDrops() === 7,
-      name: 'halloween',
+      name: 'Halloween',
       id: 183,
-      deta: 'Spooky Scary Skeletons',
-    },{
-      done: () => game.Game.GetHowManyReindeerDrops() === 7,
-      name: 'christmas',
-      id: 182,
-      delta: 'Back for Reindeer cookies',
+      delta: 'Spooky Scary Skeletons',
     },{
       done: () => false,
-      name: 'halloween',
-      id: 183,
-      delta: 'Vibe here apparently',
+      name: 'Christmas',
+      id: 182,
+      delta: 'Back for Reindeer cookies',
     },
   ];
   const next = flareSeasonPhases.find(s=>!s.done());
   if (next) {
-    if (game.Game.season !== next.name) {
+    if (game.Game.season !== next.name.toLowerCase()) {
       const cost = game.Game.UpgradesById[next.id].priceFunc();
       if (game.Game.cookies >= cost) {
+        flareLog(`Changing Season to ${next.name}`);
         flareShouldSpendCookies = false;
         game.Game.UpgradesById[next.id].click();
         return flareOneAction;
@@ -317,7 +339,8 @@ const flareSpendLumps = () => {
       'Wizard tower', // 1st Grimoire
       'Temple', // 2nd Pantheon
       'Farm', // 3rd Garden
-      'Bank', // 4th Stock Market
+      // Skip the bank for now, use that lump on the farm upgrades
+      // 'Bank', // 4th Stock Market
     ]
       .map(n => game.Game.Objects[n])
       .find(obj => obj.level === 0);
@@ -431,7 +454,7 @@ const flareCastSpells = () => {
   const spell = grimoire.spells['hand of fate'];
   if (grimoire.magicM >= 100) {
     if (grimoire.magic >= 100) {
-      if (flareBuildingBuffs().length) {
+      if (flareCastableBuffs().length) {
         tower.switchMinigame(1);
         flareLog('Casting "Force the Hand of Fate"');
         grimoire.castSpell(spell);
@@ -488,6 +511,7 @@ const flarePlayWithGods = () => {
   if (mg.swaps === 3) {
     const current = new Date();
     let gods;
+
     // Line 4998 for formula
     // Ages times: https://cookieclicker.fandom.com/wiki/Pantheon#Cyclius,_Spirit_of_Ages
     if (flareIsBefore(current, 1, 12)) {
@@ -514,30 +538,35 @@ const flarePlayWithGods = () => {
       gods = [{ name: 'decadence', slot: 0 }, { name: 'labor', slot: 1 }, { name: 'creation', slot: 2 }];
     }
 
-    if (gods.find(({name, slot}) => flareMoveGod(mg.gods[name], slot))) return true;
-
-    // Once we figure out Godzamok
-    /*
-    if (mg.slot[0] === -1) {
-      if (flareMoveGod(mg.gods['ruin'], 0)) return true;
-    } else if (mg.slot[1] === -1) {
-      if (flareMoveGod(mg.gods['labor'], 1)) return true;
-    } else if (mg.slot[2] === -1) {
-      if (flareMoveGod(mg.gods['creation'], 2)) return true;
+    let zero;
+    if (game.Game.lumpT + game.Game.lumpRipeAge <= Date.now() + (2*60*60*1000)) {
+      zero = 'order';
+    } else if (flareNextChipBatch().batchCost > 10000000000) { // 9th ascension?
+      zero = 'ruin';
     }
-    */
+
+    if (zero) {
+      gods = gods.sort((a,b) => a.slot - b.slot);
+      gods[0].name = zero;
+    }
+
+    if (gods.find(({name, slot}) => flareMoveGod(mg.gods[name], slot))) return true;
   }
-  return false; // need to figure out when this is actually beneficial
-  const buffs = Object.keys(game.Game.buffs);
-  const devastate = !buffs.includes('Devastation') && !buffs.includes('Cookie storm') && buffs.length > 1;
-  if (mg.slot[0] === 2 && devastate) {
+
+  if (mg.slot[0] === 2) {
+    const buffs = Object.keys(game.Game.buffs);
+    if (
+      buffs.includes('Devastation')
+      || buffs.includes('Cookie storm')
+      || flareGoodBuffs().length < 2
+    ) return false;
     // https://cookieclicker.wiki.gg/wiki/Pantheon#Godzamok_101
-    const sellable = ['Farm', 'Mine', 'Factory', 'Bank', 'Shipment', 'Alchemy lab', 'Portal', 'Antimatter condenser'];
+    const sellable = ['Antimatter condenser', 'Portal', 'Alchemy lab', 'Shipment', 'Bank', 'Factory', 'Mine', 'Farm'];
 
     const flareRepurchase = sellable
       .map(n => {
         const obj = game.Game.Objects[n];
-        if (obj.amount < 50) return null;
+        if (obj.amount < 500) return null;
         return {
           name: obj.name,
           sold: obj.amount,
@@ -547,49 +576,36 @@ const flarePlayWithGods = () => {
         };
       })
       .filter(o => o);
-    game.Game.storeBulkButton(5); // Set to All to sell fastest
-    flareMultiStep = () => { // Sell each building type
-      const toSell = flareRepurchase.find(o => !o.wasSold);
-      if (toSell) {
-        toSell.wasSold = true;
-        flareLog(`Selling building: ${toSell.name}`, toSell.sold);
-        obj.sell();
-        return true;
-      }
-      flareMultiStep = () => { // Set button to 100's
-        game.Game.storeBulkButton(4);
-        flareMultiStep = () => { // Buy back anything in the 100-range
-          const toBuyAt100 = flareRepurchase
-            .filter(o => o.sold - o.bought > 100);
-          if (toBuyAt100.length) {
-            const buying = toBuyAt100[0];
-            const before = buying.obj.amount;
-            buying.obj.buy();
-            const qty = buying.obj.amount - before;
-            if (qty !== 100) buying.bought = buying.sold; // We can't afford more
-            else buying.bought+=100;
-            if (qty > 0) flareLog(`Buying building: ${buying.name}`, qty);
-            return true;
-          }
-          flareMultiStep = () => { // Set button to 10's
-            game.Game.storeBulkButton(3);
-            flareMultiStep = () => { // Buy back anything in the 10-range
-              const toBuyAt10 = flareRepurchase
-                .filter(o => o.sold - o.bought > 10);
-              if (toBuyAt10.length) {
-                const buying = toBuyAt10[0];
+    if (!flareRepurchase.length) return false;
+    game.Game.storeBulkButton(1); // Set to sell
+    flareMultiStep = () => { // Set to All to sell fastest
+      game.Game.storeBulkButton(5);
+      flareMultiStep = () => { // Sell each building type
+        const toSell = flareRepurchase.find(o => !o.wasSold);
+        if (toSell) {
+          flareLog(`Selling building: ${toSell.name}`, toSell.sold);
+          toSell.obj.sell(-1);
+          toSell.wasSold = true;
+          return true;
+        }
+        flareMultiStep = () => { // Set to Buy
+          game.Game.storeBulkButton(0);
+          flareMultiStep = () => { // Set button to 100's
+            game.Game.storeBulkButton(4);
+            flareMultiStep = () => { // Buy back anything in the 100-range
+              const toBuyAt100 = flareRepurchase
+                .filter(o => o.sold - o.bought > 100);
+              if (toBuyAt100.length) {
+                const buying = toBuyAt100[0];
                 const before = buying.obj.amount;
                 buying.obj.buy();
                 const qty = buying.obj.amount - before;
-                if (qty !== 10) buying.bought = buying.sold; // We can't afford more
-                else buying.bought+=10;
+                if (qty !== 100) buying.bought = buying.sold; // We can't afford more
+                else buying.bought+=100;
                 if (qty > 0) flareLog(`Buying building: ${buying.name}`, qty);
                 return true;
               }
-              flareMultiStep = () => { // Set button back to 1
-                game.Game.storeBulkButton(2);
-                flareMultiStep = undefined;
-              }
+              flareMultiStep = undefined;
             }
           }
         }
@@ -617,23 +633,24 @@ const flareMoveGod = (from, to) => {
 }
 
 const flareGoodBuffs = () => {
-  let good = flareBuildingBuffs();
+  let good = flareCastableBuffs();
   const keys = Object.keys(game.Game.buffs);
   if (keys.length > good.length) {
-    good = good.concat(keys.filter(b => flareBuffNames.includes(b)));
+    good = good.concat(keys.filter(b => flareOtherBuffs.includes(b)));
   }
   return good;
 }
 
-const flareBuildingBuffs = () => {
+const flareCastableBuffs = () => {
   let good = [];
   let count = 0;
   const buffs = Object.keys(game.Game.buffs);
   const gcbs = game.Game.goldenCookieBuildingBuffs;
-  if (buffs.length === 0) return false;
+  if (buffs.length === 0) return good;
   for (b in gcbs) {
     if (buffs.includes(gcbs[b][0])) good.push(gcbs[b][0]);
   }
+  if (buffs.includes('Elder frenzy')) good.push('Elder frenzy');
   return good;
 }
 
@@ -650,112 +667,20 @@ const flareBoostBuffs = () => {
 // I think the goal of this game is going to be unlocking all the plants
 const flareTendGarden = () => {
   const farm = game.Game.Objects['Farm'];
-  if (!farm.minigameLoaded) return false;
+  if (!farm.amount || !farm.minigameLoaded) return false;
+  farm.switchMinigame(1);
 
   const garden = farm.minigame;
-
-  const soil = ['woodchips', 'fertilizer', 'dirt']
-    .map(n => garden.soils[n])
-    .find(s => farm.amount >= s.req)
-  if (garden.soil !== soil.id) {
-    flareLog(`Swapping Garden soil to ${soil.name}`);
-    gid(`gardenSoil-${soil.id}`).click();
-    return true;
-  }
-
-  const plantTiles = { primary: [], secondary: [] };
-  let harvestTiles;
-
-  switch (farm.level) {
-    case 1:
-      plantTiles.primary = [{x:3,y:2}];
-      plantTiles.secondary = [{x:2,y:2}];
-      harvestTiles = [{x:2,y:3},{x:3,y:3}];
-      break;
-    case 2:
-      plantTiles.primary = [{x:3,y:2}];
-      plantTiles.secondary = [{x:3,y:3}];
-      harvestTiles = [{x:2,y:2},{x:4,y:2},{x:2,y:3},{x:4,y:3}];
-      break;
-    case 3:
-      plantTiles.primary = [{x:2,y:3},{x:4,y:3}];
-      plantTiles.secondary = [{x:3,y:3}];
-      harvestTiles = [
-        {x:2,y:2},{x:3,y:2},{x:4,y:2},
-
-        {x:2,y:4},{x:3,y:4},{x:4,y:4}];
-      break;
-    case 4:
-      plantTiles.primary = [{x:2,y:3},{x:3,y:3}];
-      plantTiles.secondary = [{x:1,y:3},{x:4,y:3}];
-      harvestTiles = [
-        {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},
-        {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},
-      ];
-      break;
-    case 5:
-      plantTiles.primary = [{x:2,y:2},{x:3,y:3}];
-      plantTiles.secondary = [{x:1,y:1},{x:4,y:1},{x:1,y:4},{x:4,y:4}];
-      harvestTiles = [
-                  {x:2,y:1},{x:2,y:1},
-        {x:1,y:2},                    {x:4,y:2},
-        {x:1,y:3},                    {x:4,y:3},
-                  {x:2,y:4},{x:3,y:4},
-      ];
-      break;
-    case 6:
-      plantTiles.primary = [{x:3,y:1},{x:2,y:3},{x:5,y:3}];
-      plantTiles.secondary = [{x:1,y:1},{x:5,y:1},{x:4,y:3},{x:1,y:4}];
-      harvestTiles = [
-                  {x:2,y:1},          {x:4,y:1},
-        {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
-        {x:1,y:3},          {x:3,y:3},
-                  {x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},
-      ];
-      break;
-    case 7:
-      plantTiles.primary = [{x:2,y:1},{x:5,y:1},{x:2,y:4},{x:5,y:4}];
-      plantTiles.secondary = [{x:1,y:1},{x:4,y:1},{x:1,y:4},{x:4,y:4}];
-      harvestTiles = [
-                            {x:3,y:1},
-        {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
-        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
-                            {x:3,y:4},
-        {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
-      ];
-      break;
-    case 8:
-      plantTiles.primary = [{x:2,y:1},{x:5,y:1},{x:2,y:4},{x:5,y:4}];
-      plantTiles.secondary = [{x:2,y:2},{x:5,y:2},{x:2,y:5},{x:5,y:5}];
-      harvestTiles = [
-        {x:1,y:1},          {x:3,y:1},{x:4,y:1},          {x:6,y:1},
-        {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
-        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
-        {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
-        {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
-      ];
-      break;
-    case 9:
-      plantTiles.primary = [{x:1,y:2},{x:3,y:2},{x:6,y:2},{x:1,y:5},{x:4,y:5},{x:6,y:5}];
-      plantTiles.secondary = [{x:2,y:2},{x:5,y:2},{x:2,y:5},{x:5,y:5}];
-      harvestTiles = [
-        {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
-                                      {x:4,y:2},
-        {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
-        {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
-                                      {x:4,y:5},
-        {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
-      ];
-      break;
-  }
-
   const plants = garden.plants;
+
   const crops = flarePlants
-    .map(({target, primary, secondary}) => {
+    .map(({target, primary, secondary, soil, layout = 'standard'}) => {
       return {
         target: plants[target],
         primary: plants[primary],
         secondary: plants[secondary],
+        soil,
+        layout,
       };
     })
     .find(({target, primary, secondary}) => {
@@ -766,324 +691,27 @@ const flareTendGarden = () => {
       return primary.unlocked && secondary.unlocked;
     });
 
-    // complex plants
-  if (crops.target.key === 'everdaisy' && farm.level >= 3) {
-    switch (farm.level) {
-      case 3:
-        plantTiles.primary = [
-          {x:2,y:2},{x:3,y:2},{x:4,y:2},
-          {x:2,y:3},          {x:4,y:3},
-        ];
-        plantTiles.secondary = [{x:2,y:4},{x:3,y:4},{x:4,y:4}];
-        harvestTiles = [{x:3,y:3}];
-        break;
-      case 4:
-        plantTiles.primary = [
-          {x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},
-          {x:1,y:3},                    {x:4,y:3},
-        ];
-        plantTiles.secondary = [{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4}];
-        harvestTiles = [{x:2,y:3},{x:3,y:3}];
-        break;
-      case 5:
-        plantTiles.primary = [
-
-          {x:1,y:2},                    {x:4,y:2},
-          {x:1,y:3},{x:2,y:3},          {x:4,y:3},
-          {x:1,y:4},
-        ];
-        plantTiles.secondary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},
-
-
-          {x:2,y:4},{x:3,y:4},{x:4,y:4},
-        ];
-        harvestTiles = [{x:2,y:2},{x:3,y:2},{x:3,y:3}];
-        break;
-      case 6:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},         ,{x:4,y:1},{x:5,y:1},
-          {x:1,y:2},                              {x:5,y:2},
-          {x:1,y:3},                              {x:5,y:3},
-          {x:1,y:4},{x:2,y:4},         ,{x:4,y:4},{x:5,y:4},
-        ];
-        plantTiles.secondary = [
-          {x:3,y:1},
-          {x:3,y:2},
-          {x:3,y:3},
-          {x:3,y:r},
-        ];
-        harvestTiles = [{x:2,y:2},{x:4,y:2},{x:2,y:3},{x:4,y:3}];
-        break;
-      case 7:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
-          {x:1,y:2},                              {x:5,y:2},
-
-          {x:1,y:4},                              {x:5,y:4},
-          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
-        ];
-        plantTiles.secondary = [
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
-        ];
-        harvestTiles = [
-          {x:2,y:2},{x:3,y:2},{x:4,y:2},
-
-          {x:2,y:4},{x:3,y:4},{x:4,y:4},
-        ];
-        break;
-      case 8:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
-          {x:1,y:2},                                        {x:6,y:2},
-
-          {x:1,y:4},                                        {x:6,y:4},
-          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},
-        ];
-        plantTiles.secondary = [
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
-        ];
-        harvestTiles = [
-          {x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},
-
-          {x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:2},
-        ];
-        break;
-      case 9:
-        plantTiles.primary = [
-
-          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
-          {x:1,y:3},          {x:3,y:3},                    {x:6,y:3},
-
-          {x:1,y:5},                                        {x:6,y:5},
-          {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
-        ];
-        plantTiles.secondary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
-
-
-          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
-
-
-        ];
-        harvestTiles = [
-
-          {x:2,y:2},                    {x:5,y:2},
-          {x:2,y:3},          {x:4,y:3},{x:5,y:3},
-
-          {x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
-
-        ];
-        break;
-    }
-  } else if (crops.target.key === 'shriekbulb') {
-    switch (farm.level) {
-      case 1:
-        plantTiles.primary = [{x:2,y:2},{x:3,y:2},{x:2,y:3}];
-        harvestTiles = [{x:3,y:3}];
-        break;
-      case 2:
-        plantTiles.primary = [
-          {x:2,y:2},{x:3,y:2},{x:4,y:2},
-                    {x:3,y:3},
-        ];
-        harvestTiles = [{x:2,y:3},{x:4,y:3}];
-        break;
-      case 3:
-        plantTiles.primary = [
-          {x:2,y:2},          {x:4,y:2},
-                    {x:3,y:3},
-          {x:2,y:4},          {x:4,y:4},
-        ];
-        harvestTiles = [
-                    {x:3,y:2},
-          {x:2,y:3},          {x:4,y:3},
-                    {x:3,y:4},
-        ];
-        break;
-      case 4:
-        plantTiles.primary = [
-          {x:1,y:2},                    {x:4,y:2},
-                    {x:2,y:3},{x:3,y:3},
-          {x:1,y:4},                    {x:4,y:4},
-        ];
-        harvestTiles = [
-                    {x:2,y:2},{x:3,y:2},
-          {x:1,y:3},                    {x:4,y:3},
-                    {x:2,y:4},{x:3,y:4},
-        ];
-        break;
-      case 5:
-        plantTiles.primary = [
-          {x:1,y:1},                    {x:4,y:1},
-                    {x:2,y:2},{x:3,y:2},
-                    {x:2,y:3},{x:3,y:3},
-          {x:1,y:4},                    {x:4,y:4},
-        ];
-        harvestTiles = [
-                    {x:2,y:1},{x:3,y:1},
-          {x:1,y:2},                    {x:4,y:2},
-          {x:1,y:3},                    {x:4,y:3},
-                    {x:2,y:4},{x:3,y:4},
-        ];
-        break;
-      case 6:
-        plantTiles.primary = [
-                    {x:2,y:1},          {x:4,y:1},
-                                        {x:4,y:2},{x:5,y:2},
-          {x:1,y:3},{x:2,y:3},
-                    {x:2,y:4},          {x:4,y:4},
-        ];
-        harvestTiles = [
-          {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
-          {x:1,y:2},{x:2,y:2},{x:3,y:2},
-          {x:1,y:3},{x:2,y:3},
-          {x:1,y:4},          {x:3,y:4},          {x:5,y:4},
-        ];
-        break;
-      case 7:
-        plantTiles.primary = [
-                              {x:3,y:1},
-          {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
-
-          {x:1,y:4},{x:2,y:4},          {x:4,y:4},{x:5,y:4},
-                    {x:2,y:5},          {x:4,y:5},
-        ];
-        harvestTiles = [
-          {x:1,y:1},{x:2,y:1},          {x:4,y:1},{x:5,y:1},
-                    {x:2,y:2},          {x:4,y:2},
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
-                              {x:3,y:4},
-          {x:1,y:5},          {x:3,y:5},          {x:5,y:5},
-        ];
-        break;
-      case 8:
-        plantTiles.primary = [
-          {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
-                    {x:2,y:2},                    {x:5,y:2},
-                    {x:2,y:3},                    {x:5,y:3},
-                    {x:2,y:4},                    {x:5,y:4},
-          {x:1,y:5},          {x:3,y:5},          {x:5,y:5},
-        ];
-        harvestTiles = [
-                    {x:2,y:1},          {x:4,y:1},          {x:6,y:1},
-          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
-          {x:1,y:3},          {x:3,y:3},{x:4,y:3},          {x:6,y:3},
-          {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
-                    {x:2,y:5},          {x:4,y:5},          {x:6,y:5},
-        ];
-        break;
-      case 9:
-        plantTiles.primary = [
-          {x:1,y:1},          {x:3,y:1},          {x:5,y:1},
-                    {x:2,y:2},                    {x:5,y:2},
-                    {x:2,y:3},                    {x:5,y:3},
-                    {x:2,y:4},                    {x:5,y:4},
-                    {x:2,y:5},                    {x:5,y:5},
-          {x:1,y:6},          {x:3,y:6},          {x:5,y:6},
-        ];
-        harvestTiles = [
-                    {x:2,y:1},          {x:4,y:1},          {x:6,y:1},
-          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
-          {x:1,y:3},          {x:3,y:3},{x:4,y:3},          {x:6,y:3},
-          {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
-          {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
-                    {x:2,y:6},          {x:4,y:6},          {x:6,y:6},
-        ];
-        break;
-    }
-  } else if (crops.target.key === 'queenbeetLump') {
-    switch (farm.level) {
-      case 3:
-        plantTiles.primary = [
-          {x:2,y:2},{x:3,y:2},{x:4,y:2},
-          {x:2,y:3},          {x:4,y:3},
-          {x:2,y:4},{x:3,y:4},{x:4,y:4},
-        ];
-        harvestTiles = [{x:3,y:3}];
-        break;
-      case 4:
-        plantTiles.primary = [
-          {x:1,y:2},{x:2,y:2},{x:3,y:2},
-          {x:1,y:3},          {x:3,y:3},
-          {x:1,y:4},{x:2,y:4},{x:3,y:4},
-        ];
-        harvestTiles = [ {x:4,y:2},{x:2,y:3},{x:4,y:3},{x:4,y:4}];
-        break;
-      case 5:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},
-          {x:1,y:2},          {x:3,y:2},
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},
-        ];
-        harvestTiles = [
-                                        {x:4,y:1},
-                    {x:2,y:2},          {x:4,y:2},
-                                        {x:4,y:3},
-          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},
-        ];
-        break;
-      case 6:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
-          {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
-        ];
-        harvestTiles = [
-                    {x:2,y:2},          {x:4,y:2},
-
-          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},
-        ];
-        break;
-      case 7:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},
-          {x:1,y:2},          {x:3,y:2},          {x:5,y:2},
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},
-          {x:1,y:4},          {x:3,y:4},          {x:5,y:4},
-          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},
-        ];
-        harvestTiles = [
-                    {x:2,y:2},          {x:4,y:2},
-
-                    {x:2,y:4},          {x:4,y:4},
-        ];
-        break;
-      case 8:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
-          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
-          {x:1,y:4},          {x:3,y:4},{x:4,y:4},          {x:6,y:4},
-          {x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},
-        ];
-        harvestTiles = [
-                    {x:2,y:2},                    {x:5,y:2},
-
-                    {x:2,y:4},                    {x:5,y:4},
-        ];
-        break;
-      case 9:
-        plantTiles.primary = [
-          {x:1,y:1},{x:2,y:1},{x:3,y:1},{x:4,y:1},{x:5,y:1},{x:6,y:1},
-          {x:1,y:2},          {x:3,y:2},{x:4,y:2},          {x:6,y:2},
-          {x:1,y:3},{x:2,y:3},{x:3,y:3},{x:4,y:3},{x:5,y:3},{x:6,y:3},
-          {x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},
-          {x:1,y:5},          {x:3,y:5},{x:4,y:5},          {x:6,y:5},
-          {x:1,y:6},{x:2,y:6},{x:3,y:6},{x:4,y:6},{x:5,y:6},{x:6,y:6},
-        ];
-        harvestTiles = [
-                    {x:2,y:2},                    {x:5,y:2},
-
-                    {x:2,y:5},                    {x:5,y:5},
-        ];
-        break;
+  if (Date.now() > garden.nextSoil) {
+    const soils = ['fertilizer', 'dirt'];
+    if (!flareGardenCheck() && crops.soil) soils.unshift(crops.soil);
+    const soil = soils
+      .map(n => garden.soils[n])
+      .find(s => farm.amount >= s.req)
+    if (garden.soil !== soil.id) {
+      flareLog(`Swapping Garden soil to ${soil.name}`);
+      gid(`gardenSoil-${soil.id}`).click();
+      return true;
     }
   }
+  flareDashMessage += `Target: ${crops.target.key}`;
+
+  const plantTiles = flareGardenTiles[crops.layout][farm.level - 1];
 
   let acted = plantTiles.primary.find(({x,y}) => flarePlant(x,y,crops.primary, crops.target));
-  if (!acted) acted = plantTiles.secondary.find(({x,y}) => flarePlant(x,y,crops.secondary, crops.target));
-  if (!acted) acted = harvestTiles.find(({x,y}) => flareHarvest(x,y));
+  if (!acted && plantTiles.secondary)
+    acted = plantTiles.secondary.find(({x,y}) => flarePlant(x,y,crops.secondary, crops.target));
+  if (!acted)
+    acted = plantTiles.harvest.find(({x,y}) => flareHarvest(x,y));
 
   return acted;
 }
@@ -1098,16 +726,20 @@ const flarePlant = (x, y, crop, target) => {
     const maxWait = existingCropId === crop.id;
     return flareHarvest(x,y,maxWait);
   }
+
   if (!crop.unlocked) return false; // We could be waiting for Meddleweed, which we can't plant right away
   const cropCost = garden.getCost(crop);
   if (flareGoodBuffs().length || game.Game.cookies < cropCost) {
-    flareNextPurchase = {
-      name: crop.name,
-      price: cropCost,
-      delta: `Target: ${target.name}`,
-      eta: (cropCost - game.Game.cookies) / flareGetRate(),
-    };
-    flareShouldSpendCookies = false;
+    const eta = flareGetETA(cropCost);
+    if (eta <= flareLongestWait) {
+      flareNextPurchase = {
+        name: crop.name,
+        price: cropCost,
+        delta: `Target: ${target.name}`,
+        eta: flareGoodBuffs().length ? 'waiting on buff' : eta,
+      };
+      flareShouldSpendCookies = false;
+    }
     return false;
   }
   flareLog(`Planting ${crop.name} in ${x},${y}`);
@@ -1129,7 +761,7 @@ const flareHarvest = (x, y, maxWait) => {
     let maturityMinimum = crop.mature;
     if (maxWait) {
       // let crumbspores pop
-      maturityMinimum = crop.key === 'crumbspore' ? 100 : 100 - crop.ageTick;
+      maturityMinimum = crop.key === 'crumbspore' ? 100 : 95 - crop.ageTick - crop.ageTickR;
     }
     if (!(flareNeedMature(crop) || maxWait) || maturity >= maturityMinimum) {
       // flareLog(`Harvesting ${crop.name} in ${x},${y}`);
@@ -1146,6 +778,18 @@ const flareNeedMature = (crop) => {
     const plants = game.Game.Objects['Farm'].minigame.plants;
     return !(crop.unlocked && plants['brownMold'].unlocked && plants['crumbspore'].unlocked);
   } else return !crop.unlocked;
+}
+
+const flareGardenCheck = () => {
+  const farm = game.Game.Objects['Farm'];
+  if (!farm.amount ||!farm.minigameLoaded) return false;
+  const garden = game.Game.Objects['Farm'].minigame;
+  const layout = flareGardenTiles['standard'][farm.level - 1];
+  const allTiles = layout.primary.concat(layout.secondary || [], layout.harvest);
+  return allTiles.find(({x,y}) => {
+    const tileCropId = garden.getTile(x,y)[0];
+    return tileCropId && !garden.plantsById[tileCropId - 1].unlocked;
+  });
 }
 
 const flareAdjustStocks = () => {
@@ -1181,53 +825,63 @@ const flareTrainDragon = () => {
         game.Game.UpgradeDragon();
         return flareOneAction;
       }
-    } else {
-      let target;
-      let qty = 100;
-      switch (dl) {
-        case 5: target = 'Cursor'; break;
-        case 6: target = 'Grandma'; break;
-        case 7: target = 'Farm'; break;
-        case 8: target = 'Mine'; break;
-        case 9: target = 'Factory'; break;
-        case 10: target = 'Bank'; break;
-        case 11: target = 'Temple'; break;
-        case 12: target = 'Wizard tower'; qty = 200; break;
-        case 13: target = 'Shipment'; break;
-        case 14: target = 'Alchemy lab'; break;
-        case 15: target = 'Portal'; break;
-        case 16: target = 'Time machine'; break;
-        case 17: target = 'Antimatter condenser'; break;
-        case 18: target = 'Prism'; break;
-        case 19: target = 'Chancemaker'; break;
-        case 20: target = 'Fractal engine'; break;
-        case 21: target = 'Javascript console'; break;
-        case 22: target = 'Idleverse'; break;
-        case 23: target = 'Cortex baker'; break;
-        case 24: target = 'You'; break;
-      }
-      if (target && game.Game.Objects[target].amount >= qty) {
-        flareLog(`Upgrading Dragon! (goodbye 100 ${target})`);
-        game.Game.specialTab='dragon';
-        game.Game.ToggleSpecialMenu(1);
-        game.Game.UpgradeDragon();
-        flareMultiStep = () => {
-          game.Game.storeBulkButton(4);
+    } else if (dl <= 24) {
+        let target;
+        let qty = 100;
+        switch (dl) {
+          case 5: target = 'Cursor'; break;
+          case 6: target = 'Grandma'; break;
+          case 7: target = 'Farm'; break;
+          case 8: target = 'Mine'; break;
+          case 9: target = 'Factory'; break;
+          case 10: target = 'Bank'; break;
+          case 11: target = 'Temple'; break;
+          case 12: target = 'Wizard tower'; qty = 200; break;
+          case 13: target = 'Shipment'; break;
+          case 14: target = 'Alchemy lab'; break;
+          case 15: target = 'Portal'; break;
+          case 16: target = 'Time machine'; break;
+          case 17: target = 'Antimatter condenser'; break;
+          case 18: target = 'Prism'; break;
+          case 19: target = 'Chancemaker'; break;
+          case 20: target = 'Fractal engine'; break;
+          case 21: target = 'Javascript console'; break;
+          case 22: target = 'Idleverse'; break;
+          case 23: target = 'Cortex baker'; break;
+          case 24: target = 'You'; break;
+            // case 25: 50 of all buildings
+            // case 26: 200 of all buildings
+        }
+        if (target && game.Game.Objects[target].amount >= qty) {
+          flareLog(`Upgrading Dragon! (goodbye 100 ${target})`);
+          game.Game.specialTab='dragon';
+          game.Game.ToggleSpecialMenu(1);
+          game.Game.UpgradeDragon();
           flareMultiStep = () => {
-            game.Game.Objects[target].buy();
+            game.Game.storeBulkButton(4);
             flareMultiStep = () => {
-              flareLog(`Buying building: ${target}`, game.Game.Objects[target].amount);
-              game.Game.storeBulkButton(2);
-              flareMultiStep = undefined;
+              game.Game.Objects[target].buy();
+              flareMultiStep = () => {
+                flareLog(`Buying building: ${target}`, game.Game.Objects[target].amount);
+                game.Game.storeBulkButton(2);
+                flareMultiStep = undefined;
+              }
             }
           }
+          return true;
         }
-        return true;
-      }
+    } else if (dl <= 26 && game.Game.Objects['You'].amount > 200) {
+      // Only worth doing the 50 if we can also do the 200
+      let qty = dl === 25 ? 50 : 200;
+      flareLog(`Upgrading Dragon! (goodbye ${qty} EVERYTHINGS)`);
+      game.Game.specialTab='dragon';
+      game.Game.ToggleSpecialMenu(1);
+      game.Game.UpgradeDragon();
     }
+
     if (dl >= 5) {
       // Line 14798 for auras
-      const bestAura = [
+      const bestAuras = [
         {
           id: 1,
           delta: () => game.Game.cookiesPs * game.Game.milkProgress * 0.05,
@@ -1239,6 +893,8 @@ const flareTrainDragon = () => {
         }, {
           id: 3,
           delta: () => {
+            // for some reason, grandmas.storedTotalChips shoots up during Cursed finger...
+            if (!game.Game.cookiesPs) return 0;
             const g = game.Game.Objects['Grandma'];
             const num = game.Game.BuildingsOwned - g.amount;
             return num * 0.01 * g.amount * g.storedTotalCps;
@@ -1259,64 +915,64 @@ const flareTrainDragon = () => {
         }, {
           id: 7,
           delta: () => 0, //flareBuildings().price * 0.02, // Buildings are 2% cheeper, but need to consider the cost to switch and how long you'll need to save for
-          owned: () => game.Game.dragonLevel >= 10,
+          owned: () => game.Game.dragonLevel >= 11,
         }, {
           id: 8,
           delta: () => flareHeavenlyIncrease(.05), // 5% bonus to prestige
-          owned: () => game.Game.dragonLevel >= 11,
+          owned: () => game.Game.dragonLevel >= 12,
         }, {
           id: 9,
           delta: () => 0, // Golden cookies 5% appear
-          owned: () => game.Game.dragonLevel >= 12,
+          owned: () => game.Game.dragonLevel >= 13,
         }, {
           id: 10,
           delta: () => 0, // enables "Dragon Flight" Golden cookie
-          owned: () => game.Game.dragonLevel >= 13,
+          owned: () => game.Game.dragonLevel >= 14,
         }, {
           id: 11,
           delta: () => 0, // Golden cookies give 10% more cookies
-          owned: () => game.Game.dragonLevel >= 14,
+          owned: () => game.Game.dragonLevel >= 15,
         }, {
           id: 12,
           delta: () => 0, // Wrath cookies give 10% more cookies
-          owned: () => game.Game.dragonLevel >= 15,
+          owned: () => game.Game.dragonLevel >= 16,
         }, {
           id: 13,
           delta: () => 0, // Golden cookies last 5% longer
-          owned: () => game.Game.dragonLevel >= 16,
-        }, {
-          id: 14,
-          delta: () => flareNeedDrops() ? Number.MAX_VALUE : 0, // 25%+ Random Drops
           owned: () => game.Game.dragonLevel >= 17,
         }, {
-          id: 15,
-          delta: () => flareGetRate(), // All cookie production doubled?
+          id: 14,
+          delta: () => flareNeedDrops() ? Number.MAX_VALUE - 1 : 0, // 25%+ Random Drops
           owned: () => game.Game.dragonLevel >= 18,
+        }, {
+          id: 15,
+          delta: () => flareGetRate(), // All cookie production doubled
+          owned: () => game.Game.dragonLevel >= 19,
         }, {
           id: 16,
           delta: () => 0, // 123% per golden cookie on screen
-          owned: () => game.Game.dragonLevel >= 19,
-        }, {
-          id: 17,
-          delta: () => 0, // Sugar lumps grow 5% faster, 50% weirder
           owned: () => game.Game.dragonLevel >= 20,
-        }, {
-          id: 18,
-          delta: () => 0, // Selling best building may grant wish
+        }, {// Sugar lumps grow 5% faster, 50% weirder
+          id: 17,
+          delta: () => flareNextChipBatch().upgrades.length === 0 ? Number.MAX_VALUE : 0,
           owned: () => game.Game.dragonLevel >= 21,
         }, {
-          id: 19,
-          delta: () => 0, // Supreme Intellect - powers minigames
+          id: 18,
+          delta: () => 0, // 1/10 of each other aura
           owned: () => game.Game.dragonLevel >= 22,
         }, {
-          id: 20,
-          delta: () => 0, // Enhanced wrinklers
+          id: 19,
+          delta: () => 0, // Selling best building may grant wish
           owned: () => game.Game.dragonLevel >= 23,
         }, {
           id: 21,
-          delta: () => 0, // bake Dragon cookie?
+          delta: () => 0, // Supreme Intellect - powers minigames
           owned: () => game.Game.dragonLevel >= 24,
-        },
+        }, {
+          id: 22,
+          delta: () => 0, // Dragon Guts, +2 wrinklers, 20% more eaten, 20% more splode
+          owned: () => game.Game.dragonLevel >= 25,
+        }, // 26 is bake a cookie, 27 is get another aura
       ]
         .map(a => {
           if (!a.owned()) return null;
@@ -1325,10 +981,16 @@ const flareTrainDragon = () => {
           return { id, delta: d }
         })
         .filter(o => o)
-        .sort((a, b) => b.delta - a.delta)[0]?.id;
+        .sort((a, b) => b.delta - a.delta);
 
-      if (game.Game.dragonAura !== bestAura) {
-        return flareSetDragonAura(bestAura, 0);
+      if (game.Game.dragonAura !== bestAuras[0].id) {
+        return flareSetDragonAura(bestAuras[0].id, 0);
+      }
+
+      if (game.Game.dragonLevel === 27) {
+        if (game.Game.dragonAura2 !== bestAuras[1].id) {
+          return flareSetDragonAura(bestAuras[1].id, 1);
+        }
       }
     }
   }
@@ -1364,7 +1026,14 @@ const flareShop = () => {
       game.Game.UpgradesById[nextUpgrade.id].click();
       if (nextUpgrade.after) {
         flareMultiStep = nextUpgrade.after;
+      } else if (flareLongestWait < 1 && game.Game.Has('Inspired checklist')) {
+        flareMultiStep = () => {
+          flareLog('Upgrading! Buy ALL!');
+          game.Game.storeBuyAll();
+          flareMultiStep = undefined;
+        }
       }
+      return flareOneAction;
     }
   } else if(nextBuilding) {
     flareNextPurchase = nextBuilding;
@@ -1375,6 +1044,7 @@ const flareShop = () => {
       () => flareBuyQty(building, 1),
     ].find(f => f());
     if (bought) {
+      if (building.minigameLoaded && !building.onMinigame) building.switchMinigame(1);
       flareShouldSpendCookies = false;
       return flareOneAction;
     }
@@ -1400,13 +1070,6 @@ const flareBuyQty = (obj, qty) => {
   return false;
 }
 
-
-const flareObjectsNoCursor = () => {
-  let num = 0;
-  for (const i in game.Game.Objects) num += game.Game.Objects[i].amount;
-  return num - game.Game.Objects['Cursor'].amount;
-}
-
 const flareUpgrades = () => {
   return flareUpgradesList
     .map(({id, delta, after}) => {
@@ -1421,7 +1084,7 @@ const flareUpgrades = () => {
       const timeCheck = price / flareGetRate();
       const ratio = timeCheck <= quickBuyLimit ? d : d/price;
       // const ratio = d/price;
-      const eta = (price - game.Game.cookies) / flareGetRate();
+      const eta = flareGetETA(price);
       return {
         id,
         name,
@@ -1441,6 +1104,14 @@ const flareGetRate = () => {
   return flareHz * game.Game.computedMouseCps + game.Game.cookiesPs;
 }
 
+const flareGetETA = (price) => {
+  const ws = game.Game.wrinklers.filter(w=>w.sucked);
+  const sucked = ws.reduce((s,w) => s+=w.sucked,0);
+  // cookiesPs doesn't get reduced by wrinklers, just display.
+  // Calculating exact suck rate sucks, this is close enough
+  return (price - game.Game.cookies - sucked) / flareGetRate();
+}
+
 const flareBuildings = () => {
   return flareBuildingsList
     .map(({id, delta}) => {
@@ -1457,7 +1128,7 @@ const flareBuildings = () => {
       const buyCheep = !game.Game.Has('Get lucky') || !flareGoodBuffs().length;
       const ratio = timeCheck <= quickBuyLimit && buyCheep ? d : d/price;
 
-      const eta = (price - game.Game.cookies) / flareGetRate();
+      const eta = flareGetETA(price);
       return {
         name: id,
         price,
@@ -1514,7 +1185,10 @@ const flareDrawOutput = () => {
   // For funsies, start the output in the center, then bump it down when we get first grandma, then move to cookie when
   // we get our first farm
   const out = document.getElementById('flareOutputContainer');
-  if (!game.Game.Objects['Farm'].amount) {
+  if (
+    !(game.Game.Objects['Farm'].amount || game.Game.Objects['Wizard tower'].amount)
+    || (game.Game.elderWrath && !game.Game.HasAchiev('Itchscratcher'))
+  ) {
     const divider = gid('leftBeam').getBoundingClientRect();
     const ca = gid('centerArea').getBoundingClientRect();
     out.style.left = `${ca.x}px`;
@@ -1564,6 +1238,7 @@ const flareLog = (message, qty = 1) => {
     timestamp: Date.now(),
     message: qty > 1 ? message + ` x${qty}`: message,
     cookies: Math.floor(game.Game.cookies),
+    chips: Math.floor(game.Game.HowMuchPrestige(game.Game.cookiesReset+game.Game.cookiesEarned)),
     building_cps: Math.floor(game.Game.cookiesPs),
     click_cps: Math.floor(flareHz * game.Game.computedMouseCps),
   });
@@ -1571,51 +1246,54 @@ const flareLog = (message, qty = 1) => {
 
   if (!message || message === 'Log') return;
 
-  const lastIndex = flareMessages.length - 1;
-  if (lastIndex > 0 && message === flareMessages[lastIndex].message) flareMessages[lastIndex].qty += qty;
-  else flareMessages.push({ message, qty });
+  let type = 2; // default to bottom
+  let mess = message;
+  flareChatChecks.find((checks, i) => checks.find(e => {
+    mess = mess.replace(e.regex, `<span class="${e.class}">$1</span>`);
+    if (mess !== message) {
+      type = i;
+      return true;
+    }
+  }));
 
-  let messages = '';
-  flareMessages = flareMessages.slice(Math.max(flareMessages.length - 100, 0));
-  flareMessages
-    .forEach((m, i) => {
-      let mess = m.message;
+  let list = flareMessages[type];
+  const lastIndex = list.length - 1;
+  if (lastIndex > 0 && mess === list[lastIndex].message) list[lastIndex].qty += qty;
+  else list.push({ message: mess, qty });
 
-      if (m.qty > 1) mess += ` (x${m.qty})`;
-      mess = mess.replace(/Error/g, '<span class="flareError">Error</span>');
-      mess = mess.replace(/Pop goes the wrinkler/g, '<span class="flareWrinkler">Pop goes the wrinkler</span>');
-      mess = mess.replace(/Swapping God/g, '<span class="flareGod">Swapping God</span>');
-      mess = mess.replace(/Casting/g, '<span class="flareCasting">Casting</span>');
-      mess = mess.replace(/Harvesting/g, '<span class="flareHarvesting">Harvesting</span>');
-      mess = mess.replace(/Planting/g, '<span class="flarePlanting">Planting</span>');
-      mess = mess.replace(/Building Available/g, '<span class="flareNewBuilding">Building Available</span>');
-      mess = mess.replace(/Activating Minigame/g, '<span class="flareMinigame">Activating Minigame</span>');
-      mess = mess.replace(/Upgrading!/g, '<span class="flareUpgrading">Upgrading!</span>');
-      mess = mess.replace(/Dragon Aura/g, '<span class="flareDragon">Dragon Aura</span>');
-      mess = mess.replace(/Upgrading Dragon/g, '<span class="flareDragon">Upgrading Dragon</span>');
-      mess = mess.replace(/Unlocking/g, '<span class="flareUnlocking">Unlocking</span>');
-      mess = mess.replace(/Buying building/g, '<span class="flareBuilding">Buying building</span>');
-      mess = mess.replace(/Selling building/g, '<span class="flareBuilding">Selling building</span>');
-      mess = mess.replace(/Achievement won/g, '<span class="flareAchievement">Achievement won</span>');
-      mess = mess.replace(/Clicking Golden Cookie/g, '<span class="flareGoldenCookie">Clicking Golden Cookie</span>');
+  flareMessages = flareMessages.map((l,lid) => {
+    let messages = '';
+    l = l.slice(Math.max(l.length - 100, 0));
+    l.forEach((m, i) => {
+        let mess = m.message;
+        if (m.qty > 1) mess += ` (x${m.qty})`;
+        if (type === lid && i === Math.min(list.length, 100) - 1) {
+          mess = `(new)&nbsp;${mess}`;
+        }
+        messages += `<div>${mess}</div>`;
+      });
 
-      if (i === Math.min(flareMessages.length, 100) - 1) {
-        mess = `(new)&nbsp;${mess}`;
-      }
+    let elementName = 'flareOutputBot';
+    if (lid === 0) elementName = 'flareOutputTop';
+    if (lid === 1) elementName = 'flareOutputMid';
 
-      messages += `<div>${mess}</div>`;
-    });
-  document.getElementById('flareOutput').innerHTML = messages;
-  document.getElementById("flareOutput").scrollTop = document.getElementById("flareOutput").scrollHeight;
+    document.getElementById(elementName).innerHTML = messages;
+    return l;
+  });
+
+  document.getElementById('flareOutputTop').scrollTop = document.getElementById('flareOutputTop').scrollHeight;
+  document.getElementById('flareOutputMid').scrollTop = document.getElementById('flareOutputMid').scrollHeight;
+  document.getElementById('flareOutputBot').scrollTop = document.getElementById('flareOutputBot').scrollHeight;
 };
 
 const flareDownload = () => {
-  const head = 'tick,timestamp,message,cookies,building_cps,click_cps';
+  const head = 'tick,timestamp,message,cookies,chips,building_cps,click_cps';
   const output = head + '\n' + flareLogs.map(l => {
     let line = `${l.tick},`;
     line += `${l.timestamp},`
     line += `"${l.message.replaceAll('"','""')}",`
     line += `${l.cookies},`
+    line += `${l.chips},`
     line += `${l.building_cps},`
     line += `${l.click_cps}`
     return line;
@@ -1642,6 +1320,15 @@ const startFlare = () => {
     game.Game.registerMod('FLARE AI', {
       init:function(){
         kickoff();
+        // game.Game.prefs['format'] = 1;
+        // TODO: remove after done testing
+        game.Game.prefs['fancy'] = 0;
+        game.Game.prefs['filters'] = 0;
+        game.Game.prefs['particles'] = 0;
+        game.Game.prefs['numbers'] = 1;
+        game.Game.prefs['milk'] = 0;
+        game.Game.prefs['cursors'] = 0;
+        game.Game.prefs['wobbly'] = 0;
       },
       save:function(){
         return JSON.stringify({
@@ -1668,7 +1355,7 @@ const startFlare = () => {
 }
 
 const flareAchievementHunt = () => {
-  if (!game.Game.HasAchiev('Cookie-dunker') && game.Game.milkH > .1) {
+  if (!game.Game.HasAchiev('Cookie-dunker') && game.Game.milkH > .2) {
     document.getElementById('game').style.height = '100px';
   } else {
     document.getElementById('game').style.height = '100vh';
@@ -1685,13 +1372,13 @@ const flareHandleGrandmapocalypse = () => {
       if (longest.hp <= 2) active.shift();
     }
     // If we're still waiting for drops/achievements, click wrinklers asap
-    if (flareNeedDrops() || !game.Game.HasAchiev('Moistburster')) {
+    if (flareNeedWrinklerDrops() || !game.Game.HasAchiev('Moistburster')) {
       const clicked = active.find(w => flareClickWrinkler(w));
       return clicked && flareOneAction;
     }
     // If we haven't appeased them enough, do that
     const pledge = game.Game.UpgradesById[74];
-    if (!game.Game.HasAchiev('Elder slumber') && pledge.unlocked) {
+    if (!(game.Game.HasAchiev('Elder slumber') || game.Game.pledges >= 5) && pledge.unlocked) {
       const price = pledge.getPrice();
       const eta = (price - game.Game.cookies) / flareGetRate();
       flareNextPurchase = {
@@ -1704,12 +1391,25 @@ const flareHandleGrandmapocalypse = () => {
       if (game.Game.cookies >= price) {
         flareLog('Appeasing the Grandmatriarchs');
         pledge.click();
-        return flareOneAction;
+        flareMultiStep = () => {
+          const cov = game.Game.UpgradesById[84];
+          if (!cov.unlocked) return false;
+          cov.click();
+          flareMultiStep = () => {
+            const revoke = game.Game.UpgradesById[85];
+            if (!revoke.unlocked) return false;
+            revoke.click();
+            flareMultiStep = undefined;
+          }
+        }
+        return true;
       }
       return false;
     }
-    // Otherwise, let the wrinklers stack as high as possible, then nuke 'em
-    if (active.length >= game.Game.getWrinklersMax()) {
+    const sum = active.reduce((s,w) => s+=w.sucked,0);
+    flareDashMessage += sum;
+    // If we can't afford the upgrade otherwise, and CAN with wrinklers, pop 'em like they're hot
+    if (game.Game.cookies < flareNextPurchase.price && sum + game.Game.cookies >= flareNextPurchase.price) {
       flareMultiStep = () => {
         if (!active.find(w => flareClickWrinkler(w))) flareMultiStep = undefined;
       };
@@ -1728,10 +1428,13 @@ const flareClickWrinkler = (wrinkler) => {
   return false;
 }
 
-const flareNeedDrops = () => {
+const flareNeedWrinklerDrops = () => {
   return !(game.Game.GetHowManyEggs() === 20
-  && game.Game.GetHowManyHalloweenDrops() === 7
-  && game.Game.GetHowManyReindeerDrops() === 7);
+  && game.Game.GetHowManyHalloweenDrops() === 7);
+}
+
+const flareNeedDrops = () => {
+  return flareNeedWrinklerDrops() || game.Game.GetHowManyReindeerDrops() < 7;
 }
 
 // Functions basically lifted from main game
@@ -1756,8 +1459,10 @@ const flareCurrentFingersBase = () => {
 }
 
 const flareCurrentFingers = () => {
-  return flareCurrentFingersBase() * flareObjectsNoCursor();
+  const rest = game.Game.BuildingsOwned - game.Game.Objects['Cursor'].amount;
+  return flareCurrentFingersBase() * rest;
 };
+
 const flareCheat = () => {
   game.Game.OpenSesame();
   if(game.Game.lumpsTotal <= 0) {
@@ -1788,10 +1493,9 @@ const flareHeavenlyIncrease = (addPercent) => {
 }
 
 const flareGetChips = () => {
-  const chips = flareNextChipBatch().batchCost + game.Game.HowMuchPrestige(game.Game.cookiesReset) + 1;
-  const need = game.Game.HowManyCookiesReset(chips) - game.Game.cookiesReset;
-  game.Game.cookies = need;
-  game.Game.cookiesEarned = need;
+  const moreChips = flareNextChipBatch().batchCost - game.Game.heavenlyChips;
+  const totalChips = moreChips + Math.ceil(game.Game.HowMuchPrestige(game.Game.cookiesReset)) + 1;
+  const moreCookiesNeeded = game.Game.HowManyCookiesReset(totalChips) - game.Game.cookiesReset;
+  game.Game.cookies = moreCookiesNeeded;
+  game.Game.cookiesEarned = moreCookiesNeeded;
 }
-
-

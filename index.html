@@ -34,9 +34,17 @@
         height: 100%;
       }
       #flareOutput {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         height: 100%;
-        overflow: scroll;
         margin-left: 5px;
+      }
+      #flareOutput > div {
+        overflow: scroll;
+      }
+      #flareOutput > div:not(:first-child) {
+        border-top: dotted 1px black;
       }
       #flareDynamicOutput {
         position: absolute;
@@ -55,8 +63,8 @@
       }
       #flareDashboard {
         position: absolute;
-        bottom: 30px;
-        left: 0px;
+        bottom: 0;
+        left: 100px;
         background-color:white;
       }
       #flareOutput q {
@@ -68,6 +76,9 @@
       }
       .flareWrinkler {
         color: red;
+      }
+      .flareWrathCookie {
+        color: #b71132;
       }
       .flareGod {
         color: purple;
@@ -87,11 +98,20 @@
       .flareMinigame {
         color: green;
       }
+      .flareSeason {
+        color: green;
+      }
+      .flareFortune {
+        color: green;
+      }
       .flareUpgrading {
         color: blue;
       }
-      .flareBuilding {
+      .flareBuyBuilding {
         color: orange;
+      }
+      .flareSellBuilding {
+        color: green;
       }
       .flareAchievement {
         color: gold;
@@ -106,6 +126,25 @@
       }
       .flareHarvesting {
         color: #B5C0C9;
+      }
+      .flareAscend {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 0, 0, 1) 0%,
+          rgba(255, 154, 0, 1) 10%,
+          rgba(208, 222, 33, 1) 20%,
+          rgba(79, 220, 74, 1) 30%,
+          rgba(63, 218, 216, 1) 40%,
+          rgba(47, 201, 226, 1) 50%,
+          rgba(28, 127, 238, 1) 60%,
+          rgba(95, 21, 242, 1) 70%,
+          rgba(186, 12, 248, 1) 80%,
+          rgba(251, 7, 217, 1) 90%,
+          rgba(255, 0, 0, 1)
+          100%
+          );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
     </style>
     <script>
@@ -147,7 +186,11 @@
     </div>
 <div id="flareOutputContainer">
     <div class="flareDataHolder">
-        <div id="flareOutput"></div>
+        <div id="flareOutput">
+          <div id="flareOutputTop"></div>
+          <div id="flareOutputMid"></div>
+          <div id="flareOutputBot"></div>
+        </div>
         <div id="flareDynamicOutput"></div>
     </div>
 </div>
